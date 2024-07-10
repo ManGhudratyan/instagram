@@ -19,12 +19,25 @@ class AuthServiceImp implements AuthService {
     );
     final userCredential =
         await FirebaseAuth.instance.signInWithCredential(credential);
-    firebaseFirestore.collection('users').doc(userCredential.user!.uid).set(
-      {
-        'userId': userCredential.user?.uid,
-        'email': userCredential.user?.email,
-      },
-    );
+    if (userCredential.user!.emailVerified) {
+      firebaseFirestore
+          .collection('users')
+          .doc(userCredential.user!.uid)
+          .update(
+        {
+          'userId': userCredential.user?.uid,
+          'email': userCredential.user?.email,
+        },
+      );
+    } else {
+      firebaseFirestore.collection('users').doc(userCredential.user!.uid).set(
+        {
+          'userId': userCredential.user?.uid,
+          'email': userCredential.user?.email,
+        },
+      );
+    }
+
     return userCredential;
   }
 }

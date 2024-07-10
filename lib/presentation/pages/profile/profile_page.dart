@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../domain/entities/user_entity.dart';
+import '../../constants/assets.dart';
 import '../../constants/gaps.dart';
 import '../../logic/auth/auth_bloc.dart';
 import '../../logic/media/media_bloc.dart';
@@ -20,54 +21,51 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   late final TextEditingController _nameController =
-      TextEditingController(text: widget.userEntity?.name ?? '');
+      TextEditingController(text: widget.userEntity?.name);
   late final TextEditingController _userNameController =
-      TextEditingController(text: widget.userEntity?.username ?? '');
+      TextEditingController(text: widget.userEntity?.username);
   late final TextEditingController _bioController =
-      TextEditingController(text: widget.userEntity?.bio ?? '');
+      TextEditingController(text: widget.userEntity?.bio);
 
   @override
   void initState() {
     super.initState();
-    if (widget.userEntity != null) {
-      context
-          .read<UserBloc>()
-          .add(GetUserDataEvent(widget.userEntity!.userId ?? ''));
-    }
+    final userId =
+        context.read<AuthBloc>().state.userCredential?.user?.uid ?? '';
+    context.read<UserBloc>().add(GetUserDataEvent(userId));
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-          automaticallyImplyLeading: false,
-          title: const Text('Username'),
-          actions: [
-            IconButton(
-              icon: const Icon(
-                Icons.control_point_duplicate_sharp,
-                color: Colors.white,
-              ),
-              onPressed: () {},
-            ),
-            IconButton(
-              icon: const Icon(Icons.more_horiz_outlined, color: Colors.white),
-              onPressed: () {},
-            ),
-          ]),
-      body: BlocConsumer<UserBloc, UserState>(
-        listener: (context, userState) {
-          if (userState is UserDataDbFailed) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(userState.error ?? ''),
-              ),
-            );
-          }
-        },
-        builder: (context, userState) {
-          return BlocConsumer<AuthBloc, AuthState>(
-              listener: (context, authState) {
+    return BlocConsumer<UserBloc, UserState>(
+      listener: (context, userState) {
+        if (userState is SaveUserToDbFailed) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(userState.error ?? '')),
+          );
+        }
+      },
+      builder: (context, userState) {
+        return Scaffold(
+          appBar: AppBar(
+              automaticallyImplyLeading: false,
+              title: Text(userState.userModel?.username ?? 'No username'),
+              actions: [
+                IconButton(
+                  icon: const Icon(
+                    Icons.control_point_duplicate_sharp,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {},
+                ),
+                IconButton(
+                  icon: const Icon(Icons.more_horiz_outlined,
+                      color: Colors.white),
+                  onPressed: () {},
+                ),
+              ]),
+          body:
+              BlocConsumer<AuthBloc, AuthState>(listener: (context, authState) {
             if (authState is SaveUserToDbFailed) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text(authState.error ?? '')),
@@ -79,11 +77,16 @@ class _ProfilePageState extends State<ProfilePage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Row(
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       CircleAvatar(
                         radius: 50,
+                        backgroundImage:
+                            userState.userModel?.profileImage != null
+                                ? NetworkImage(
+                                    userState.userModel?.profileImage ?? '')
+                                : AssetImage(Assets.profileImage),
                         backgroundColor: Colors.white,
                       ),
                       IntOnString(count: '0', text: 'Posts'),
@@ -91,8 +94,11 @@ class _ProfilePageState extends State<ProfilePage> {
                       IntOnString(count: '0', text: 'Following')
                     ],
                   ),
-                  const Column(
-                    children: [Text('Name'), Text('bio')],
+                  Column(
+                    children: [
+                      Text(userState.userModel?.name ?? 'No name'),
+                      Text(userState.userModel?.bio ?? 'No bio'),
+                    ],
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -167,7 +173,6 @@ class _ProfilePageState extends State<ProfilePage> {
                                                           username:
                                                               _userNameController
                                                                   .text,
-                                                          // profileImage: mediaState.fileImage?.file.path
                                                         );
                                                         context
                                                             .read<UserBloc>()
@@ -186,6 +191,16 @@ class _ProfilePageState extends State<ProfilePage> {
                                                     backgroundColor:
                                                         Colors.white,
                                                     radius: 50,
+                                                    backgroundImage: userState
+                                                                .userModel
+                                                                ?.profileImage !=
+                                                            null
+                                                        ? NetworkImage(userState
+                                                                .userModel
+                                                                ?.profileImage ??
+                                                            '')
+                                                        : AssetImage(Assets
+                                                            .profileImage),
                                                     child: GestureDetector(
                                                       onTap: () {
                                                         showModalBottomSheet(
@@ -199,7 +214,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                           context: context,
                                                           builder: (context) {
                                                             return SizedBox(
-                                                              height: 100,
+                                                              height: 200,
                                                               width:
                                                                   MediaQuery.of(
                                                                           context)
@@ -254,7 +269,29 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                           color:
                                                                               Colors.white),
                                                                     ),
-                                                                  )
+                                                                  ),
+                                                                   ElevatedButton(
+                                                                    style: ElevatedButton.styleFrom(
+                                                                        backgroundColor: const Color
+                                                                            .fromRGBO(
+                                                                            1,
+                                                                            149,
+                                                                            247,
+                                                                            1)),
+                                                                    onPressed:
+                                                                        () {
+                                                                          
+                                                                              
+                                                                          
+                                                                    },
+                                                                    child:
+                                                                        const Text(
+                                                                      'Save',
+                                                                      style: TextStyle( 
+                                                                          color:
+                                                                              Colors.white),
+                                                                    ),
+                                                                  ),
                                                                 ],
                                                               ),
                                                             );
@@ -356,9 +393,9 @@ class _ProfilePageState extends State<ProfilePage> {
                 ],
               ),
             );
-          });
-        },
-      ),
+          }),
+        );
+      },
     );
   }
 }

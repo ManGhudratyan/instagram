@@ -1,8 +1,10 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import '../../domain/entities/user_entity.dart';
 import '../../domain/repositories/user_repository.dart';
-import '../models/user_model.dart';
+import '../models/user/user_model.dart';
 import '../services/user/user_service.dart';
 
 class UserRepositoryImp implements UserRepository {
@@ -22,5 +24,10 @@ class UserRepositoryImp implements UserRepository {
   @override
   Future<UserModel> getUserFromDb(String userId) async {
     return userService.getUserFromDb(userId);
-}
+  }
+
+  @override
+  Stream<QuerySnapshot<Map<String, dynamic>>> getUsersFromCollection() {
+    return userService.getUsersFromCollection();
+  }
 }

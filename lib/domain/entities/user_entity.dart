@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import '../../data/models/user_model.dart';
+import '../../data/models/user/user_model.dart';
 
 class UserEntity {
   UserEntity({

@@ -29,16 +29,4 @@ class UploadProfilePhotoEvent extends UserEvent {
   final File file;
 }
 
-final class UserFailed extends UserState {
-  UserFailed(UserState initialState, String error)
-      : super(userModel: initialState.userModel, error: error);
-}
-
-final class UserLoading extends UserState {
-  UserLoading(UserState initialState)
-      : super(userModel: initialState.userModel);
-}
-
-final class UserLoaded extends UserState {
-  const UserLoaded(UserModel? model) : super(userModel: model);
-}
+class GetUsersCollectionEvent extends UserEvent {}

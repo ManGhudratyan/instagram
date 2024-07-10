@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import '../../../data/models/user_model.dart';
+import '../../../data/models/user/user_model.dart';
 import '../../../domain/entities/user_entity.dart';
 import '../../../domain/repositories/user_repository.dart';
 
@@ -14,6 +14,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     on<UpdateUserDataEvent>(_mapUpdateUserDataEventToState);
     on<GetUserDataEvent>(_mapGetUserDataEventToState);
     on<UploadProfilePhotoEvent>(_mapUploadProfilePhotoEventToState);
+    on<GetUsersCollectionEvent>(_mapGetUsersCollectionEventToState);
   }
 
   final UserRepository userRepository;
@@ -23,11 +24,11 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     try {
       emit(UserDataDbUpdating());
       final userModel = event.userEntity.toModel();
+      await userRepository.saveUserToDB(userModel);
       if (event.file != null) {
         await userRepository.uploadProfilePicture(
             event.userEntity.userId ?? '', event.file!);
       }
-      await userRepository.saveUserToDB(userModel);
       emit(UserDataDbUpdated(userModel));
     } catch (error) {
       emit(UserDataDbFailed(error.toString()));
@@ -56,4 +57,17 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       emit(UserFailed(state, e.toString()));
     }
   }
+
+  FutureOr<void> _mapGetUsersCollectionEventToState(
+      GetUsersCollectionEvent event, Emitter<UserState> emit) async {
+        try{
+          emit(GetUsersFromCollectionLoading());
+          await for(final snapshot in userRepository.getUsersFromCollection()){
+            final users = snapshot.docs.map((doc)=>UserModel.fromJson(doc.data())).toList();
+            emit(GetUsersFromCollectionLoaded(users));
+          }
+        }catch(error){
+          emit(GetUsersFromCollectionFailed(error.toString()));
+        }
+      }
 }

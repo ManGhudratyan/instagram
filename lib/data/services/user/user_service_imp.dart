@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
-import '../../models/user_model.dart';
+import '../../models/user/user_model.dart';
 import 'user_service.dart';
 
 class UserServiceImp extends UserService {
@@ -39,5 +39,10 @@ class UserServiceImp extends UserService {
         await firebaseFirestore.collection('users').doc(userId).get();
     final userData = UserModel.fromJson(snapshot.data() ?? {});
     return userData;
+  }
+
+  @override
+  Stream<QuerySnapshot<Map<String, dynamic>>> getUsersFromCollection() {
+    return FirebaseFirestore.instance.collection('users').snapshots();
   }
 }
