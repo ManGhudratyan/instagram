@@ -40,6 +40,7 @@ class _HomePageState extends State<HomePage> {
           );
         }
         return Scaffold(
+          backgroundColor: Colors.blueGrey,
           appBar: AppBar(
             automaticallyImplyLeading: false,
             title: const Text(
@@ -86,10 +87,14 @@ class _HomePageState extends State<HomePage> {
                           child: Column(
                             children: [
                               CircleAvatar(
-                                backgroundImage: NetworkImage(userState.userModel?.profileImage ?? ''),
+                                backgroundImage: NetworkImage(
+                                     userState.users?[index].profileImage ?? Assets.profileImage),
                                 radius: 40,
                               ),
-                              Text(user?.name ?? 'No name'),
+                              Text(
+                                userState.users?[index].name ?? 'No name',
+                                style: TextStyle(color: Colors.white),
+                              ),
                             ],
                           ),
                         );
