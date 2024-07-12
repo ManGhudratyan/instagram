@@ -11,24 +11,40 @@ sealed class UserState extends Equatable {
 
 final class UserInitial extends UserState {}
 
-final class UserDataDbUpdating extends UserState {}
+final class UserDataDbUpdating extends UserState {
+  UserDataDbUpdating(UserState initState)
+      : super(userModel: initState.userModel, users: initState.users);
+}
 
 final class UserDataDbUpdated extends UserState {
-  const UserDataDbUpdated(UserModel userModel) : super(userModel: userModel);
+  UserDataDbUpdated(UserModel userModel, UserState initState)
+      : super(userModel: userModel, users: initState.users);
 }
 
 final class UserDataDbFailed extends UserState {
-  const UserDataDbFailed(String error) : super(error: error);
+  UserDataDbFailed(String error, UserState initState)
+      : super(
+            error: error,
+            userModel: initState.userModel,
+            users: initState.users);
 }
 
-final class GetUserDataLoading extends UserState {}
+final class GetUserDataLoading extends UserState {
+  GetUserDataLoading(UserState initState)
+      : super(userModel: initState.userModel, users: initState.users);
+}
 
 final class GetUserDataLoaded extends UserState {
-  const GetUserDataLoaded(UserModel userModel) : super(userModel: userModel);
+  GetUserDataLoaded(UserModel userModel, UserState initState)
+      : super(userModel: userModel, users: initState.users);
 }
 
 final class GetUserDataFailed extends UserState {
-  const GetUserDataFailed(String error) : super(error: error);
+  GetUserDataFailed(String error, UserState initState)
+      : super(
+            error: error,
+            userModel: initState.userModel,
+            users: initState.users);
 }
 
 final class UserFailed extends UserState {
@@ -42,16 +58,25 @@ final class UserLoading extends UserState {
 }
 
 final class UserLoaded extends UserState {
-  const UserLoaded(UserModel? model) : super(userModel: model);
+  UserLoaded(UserModel? model, UserState initState)
+      : super(userModel: model, users: initState.users);
 }
 
 final class GetUsersFromCollectionLoaded extends UserState {
-  const GetUsersFromCollectionLoaded(List<UserModel> users)
-      : super(users: users);
+  GetUsersFromCollectionLoaded(UserState initState, List<UserModel> users)
+      : super(users: users, userModel: initState.userModel);
 }
 
-final class GetUsersFromCollectionLoading extends UserState {}
+final class GetUsersFromCollectionLoading extends UserState {
+  GetUsersFromCollectionLoading(UserState initialState)
+      : super(userModel: initialState.userModel);
+}
 
 final class GetUsersFromCollectionFailed extends UserState {
-  const GetUsersFromCollectionFailed(String error) : super(error: error);
+  GetUsersFromCollectionFailed(String error, UserState initState)
+      : super(
+          error: error,
+          userModel: initState.userModel,
+          users: initState.users,
+        );
 }

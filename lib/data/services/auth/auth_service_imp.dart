@@ -37,7 +37,6 @@ class AuthServiceImp implements AuthService {
         },
       );
     }
-
     return userCredential;
   }
 }

@@ -1,0 +1,3 @@
+// class PostEntity {
+//   final String
+// }

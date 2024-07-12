@@ -22,28 +22,28 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   FutureOr<void> _mapUpdateUserDataEventToState(
       UpdateUserDataEvent event, Emitter<UserState> emit) async {
     try {
-      emit(UserDataDbUpdating());
+      emit(UserDataDbUpdating(state));
       final userModel = event.userEntity.toModel();
       await userRepository.saveUserToDB(userModel);
       if (event.file != null) {
         await userRepository.uploadProfilePicture(
             event.userEntity.userId ?? '', event.file!);
       }
-      emit(UserDataDbUpdated(userModel));
+      emit(UserDataDbUpdated(userModel, state));
     } catch (error) {
-      emit(UserDataDbFailed(error.toString()));
+      emit(UserDataDbFailed(state.error ?? '', state));
     }
   }
 
   FutureOr<void> _mapGetUserDataEventToState(
       GetUserDataEvent event, Emitter<UserState> emit) async {
     try {
-      emit(GetUserDataLoading());
+      emit(GetUserDataLoading(state));
       final users =
           await userRepository.getUserFromDb(event.userEntity?.userId ?? '');
-      emit(GetUserDataLoaded(users));
+      emit(GetUserDataLoaded(users, state));
     } catch (error) {
-      emit(GetUserDataFailed(error.toString()));
+      emit(GetUserDataFailed(error.toString(), state));
     }
   }
 
@@ -52,7 +52,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     try {
       emit(UserLoading(state));
       await userRepository.uploadProfilePicture(event.userId, event.file);
-      emit(UserLoaded(state.userModel));
+      emit(UserLoaded(state.userModel, state));
     } catch (e) {
       emit(UserFailed(state, e.toString()));
     }
@@ -60,14 +60,15 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
   FutureOr<void> _mapGetUsersCollectionEventToState(
       GetUsersCollectionEvent event, Emitter<UserState> emit) async {
-        try{
-          emit(GetUsersFromCollectionLoading());
-          await for(final snapshot in userRepository.getUsersFromCollection()){
-            final users = snapshot.docs.map((doc)=>UserModel.fromJson(doc.data())).toList();
-            emit(GetUsersFromCollectionLoaded(users));
-          }
-        }catch(error){
-          emit(GetUsersFromCollectionFailed(error.toString()));
-        }
+    try {
+      emit(GetUsersFromCollectionLoading(state));
+      await for (final snapshot in userRepository.getUsersFromCollection()) {
+        final users =
+            snapshot.docs.map((doc) => UserModel.fromJson(doc.data())).toList();
+        emit(GetUsersFromCollectionLoaded(state, users));
       }
+    } catch (error) {
+      emit(GetUsersFromCollectionFailed(error.toString(), state));
+    } 
+  }
 }
