@@ -9,7 +9,7 @@ class AuthServiceImp implements AuthService {
 
   final FirebaseFirestore firebaseFirestore;
 
-  @override
+  @override 
   Future<UserCredential> signInWithGoogle() async {
     final gUser = await GoogleSignIn().signIn();
     final gAuth = await gUser?.authentication;
@@ -19,24 +19,20 @@ class AuthServiceImp implements AuthService {
     );
     final userCredential =
         await FirebaseAuth.instance.signInWithCredential(credential);
-    if (userCredential.user!.emailVerified) {
-      firebaseFirestore
-          .collection('users')
-          .doc(userCredential.user!.uid)
-          .update(
-        {
-          'userId': userCredential.user?.uid,
-          'email': userCredential.user?.email,
-        },
-      );
-    } else {
-      firebaseFirestore.collection('users').doc(userCredential.user!.uid).set(
-        {
-          'userId': userCredential.user?.uid,
-          'email': userCredential.user?.email,
-        },
-      );
+
+    if (userCredential.user != null) {
+      final userDoc =
+          firebaseFirestore.collection('users').doc(userCredential.user!.uid);
+      final docSnapshot = await userDoc.get();
+
+      if (!docSnapshot.exists) {
+        userDoc.set({
+          'uid': userCredential.user!.uid,
+          'email': userCredential.user!.email,
+        });
+      }
     }
+
     return userCredential;
   }
 }

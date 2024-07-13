@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, deprecated_member_use
+// ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,7 +28,7 @@ class _HomePageState extends State<HomePage> {
         if (userState is GetUsersFromCollectionFailed) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(userState.error ?? ''),
+              content: Text(userState.error ?? 'Failed to load users'),
             ),
           );
         }
@@ -57,7 +57,62 @@ class _HomePageState extends State<HomePage> {
                   width: 24,
                   color: Colors.white,
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (context) {
+                      return SizedBox(
+                        height: 430,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Expanded(
+                              child: ListView.builder(
+                                itemCount: 6,
+                                itemBuilder: (context, index) {
+                                  final titles = [
+                                    'Reel',
+                                    'Post',
+                                    'Story',
+                                    'Story Highlight',
+                                    'Live',
+                                    'Guide',
+                                  ];
+                                  final icons = [
+                                    Icons.video_collection_outlined,
+                                    Icons.square_outlined,
+                                    Icons.add_circle_outline_outlined,
+                                    Icons.highlight_outlined,
+                                    Icons.leak_remove_outlined,
+                                    Icons.menu_book,
+                                  ];
+                                  return Card(
+                                    child: InkWell(
+                                      onTap: () {
+                                        if(index == 1){
+                                        Navigator.pushNamed(context, '/create-post-page');
+
+                                        }
+                                      },
+                                      child: ListTile(
+                                        leading: CircleAvatar(
+                                          backgroundColor: const Color.fromARGB(255, 194, 201, 207),
+                                          child: Icon(icons[index]),
+                                        ),
+                                        title: Text(titles[index]),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                },
               ),
               IconButton(
                 icon: SvgPicture.asset(
@@ -71,7 +126,7 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
           body: ListView.builder(
-            itemCount: 3,
+            itemCount: userState.users?.length ?? 0,
             itemBuilder: (context, index) {
               final user = userState.users?[index];
               return Column(
@@ -80,20 +135,21 @@ class _HomePageState extends State<HomePage> {
                     height: 120,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
-                      itemCount: userState.users?.length,
+                      itemCount: userState.users?.length ?? 0,
                       itemBuilder: (context, index) {
                         return Padding(
-                          padding: EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(8.0),
                           child: Column(
                             children: [
                               CircleAvatar(
                                 backgroundImage: NetworkImage(
-                                     userState.users?[index].profileImage ?? Assets.profileImage),
+                                  userState.users?[index].profileImage ?? Assets.profileImage,
+                                ),
                                 radius: 40,
                               ),
                               Text(
                                 userState.users?[index].name ?? 'No name',
-                                style: TextStyle(color: Colors.white),
+                                style: const TextStyle(color: Colors.white),
                               ),
                             ],
                           ),
@@ -101,12 +157,12 @@ class _HomePageState extends State<HomePage> {
                       },
                     ),
                   ),
-                  Divider(),
+                  const Divider(),
                   Column(
                     children: [
                       Card(
                         child: ListTile(
-                          leading: CircleAvatar(
+                          leading: const CircleAvatar(
                             backgroundColor: Colors.pink,
                           ),
                           title: Text(user?.username ?? 'No username'),
@@ -114,8 +170,8 @@ class _HomePageState extends State<HomePage> {
                       ),
                       Container(
                         height: 400,
-                        decoration: BoxDecoration(color: Colors.white),
-                      )
+                        decoration: const BoxDecoration(color: Colors.white),
+                      ),
                     ],
                   ),
                   Row(

@@ -11,4 +11,5 @@ abstract class Assets {
   static String get favoriteIcon => 'images/favorite.svg';
   static String get elipseIcon => 'images/elipse.svg';
   static String get profileImage => 'images/profileImage.png';
+  static String get whiteImage => 'images/white.png';
 }

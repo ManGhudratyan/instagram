@@ -7,5 +7,5 @@ abstract class UserService {
   Future<void> saveUserToDB(UserModel userModel);
   Future<UserModel> getUserFromDb(String userId);
   Future<void> uploadProfilePicture(String userId, File file);
-  Stream<QuerySnapshot<Map<String, dynamic>>> getUsersFromCollection();  
+  Stream<QuerySnapshot<Map<String, dynamic>>> getUsersFromCollection();
 }

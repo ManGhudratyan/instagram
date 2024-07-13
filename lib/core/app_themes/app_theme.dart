@@ -9,7 +9,6 @@ abstract class AppTheme {
         : DarkThemeMode();
   }
 
-  Color get primary;
   Color get onPrimary;
   Color get secondary;
   Color get onSecondary;

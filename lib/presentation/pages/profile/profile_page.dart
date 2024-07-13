@@ -12,21 +12,13 @@ import 'widgets/int_on_string.dart';
 import 'widgets/text_field_widget.dart';
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key, this.userEntity});
-  final UserEntity? userEntity;
+  const ProfilePage({super.key});
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  late final TextEditingController _nameController =
-      TextEditingController(text: widget.userEntity?.name);
-  late final TextEditingController _userNameController =
-      TextEditingController(text: widget.userEntity?.username);
-  late final TextEditingController _bioController =
-      TextEditingController(text: widget.userEntity?.bio);
-
   @override
   void initState() {
     super.initState();
@@ -46,10 +38,16 @@ class _ProfilePageState extends State<ProfilePage> {
         }
       },
       builder: (context, userState) {
+        final nameController =
+            TextEditingController(text: userState.userEntity?.name);
+        final userNameController =
+            TextEditingController(text: userState.userEntity?.username);
+        final bioController =
+            TextEditingController(text: userState.userEntity?.bio);
         return Scaffold(
           appBar: AppBar(
               automaticallyImplyLeading: false,
-              title: Text(userState.userModel?.username ?? 'No username'),
+              title: Text(userState.userEntity?.username ?? 'No username'),
               actions: [
                 IconButton(
                   icon: const Icon(
@@ -83,9 +81,9 @@ class _ProfilePageState extends State<ProfilePage> {
                       CircleAvatar(
                         radius: 50,
                         backgroundImage:
-                            userState.userModel?.profileImage != null
+                            userState.userEntity?.profileImage != null
                                 ? NetworkImage(
-                                    userState.userModel?.profileImage ?? '')
+                                    userState.userEntity?.profileImage ?? '')
                                 : AssetImage(Assets.profileImage),
                         backgroundColor: Colors.white,
                       ),
@@ -96,8 +94,8 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   Column(
                     children: [
-                      Text(userState.userModel?.name ?? 'No name'),
-                      Text(userState.userModel?.bio ?? 'No bio'),
+                      Text(userState.userEntity?.name ?? 'No name'),
+                      Text(userState.userEntity?.bio ?? 'No bio'),
                     ],
                   ),
                   Row(
@@ -166,12 +164,12 @@ class _ProfilePageState extends State<ProfilePage> {
                                                               .userCredential
                                                               ?.user!
                                                               .email,
-                                                          name: _nameController
+                                                          name: nameController
                                                               .text,
-                                                          bio: _bioController
+                                                          bio: bioController
                                                               .text,
                                                           username:
-                                                              _userNameController
+                                                              userNameController
                                                                   .text,
                                                         );
                                                         context
@@ -192,11 +190,11 @@ class _ProfilePageState extends State<ProfilePage> {
                                                         Colors.white,
                                                     radius: 50,
                                                     backgroundImage: userState
-                                                                .userModel
+                                                                .userEntity
                                                                 ?.profileImage !=
                                                             null
                                                         ? NetworkImage(userState
-                                                                .userModel
+                                                                .userEntity
                                                                 ?.profileImage ??
                                                             '')
                                                         : AssetImage(Assets
@@ -270,7 +268,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                               Colors.white),
                                                                     ),
                                                                   ),
-                                                                   ElevatedButton(
+                                                                  ElevatedButton(
                                                                     style: ElevatedButton.styleFrom(
                                                                         backgroundColor: const Color
                                                                             .fromRGBO(
@@ -279,15 +277,11 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                             247,
                                                                             1)),
                                                                     onPressed:
-                                                                        () {
-                                                                          
-                                                                              
-                                                                          
-                                                                    },
+                                                                        () {},
                                                                     child:
                                                                         const Text(
                                                                       'Save',
-                                                                      style: TextStyle( 
+                                                                      style: TextStyle(
                                                                           color:
                                                                               Colors.white),
                                                                     ),
@@ -316,20 +310,19 @@ class _ProfilePageState extends State<ProfilePage> {
                                               child: Text('Name'),
                                             ),
                                             TextFieldWidget(
-                                                controller: _nameController),
+                                                controller: nameController),
                                             const Align(
                                               alignment: Alignment.topLeft,
                                               child: Text('Username'),
                                             ),
                                             TextFieldWidget(
-                                                controller:
-                                                    _userNameController),
+                                                controller: userNameController),
                                             const Align(
                                               alignment: Alignment.topLeft,
                                               child: Text('Bio'),
                                             ),
                                             TextFieldWidget(
-                                                controller: _bioController),
+                                                controller: bioController),
                                             const Align(
                                               alignment: Alignment.topLeft,
                                               child: Text(

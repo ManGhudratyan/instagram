@@ -41,7 +41,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       emit(GetUserDataLoading(state));
       final users =
           await userRepository.getUserFromDb(event.userEntity?.userId ?? '');
-      emit(GetUserDataLoaded(users, state));
+      emit(GetUserDataLoaded(users.toModel(), state));
     } catch (error) {
       emit(GetUserDataFailed(error.toString(), state));
     }
@@ -52,7 +52,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     try {
       emit(UserLoading(state));
       await userRepository.uploadProfilePicture(event.userId, event.file);
-      emit(UserLoaded(state.userModel, state));
+      emit(UserLoaded(state.userEntity, state));
     } catch (e) {
       emit(UserFailed(state, e.toString()));
     }
