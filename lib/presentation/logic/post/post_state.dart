@@ -53,7 +53,6 @@ final class DeletePostDataFailed extends PostState {
   const DeletePostDataFailed(String error) : super(error: error);
 }
 
-
 final class PostFailed extends PostState {
   PostFailed(PostState initialState, String error)
       : super(postEntity: initialState.postEntity, error: error);
@@ -67,4 +66,23 @@ final class PostLoading extends PostState {
 final class PostLoaded extends PostState {
   PostLoaded(PostEntity? postEntity, PostState initState)
       : super(postEntity: postEntity, posts: initState.posts);
+}
+
+final class GetPostFromCollectionLoaded extends PostState {
+  GetPostFromCollectionLoaded(PostState initState, List<PostEntity> posts)
+      : super(posts: posts, postEntity: initState.postEntity);
+}
+
+final class GetPostFromCollectionLoading extends PostState {
+  GetPostFromCollectionLoading(PostState initialState)
+      : super(postEntity: initialState.postEntity);
+}
+
+final class GetPostFromCollectionFailed extends PostState {
+  GetPostFromCollectionFailed(String error, PostState initState)
+      : super(
+          error: error,
+          postEntity: initState.postEntity,
+          posts: initState.posts,
+        );
 }

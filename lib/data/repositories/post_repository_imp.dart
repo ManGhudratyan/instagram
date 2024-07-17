@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import '../../domain/entities/post_entity.dart';
 import '../../domain/repositories/post_repository.dart';
 import '../models/post/post_model.dart';
@@ -21,8 +23,8 @@ class PostRepositoryImp extends PostRepository {
   }
 
   @override
-  Future<PostModel> getPostFromDB(String userId) {
-    return postService.getPostFromDB(userId);
+  Future<PostModel> getPostFromDB(String postId) {
+    return postService.getPostFromDB(postId);
   }
 
   @override
@@ -33,5 +35,10 @@ class PostRepositoryImp extends PostRepository {
   @override
   Future<void> uploadPictureToDB(String postId, File file) {
     return postService.uploadPictureToDB(postId, file);
+  }
+
+  @override
+  Stream<QuerySnapshot<Map<String, dynamic>>> getPostsFromCollection() {
+    return postService.getPostsFromCollection();
   }
 }

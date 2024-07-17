@@ -58,4 +58,9 @@ class PostServiceImp implements PostService {
       {'photoUrl': downloadUrl},
     );
   }
+
+  @override
+  Stream<QuerySnapshot<Map<String, dynamic>>> getPostsFromCollection() {
+    return FirebaseFirestore.instance.collection('posts').snapshots();
+  }
 }

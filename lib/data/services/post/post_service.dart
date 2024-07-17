@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import '../../models/post/post_model.dart';
 
 abstract class PostService {
@@ -8,4 +10,5 @@ abstract class PostService {
   Future<PostModel> getPostFromDB(String postId);
   Future<void> updatePostFromDB(PostModel postModel);
   Future<void> uploadPictureToDB(String postId, File file);
+  Stream<QuerySnapshot<Map<String, dynamic>>> getPostsFromCollection();
 }

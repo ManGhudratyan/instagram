@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
+import '../../../data/models/post/post_model.dart';
 import '../../../domain/entities/post_entity.dart';
 import '../../../domain/repositories/post_repository.dart';
 
@@ -13,9 +14,10 @@ part 'post_state.dart';
 class PostBloc extends Bloc<PostEvent, PostState> {
   PostBloc(this.postRepository) : super(PostInitial()) {
     on<SavePostToDbEvent>(_mapSavePostToDbEventToState);
-    on<GetPostDataEvent>(_mapGetPostDataEventToState);
+    // on<GetPostDataEvent>(_mapGetPostDataEventToState);
     on<DeletePostDataEvent>(_mapDeletePostDataEventToState);
     on<UploadPostEvent>(_mapUploadPostEventToState);
+    on<GetPostsFromCollectionEvent>(_mapGetPostsFromCollectionEventToState);
   }
 
   final PostRepository postRepository;
@@ -30,13 +32,28 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     }
   }
 
-  FutureOr<void> _mapGetPostDataEventToState(
-      GetPostDataEvent event, Emitter<PostState> emit) async {
+  // FutureOr<void> _mapGetPostDataEventToState(
+  //     GetPostDataEvent event, Emitter<PostState> emit) async {
+  //   try {
+  //     emit(GetPostDataLoading(state));
+  //     final posts =
+  //         await postRepository.getPostFromDB(event.postEntity?.postId ?? '');
+  //     emit(GetPostDataLoaded(posts.toModel(), state));
+  //   } catch (error) {
+  //     emit(GetPostDataFailed(error.toString(), state));
+  //   }
+  // }
+
+  FutureOr<void> _mapGetPostsFromCollectionEventToState(
+      GetPostsFromCollectionEvent event, Emitter<PostState> emit) async {
     try {
       emit(GetPostDataLoading(state));
-      final posts =
-          await postRepository.getPostFromDB(event.postEntity?.userId ?? '');
-      emit(GetPostDataLoaded(posts.toModel(), state));
+      await for (final snapshot in postRepository.getPostsFromCollection()) {
+        final posts =
+            snapshot.docs.map((doc) => PostModel.fromJson(doc.data())).toList();
+        // final posts = users.map((e) => PostEntity.fromModel(e),).toList();
+        emit(GetPostFromCollectionLoaded(state, posts));
+      }
     } catch (error) {
       emit(GetPostDataFailed(error.toString(), state));
     }

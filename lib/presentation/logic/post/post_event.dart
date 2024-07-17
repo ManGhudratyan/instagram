@@ -1,9 +1,11 @@
 part of 'post_bloc.dart';
 
 sealed class PostEvent extends Equatable {
-  const PostEvent({this.postEntity, this.userId});
+  const PostEvent({this.postEntity, this.userId, this.postId});
   final PostEntity? postEntity;
   final String? userId;
+  final String? postId;
+
 
   @override
   List<Object?> get props => [userId, postEntity];
@@ -14,8 +16,8 @@ final class SavePostToDbEvent extends PostEvent {
       : super(postEntity: postEntity);
 }
 
-final class GetPostDataEvent extends PostEvent {
-  const GetPostDataEvent(String userId) : super(userId: userId);
+final class GetPostsFromCollectionEvent extends PostEvent {
+  // const GetPostDataEvent(String postId) : super(postId: postId);
 }
 
 final class DeletePostDataEvent extends PostEvent {

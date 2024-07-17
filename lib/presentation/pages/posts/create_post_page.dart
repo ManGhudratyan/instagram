@@ -7,7 +7,6 @@ import '../../constants/gaps.dart';
 import '../../logic/auth/auth_bloc.dart';
 import '../../logic/media/media_bloc.dart';
 import '../../logic/post/post_bloc.dart';
-import '../../logic/user/user_bloc.dart';
 
 class CreatePostPage extends StatefulWidget {
   const CreatePostPage({super.key});
@@ -56,7 +55,9 @@ class _CreatePostPageState extends State<CreatePostPage> {
                             userId: authState.userCredential?.user!.uid ?? '',
                             description: _descriptionController.text,
                           );
-                          context.read<PostBloc>().add(SavePostToDbEvent(postEntity));
+                          context
+                              .read<PostBloc>()
+                              .add(SavePostToDbEvent(postEntity));
                           context.read<PostBloc>().add(UploadPostEvent(
                                 postEntity.postId,
                                 mediaState.fileImage!.file,
@@ -84,9 +85,12 @@ class _CreatePostPageState extends State<CreatePostPage> {
                         },
                         child: SizedBox(
                           height: 550,
-                          child: Image.network(
-                            'https://www.paperplace.com.au/cdn/shop/products/via-felt-white.jpg?v=1458264914',
-                          ),
+                          child: mediaState is MediaLoaded &&
+                                  mediaState.fileImage != null
+                              ? Image.file(mediaState.fileImage!.file)
+                              : Image.network(
+                                  'https://www.paperplace.com.au/cdn/shop/products/via-felt-white.jpg?v=1458264914',
+                                ),
                         ),
                       ),
                       SizedBox(height: Gaps.largest),
