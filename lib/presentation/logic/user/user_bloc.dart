@@ -35,17 +35,28 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     }
   }
 
+  // FutureOr<void> _mapGetUserDataEventToState(
+  //     GetUserDataEvent event, Emitter<UserState> emit) async {
+  //   try {
+  //     emit(GetUserDataLoading(state));
+  //     final users =
+  //         await userRepository.getUserFromDb(event.userEntity?.userId ?? '');
+  //     emit(GetUserDataLoaded(users.toModel(), state));
+  //   } catch (error) {
+  //     emit(GetUserDataFailed(error.toString(), state));
+  //   }
+  // }
   FutureOr<void> _mapGetUserDataEventToState(
-      GetUserDataEvent event, Emitter<UserState> emit) async {
-    try {
-      emit(GetUserDataLoading(state));
-      final users =
-          await userRepository.getUserFromDb(event.userEntity?.userId ?? '');
-      emit(GetUserDataLoaded(users.toModel(), state));
-    } catch (error) {
-      emit(GetUserDataFailed(error.toString(), state));
-    }
+    GetUserDataEvent event, Emitter<UserState> emit) async {
+  try {
+    emit(GetUserDataLoading(state));
+    final users = await userRepository.getUserFromDb(event.userId ?? '');
+    emit(GetUserDataLoaded(users.toModel(), state));
+  } catch (error) {
+    emit(GetUserDataFailed(error.toString(), state));
   }
+}
+
 
   FutureOr<void> _mapUploadProfilePhotoEventToState(
       UploadProfilePhotoEvent event, Emitter<UserState> emit) async {

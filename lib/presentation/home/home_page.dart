@@ -1,5 +1,3 @@
-// ignore_for_file: deprecated_member_use
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -73,7 +71,7 @@ class _HomePageState extends State<HomePage> {
                       color: Colors.white,
                     ),
                     onPressed: () {
-                      Navigator.pushNamed(context, '/message-page');
+                      Navigator.pushNamed(context, '/chat-page');
                     },
                   ),
                 ],
@@ -86,28 +84,24 @@ class _HomePageState extends State<HomePage> {
                       scrollDirection: Axis.horizontal,
                       itemCount: userState.users?.length ?? 0,
                       itemBuilder: (context, index) {
+                        if (index >= (userState.users?.length ?? 0)) {
+                          return Container(); // return an empty container if index is out of bounds
+                        }
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Column(
                             children: [
                               CircleAvatar(
-                                backgroundImage:
-                                    userState.users?[index].profileImage != null
-                                        ? CachedNetworkImageProvider(userState
-                                                .users?[index].profileImage! ??
-                                            '')
-                                        : null,
+                                backgroundImage: userState.users?[index].profileImage != null
+                                    ? CachedNetworkImageProvider(userState.users?[index].profileImage ?? '')
+                                    : null,
                                 radius: 40,
-                                child:
-                                    userState.users?[index].profileImage == null
-                                        ? Text(
-                                            userState.users?[index].username
-                                                    ?.substring(0, 1)
-                                                    .toUpperCase() ??
-                                                '',
-                                            style: TextStyle(fontSize: 40),
-                                          )
-                                        : null,
+                                child: userState.users?[index].profileImage == null
+                                    ? Text(
+                                        userState.users?[index].username?.substring(0, 1).toUpperCase() ?? '',
+                                        style: TextStyle(fontSize: 40),
+                                      )
+                                    : null,
                               ),
                               Text(
                                 userState.users?[index].name ?? 'No name',
@@ -131,83 +125,58 @@ class _HomePageState extends State<HomePage> {
                         : ListView.builder(
                             itemCount: postState.posts?.length ?? 0,
                             itemBuilder: (context, index) {
+                              if (index >= (postState.posts?.length ?? 0)) {
+                                return Container(); // return an empty container if index is out of bounds
+                              }
                               final user = userState.users?.firstWhere(
-                                (user) =>
-                                    user.userId ==
-                                    postState.posts?[index].userId,
+                                (user) => user.userId == postState.posts?[index].userId,
                               );
                               return Column(
                                 children: [
                                   Card(
                                     child: ListTile(
                                       leading: CircleAvatar(
-                                        backgroundImage: userState
-                                                    .users?[index]
-                                                    .profileImage !=
-                                                null
-                                            ? CachedNetworkImageProvider(
-                                                userState.users?[index]
-                                                        .profileImage! ??
-                                                    '')
+                                        backgroundImage: user?.profileImage != null
+                                            ? CachedNetworkImageProvider(user?.profileImage ?? '')
                                             : null,
                                         radius: 40,
-                                        child: userState.users?[index]
-                                                    .profileImage ==
-                                                null
+                                        child: user?.profileImage == null
                                             ? Text(
-                                                userState.users?[index]
-                                                        .username
-                                                        ?.substring(0, 1)
-                                                        .toUpperCase() ??
-                                                    '',
-                                                style:
-                                                    TextStyle(fontSize: 40),
+                                                user?.username?.substring(0, 1).toUpperCase() ?? '',
+                                                style: TextStyle(fontSize: 40),
                                               )
                                             : null,
                                       ),
-                                      title:
-                                          Text(user?.name ?? 'No username'),
+                                      title: Text(user?.name ?? 'No username'),
                                     ),
                                   ),
                                   SizedBox(
                                     height: 400,
-                                    child: postState.posts?[index].photoUrl !=
-                                            null
-                                        ? CachedNetworkImage(
-                                            imageUrl: postState
-                                                .posts![index].photoUrl!)
+                                    child: postState.posts?[index].photoUrl != null
+                                        ? CachedNetworkImage(imageUrl: postState.posts![index].photoUrl!)
                                         : null,
                                   ),
                                   Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Row(
                                         children: [
-                                          SvgPicture.asset(Assets.heartIcon,
-                                              color: Colors.white,
-                                              height: 40),
-                                          SvgPicture.asset(Assets.commentIcon,
-                                              color: Colors.white,
-                                              height: 40),
-                                          SvgPicture.asset(Assets.vectorIcon,
-                                              color: Colors.white,
-                                              height: 28),
+                                          SvgPicture.asset(Assets.heartIcon, color: Colors.white, height: 40),
+                                          SvgPicture.asset(Assets.commentIcon, color: Colors.white, height: 40),
+                                          SvgPicture.asset(Assets.vectorIcon, color: Colors.white, height: 28),
                                         ],
                                       ),
-                                      SvgPicture.asset(Assets.saveIcon,
-                                          color: Colors.white, height: 30),
+                                      SvgPicture.asset(Assets.saveIcon, color: Colors.white, height: 30),
                                     ],
                                   ),
                                   Row(
                                     children: [
                                       Text(
-                                        postState.posts?[index].description ??
-                                            'No description',
+                                        postState.posts?[index].description ?? 'No description',
                                         style: TextStyle(color: Colors.white),
                                       ),
                                     ],
-                                  )
+                                  ),
                                 ],
                               );
                             },
@@ -228,18 +197,15 @@ class _HomePageState extends State<HomePage> {
                     label: '',
                   ),
                   BottomNavigationBarItem(
-                    icon: SvgPicture.asset(Assets.groupIcon,
-                        color: Colors.white, height: 24, width: 24),
+                    icon: SvgPicture.asset(Assets.groupIcon, color: Colors.white, height: 24, width: 24),
                     label: '',
                   ),
                   BottomNavigationBarItem(
-                    icon: SvgPicture.asset(Assets.movieIcon,
-                        color: Colors.white, height: 24, width: 24),
+                    icon: SvgPicture.asset(Assets.movieIcon, color: Colors.white, height: 24, width: 24),
                     label: '',
                   ),
                   BottomNavigationBarItem(
-                    icon: SvgPicture.asset(Assets.heartIcon,
-                        color: Colors.white, height: 24, width: 24),
+                    icon: SvgPicture.asset(Assets.heartIcon, color: Colors.white, height: 24, width: 24),
                     label: '',
                   ),
                   BottomNavigationBarItem(
