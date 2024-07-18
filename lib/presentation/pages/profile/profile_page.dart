@@ -1,8 +1,5 @@
-// ignore_for_file: deprecated_member_use
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../domain/entities/user_entity.dart';
@@ -18,7 +15,8 @@ import 'widgets/int_on_string.dart';
 import 'widgets/text_field_widget.dart';
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
+  const ProfilePage({super.key, required this.userEntity});
+  final UserEntity userEntity;
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -28,9 +26,9 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     super.initState();
-    final userId =
-        context.read<AuthBloc>().state.userCredential?.user?.uid ?? '';
-    context.read<UserBloc>().add(GetUserDataEvent(userId));
+    context
+        .read<UserBloc>()
+        .add(GetUserDataEvent(widget.userEntity.userId ?? ''));
     context.read<PostBloc>().add(GetPostsFromCollectionEvent());
   }
 
@@ -56,9 +54,7 @@ class _ProfilePageState extends State<ProfilePage> {
         final bioController =
             TextEditingController(text: userState.userEntity?.bio);
         return BlocConsumer<PostBloc, PostState>(
-          listener: (context, postState) {
-            // TODO: implement listener
-          },
+          listener: (context, postState) {},
           builder: (context, postState) {
             final postsList = postState.posts
                 ?.where((post) => post.userId == userState.userEntity?.userId)
@@ -81,7 +77,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   } else if (authState is SaveUserToDbLoaded) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text('Information has updated succesfully'),
+                        content: Text('Information has updated successfully'),
                       ),
                     );
                     Navigator.pushNamed(context, '/home-page');
@@ -112,10 +108,14 @@ class _ProfilePageState extends State<ProfilePage> {
                           ],
                         ),
                         Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(userState.userEntity?.name ?? 'Here need to be your name'),
-                            Text(userState.userEntity?.username ?? 'Here need to be your username'),
-                            Text(userState.userEntity?.bio ?? 'Here need to be your bio'),
+                            Text(userState.userEntity?.name ??
+                                'Here need to be your name'),
+                            Text(userState.userEntity?.username ??
+                                'Here need to be your username'),
+                            Text(userState.userEntity?.bio ??
+                                'Here need to be your bio'),
                           ],
                         ),
                         Row(
@@ -123,18 +123,16 @@ class _ProfilePageState extends State<ProfilePage> {
                           children: [
                             TextButton(
                               style: ButtonStyle(
-                                shape: MaterialStateProperty.all<
+                                shape: WidgetStateProperty.all<
                                     RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
                                 ),
-                                backgroundColor: MaterialStateProperty.all<
-                                        Color>(
+                                backgroundColor: WidgetStateProperty.all<Color>(
                                     const Color.fromARGB(255, 102, 100, 100)),
-                                foregroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        Colors.white),
+                                foregroundColor: WidgetStateProperty.all<Color>(
+                                    Colors.white),
                               ),
                               child: const Text('    Edit profile    '),
                               onPressed: () {
@@ -157,7 +155,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                               .showSnackBar(
                                             SnackBar(
                                               content: Text(
-                                                  'Media updated succefully'),
+                                                  'Media updated successfully'),
                                             ),
                                           );
                                         }
@@ -232,7 +230,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                             .fileImage
                                                                             ?.file),
                                                                   );
-                                                                  Navigator.pushNamed(context, '/home-page');
+                                                              Navigator.pushNamed(
+                                                                  context,
+                                                                  '/home-page');
                                                             },
                                                           ),
                                                         ],
@@ -405,18 +405,16 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                             TextButton(
                               style: ButtonStyle(
-                                shape: MaterialStateProperty.all<
+                                shape: WidgetStateProperty.all<
                                     RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
                                 ),
-                                backgroundColor: MaterialStateProperty.all<
-                                        Color>(
+                                backgroundColor: WidgetStateProperty.all<Color>(
                                     const Color.fromARGB(255, 102, 100, 100)),
-                                foregroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        Colors.white),
+                                foregroundColor: WidgetStateProperty.all<Color>(
+                                    Colors.white),
                               ),
                               child: const Text('    Share profile    '),
                               onPressed: () {},
@@ -452,7 +450,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               ? const Center(
                                   child: Text(
                                     'No posts yet',
-                                    style: TextStyle(color: Colors.white),
+                                    style: TextStyle(color: Colors.red),
                                   ),
                                 )
                               : GridView.builder(

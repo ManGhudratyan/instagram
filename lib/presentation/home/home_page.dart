@@ -4,11 +4,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
 import '../constants/assets.dart';
 import '../logic/auth/auth_bloc.dart';
 import '../logic/post/post_bloc.dart';
 import '../logic/user/user_bloc.dart';
+import '../pages/profile/profile_page.dart';
+import '../pages/user/user_page.dart';
 import '../widgets/media_bottom_sheet_widget.dart';
 
 class HomePage extends StatefulWidget {
@@ -123,30 +124,47 @@ class _HomePageState extends State<HomePage> {
                                         color: Colors.grey,
                                       ),
                                     ),
-                                    child: CircleAvatar(
-                                      backgroundColor:
-                                          Theme.of(context).colorScheme.primary,
-                                      backgroundImage: userState
-                                                  .users?[index].profileImage !=
-                                              null
-                                          ? CachedNetworkImageProvider(userState
-                                                  .users?[index].profileImage ??
-                                              '')
-                                          : null,
-                                      radius: 40,
-                                      child: userState
-                                                  .users?[index].profileImage ==
-                                              null
-                                          ? Text(
-                                              userState.users?[index].username
-                                                      ?.substring(0, 1)
-                                                      .toUpperCase() ??
-                                                  '',
-                                              style: const TextStyle(
-                                                  fontSize: 40,
-                                                  color: Colors.grey),
-                                            )
-                                          : null,
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        final user = userState.users?[index];
+                                        if (user != null) {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => UserPage(
+                                                userEntity: user,
+                                              ),
+                                            ),
+                                          );
+                                        }
+                                      },
+                                      child: CircleAvatar(
+                                        backgroundColor: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                        backgroundImage: userState.users?[index]
+                                                    .profileImage !=
+                                                null
+                                            ? CachedNetworkImageProvider(
+                                                userState.users?[index]
+                                                        .profileImage ??
+                                                    '')
+                                            : null,
+                                        radius: 40,
+                                        child: userState.users?[index]
+                                                    .profileImage ==
+                                                null
+                                            ? Text(
+                                                userState.users?[index].username
+                                                        ?.substring(0, 1)
+                                                        .toUpperCase() ??
+                                                    '',
+                                                style: const TextStyle(
+                                                    fontSize: 40,
+                                                    color: Colors.grey),
+                                              )
+                                            : null,
+                                      ),
                                     ),
                                   ),
                                   Text(
@@ -304,7 +322,23 @@ class _HomePageState extends State<HomePage> {
                       BottomNavigationBarItem(
                         icon: IconButton(
                           onPressed: () {
-                            Navigator.pushNamed(context, '/profile-page');
+                            final userId = context
+                                .read<AuthBloc>()
+                                .state
+                                .userCredential
+                                ?.user
+                                ?.uid;
+                            if (userId != null) {
+                              context
+                                  .read<UserBloc>()
+                                  .add(GetUserDataEvent(userId));
+                              Navigator.pushNamed(
+                                context,
+                                '/profile-page',
+                                arguments:
+                                    context.read<UserBloc>().state.userEntity,
+                              );
+                            }
                           },
                           icon: SvgPicture.asset(
                             Assets.elipseIcon,
