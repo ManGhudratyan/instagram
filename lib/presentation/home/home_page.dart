@@ -8,6 +8,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../constants/assets.dart';
 import '../logic/post/post_bloc.dart';
 import '../logic/user/user_bloc.dart';
+import '../widgets/media_bottom_sheet_widget.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -63,72 +64,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 actions: [
-                  IconButton(
-                    icon: SvgPicture.asset(
-                      Assets.plusIcon,
-                      height: 24,
-                      width: 24,
-                      color: Colors.white,
-                    ),
-                    onPressed: () {
-                      showModalBottomSheet(
-                        context: context,
-                        builder: (context) {
-                          return SizedBox(
-                            height: 430,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                Expanded(
-                                  child: ListView.builder(
-                                    itemCount: 6,
-                                    itemBuilder: (context, index) {
-                                      final titles = [
-                                        'Reel',
-                                        'Post',
-                                        'Story',
-                                        'Story Highlight',
-                                        'Live',
-                                        'Guide',
-                                      ];
-                                      final icons = [
-                                        Icons.video_collection_outlined,
-                                        Icons.square_outlined,
-                                        Icons.add_circle_outline_outlined,
-                                        Icons.highlight_outlined,
-                                        Icons.leak_remove_outlined,
-                                        Icons.menu_book,
-                                      ];
-                                      return Card(
-                                        child: InkWell(
-                                          onTap: () {
-                                            if (index == 1) {
-                                              Navigator.pushNamed(
-                                                  context, '/create-post-page');
-                                            }
-                                          },
-                                          child: ListTile(
-                                            leading: CircleAvatar(
-                                              backgroundColor:
-                                                  const Color.fromARGB(
-                                                      255, 194, 201, 207),
-                                              child: Icon(icons[index]),
-                                            ),
-                                            title: Text(titles[index]),
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      );
-                    },
-                  ),
+                  MediaBottomSheetWidget(),
                   IconButton(
                     icon: SvgPicture.asset(
                       Assets.messengerIcon,
@@ -200,61 +136,79 @@ class _HomePageState extends State<HomePage> {
                                     user.userId ==
                                     postState.posts?[index].userId,
                               );
-                              return Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 8, right: 8),
-                                child: Column(
-                                  children: [
-                                    Card(
-                                      child: ListTile(
-                                        leading: const CircleAvatar(
-                                          backgroundColor: Colors.pink,
-                                        ),
-                                        title:
-                                            Text(user?.name ?? 'No username'),
+                              return Column(
+                                children: [
+                                  Card(
+                                    child: ListTile(
+                                      leading: CircleAvatar(
+                                        backgroundImage: userState
+                                                    .users?[index]
+                                                    .profileImage !=
+                                                null
+                                            ? CachedNetworkImageProvider(
+                                                userState.users?[index]
+                                                        .profileImage! ??
+                                                    '')
+                                            : null,
+                                        radius: 40,
+                                        child: userState.users?[index]
+                                                    .profileImage ==
+                                                null
+                                            ? Text(
+                                                userState.users?[index]
+                                                        .username
+                                                        ?.substring(0, 1)
+                                                        .toUpperCase() ??
+                                                    '',
+                                                style:
+                                                    TextStyle(fontSize: 40),
+                                              )
+                                            : null,
                                       ),
+                                      title:
+                                          Text(user?.name ?? 'No username'),
                                     ),
-                                    SizedBox(
-                                      height: 400,
-                                      child: postState.posts?[index].photoUrl !=
-                                              null
-                                          ? CachedNetworkImage(
-                                              imageUrl: postState
-                                                  .posts![index].photoUrl!)
-                                          : null,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            SvgPicture.asset(Assets.heartIcon,
-                                                color: Colors.white,
-                                                height: 40),
-                                            SvgPicture.asset(Assets.commentIcon,
-                                                color: Colors.white,
-                                                height: 40),
-                                            SvgPicture.asset(Assets.vectorIcon,
-                                                color: Colors.white,
-                                                height: 28),
-                                          ],
-                                        ),
-                                        SvgPicture.asset(Assets.saveIcon,
-                                            color: Colors.white, height: 30),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          postState.posts?[index].description ??
-                                              'No description',
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                      ],
-                                    )
-                                  ],
-                                ),
+                                  ),
+                                  SizedBox(
+                                    height: 400,
+                                    child: postState.posts?[index].photoUrl !=
+                                            null
+                                        ? CachedNetworkImage(
+                                            imageUrl: postState
+                                                .posts![index].photoUrl!)
+                                        : null,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          SvgPicture.asset(Assets.heartIcon,
+                                              color: Colors.white,
+                                              height: 40),
+                                          SvgPicture.asset(Assets.commentIcon,
+                                              color: Colors.white,
+                                              height: 40),
+                                          SvgPicture.asset(Assets.vectorIcon,
+                                              color: Colors.white,
+                                              height: 28),
+                                        ],
+                                      ),
+                                      SvgPicture.asset(Assets.saveIcon,
+                                          color: Colors.white, height: 30),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        postState.posts?[index].description ??
+                                            'No description',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ],
+                                  )
+                                ],
                               );
                             },
                           ),

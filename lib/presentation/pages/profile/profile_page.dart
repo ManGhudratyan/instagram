@@ -4,7 +4,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 
 import '../../../domain/entities/user_entity.dart';
 import '../../constants/assets.dart';
@@ -13,6 +12,8 @@ import '../../logic/auth/auth_bloc.dart';
 import '../../logic/media/media_bloc.dart';
 import '../../logic/post/post_bloc.dart';
 import '../../logic/user/user_bloc.dart';
+import '../../widgets/media_bottom_sheet_widget.dart';
+import '../../widgets/setting_bottom_sheet_widget.dart';
 import 'widgets/int_on_string.dart';
 import 'widgets/text_field_widget.dart';
 
@@ -54,19 +55,9 @@ class _ProfilePageState extends State<ProfilePage> {
           appBar: AppBar(
               automaticallyImplyLeading: false,
               title: Text(userState.userEntity?.username ?? 'No username'),
-              actions: [
-                IconButton(
-                  icon: SvgPicture.asset(Assets.plusIcon,
-                      height: 24, width: 24, color: Colors.white),
-                  onPressed: () {},
-                ),
-                IconButton(
-                  icon: const Icon(
-                    Icons.menu,
-                    color: Colors.white,
-                  ),
-                  onPressed: () {},
-                ),
+              actions: const [
+                MediaBottomSheetWidget(),
+                SettingBottomSheetWidget(),
               ]),
           body: BlocConsumer<PostBloc, PostState>(
             listener: (context, postState) {
@@ -118,14 +109,14 @@ class _ProfilePageState extends State<ProfilePage> {
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
                                 ),
-                                backgroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        Colors.white),
+                                backgroundColor: MaterialStateProperty.all<
+                                        Color>(
+                                    const Color.fromARGB(255, 102, 100, 100)),
                                 foregroundColor:
                                     MaterialStateProperty.all<Color>(
-                                        Colors.black),
+                                        Colors.white),
                               ),
-                              child: Text('    Edit profile    '),
+                              child: const Text('    Edit profile    '),
                               onPressed: () {
                                 showModalBottomSheet<void>(
                                   context: context,
@@ -236,18 +227,13 @@ class _ProfilePageState extends State<ProfilePage> {
                                                             onTap: () {
                                                               showModalBottomSheet(
                                                                 backgroundColor:
-                                                                    const Color
-                                                                        .fromARGB(
-                                                                        255,
-                                                                        244,
-                                                                        255,
-                                                                        255),
+                                                                    Colors.white,
                                                                 context:
                                                                     context,
                                                                 builder:
                                                                     (context) {
                                                                   return SizedBox(
-                                                                    height: 200,
+                                                                    height: 170,
                                                                     width: MediaQuery.of(
                                                                             context)
                                                                         .size
@@ -257,7 +243,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                       children: [
                                                                         ElevatedButton(
                                                                           style:
-                                                                              ElevatedButton.styleFrom(backgroundColor: const Color.fromRGBO(1, 149, 247, 1)),
+                                                                              ElevatedButton.styleFrom(backgroundColor: Color.fromARGB(255, 124, 124, 124)),
                                                                           onPressed:
                                                                               () {
                                                                             context.read<MediaBloc>().add(UploadPictureFromGalleryEvent());
@@ -271,7 +257,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                         ),
                                                                         ElevatedButton(
                                                                           style:
-                                                                              ElevatedButton.styleFrom(backgroundColor: const Color.fromRGBO(1, 149, 247, 1)),
+                                                                              ElevatedButton.styleFrom(backgroundColor: Color.fromARGB(255, 124, 124, 124)),
                                                                           onPressed:
                                                                               () {
                                                                             context.read<MediaBloc>().add(UploadPictureFromCameraEvent());
@@ -285,7 +271,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                         ),
                                                                         ElevatedButton(
                                                                           style:
-                                                                              ElevatedButton.styleFrom(backgroundColor: const Color.fromRGBO(1, 149, 247, 1)),
+                                                                              ElevatedButton.styleFrom(backgroundColor: Color.fromARGB(255, 124, 124, 124)),
                                                                           onPressed:
                                                                               () {},
                                                                           child:
@@ -394,30 +380,33 @@ class _ProfilePageState extends State<ProfilePage> {
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
                                 ),
-                                backgroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        Colors.white),
+                                backgroundColor: MaterialStateProperty.all<
+                                        Color>(
+                                    const Color.fromARGB(255, 102, 100, 100)),
                                 foregroundColor:
                                     MaterialStateProperty.all<Color>(
-                                        Colors.black),
+                                        Colors.white),
                               ),
-                              child: Text('    Share profile    '),
+                              child: const Text('    Share profile    '),
                               onPressed: () {},
                             ),
                             TextButton(
                               style: ButtonStyle(
-                                  backgroundColor:
-                                      MaterialStateProperty.all<Color>(
-                                          Colors.white)),
-                              child: Icon(
+                                  backgroundColor: MaterialStateProperty.all<
+                                          Color>(
+                                      const Color.fromRGBO(65, 62, 62, 0.612))),
+                              child: const Icon(
                                 Icons.keyboard_arrow_down_outlined,
-                                color: Colors.black,
+                                color: Colors.white,
                               ),
                               onPressed: () {},
                             )
                           ],
                         ),
-                        const Divider(),
+                        SizedBox(height: Gaps.extraLarge),
+                        const Divider(
+                          color: Colors.grey,
+                        ),
                         const Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
@@ -425,10 +414,11 @@ class _ProfilePageState extends State<ProfilePage> {
                             Icon(Icons.person_pin_rounded, size: 30)
                           ],
                         ),
+                        SizedBox(height: Gaps.large),
                         Expanded(
                           child: postState.posts == null ||
                                   postState.posts!.isEmpty
-                              ? Center(
+                              ? const Center(
                                   child: Text(
                                     'There are no posts',
                                     style: TextStyle(color: Colors.white),
@@ -436,7 +426,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 )
                               : GridView.builder(
                                   gridDelegate:
-                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                      const SliverGridDelegateWithFixedCrossAxisCount(
                                     crossAxisCount: 3,
                                     mainAxisSpacing: 8,
                                     crossAxisSpacing: 8,
