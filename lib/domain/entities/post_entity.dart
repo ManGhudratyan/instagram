@@ -57,8 +57,8 @@ class PostEntity {
   }
 
   @JsonKey(includeIfNull: false)
-  final String postId;
-  final String userId;
+  final String? postId;
+  final String? userId;
   final String? photoUrl;
   final String? description;
 

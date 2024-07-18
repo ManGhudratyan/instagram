@@ -135,111 +135,129 @@ class _HomePageState extends State<HomePage> {
                       width: 24,
                       color: Colors.white,
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/message-page');
+                    },
                   ),
                 ],
               ),
-              body: ListView.builder(
-                itemCount: userState.users?.length ?? 0,
-                itemBuilder: (context, index) {
-                  final user = userState.users?[index];
-                  return Column(
-                    children: [
-                      SizedBox(
-                        height: 120,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: userState.users?.length ?? 0,
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                children: [
-                                  CircleAvatar(
-                                    backgroundImage:
-                                        userState.users?[index].profileImage !=
-                                                null
-                                            ? NetworkImage(userState
-                                                    .users?[index]
-                                                    .profileImage! ??
-                                                '')
-                                            : null,
-                                    radius: 40,
-                                    child:
-                                        userState.users?[index].profileImage ==
-                                                null
-                                            ? Text(
-                                                userState.users?[index].username
-                                                        ?.substring(0, 1)
-                                                        .toUpperCase() ??
-                                                    '',
-                                                style: TextStyle(fontSize: 40),
-                                              )
-                                            : null,
-                                  ),
-                                  Text(
-                                    userState.users?[index].name ?? 'No name',
-                                    style: const TextStyle(color: Colors.white),
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                      const Divider(),
-                      Column(
-                        children: [
-                          Card(
-                            child: ListTile(
-                              leading: const CircleAvatar(
-                                backgroundColor: Colors.pink,
-                              ),
-                                title: Text(user?.name ?? 'No username'),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 400,
-                            child: postState.posts?[index].photoUrl != null
-                                ? Image.network(
-                                    postState.posts![index].photoUrl!)
-                                : null,
-                          )
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
+              body: Column(
+                children: [
+                  SizedBox(
+                    height: 120,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: userState.users?.length ?? 0,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
                             children: [
-                              SvgPicture.asset(Assets.heartIcon,
-                                  color: Colors.white, height: 40),
-                              SvgPicture.asset(Assets.commentIcon,
-                                  color: Colors.white, height: 40),
-                              SvgPicture.asset(Assets.vectorIcon,
-                                  color: Colors.white, height: 28),
+                              CircleAvatar(
+                                backgroundImage:
+                                    userState.users?[index].profileImage != null
+                                        ? NetworkImage(userState
+                                                .users?[index].profileImage! ??
+                                            '')
+                                        : null,
+                                radius: 40,
+                                child:
+                                    userState.users?[index].profileImage == null
+                                        ? Text(
+                                            userState.users?[index].username
+                                                    ?.substring(0, 1)
+                                                    .toUpperCase() ??
+                                                '',
+                                            style: TextStyle(fontSize: 40),
+                                          )
+                                        : null,
+                              ),
+                              Text(
+                                userState.users?[index].name ?? 'No name',
+                                style: const TextStyle(color: Colors.white),
+                              ),
                             ],
                           ),
-                          SvgPicture.asset(Assets.saveIcon,
-                              color: Colors.white, height: 30),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            userState.users?[index].name ?? '',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            postState.posts?[index].description ??
-                                'No description',
-                            style: TextStyle(color: Colors.white),
+                        );
+                      },
+                    ),
+                  ),
+                  const Divider(),
+                  Expanded(
+                    child: postState.posts == null || postState.posts!.isEmpty
+                        ? Center(
+                            child: Text(
+                              'There are no posts',
+                              style: TextStyle(color: Colors.white),
+                            ),
                           )
-                        ],
-                      )
-                    ],
-                  );
-                },
+                        : ListView.builder(
+                            itemCount: postState.posts?.length ?? 0,
+                            itemBuilder: (context, index) {
+                              final user = userState.users?.firstWhere(
+                                (user) =>
+                                    user.userId ==
+                                    postState.posts?[index].userId,
+                              );
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 8, right: 8),
+                                child: Column(
+                                  children: [
+                                    Card(
+                                      child: ListTile(
+                                        leading: const CircleAvatar(
+                                          backgroundColor: Colors.pink,
+                                        ),
+                                        title:
+                                            Text(user?.name ?? 'No username'),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 400,
+                                      child: postState.posts?[index].photoUrl !=
+                                              null
+                                          ? Image.network(
+                                              postState.posts![index].photoUrl!)
+                                          : null,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            SvgPicture.asset(Assets.heartIcon,
+                                                color: Colors.white,
+                                                height: 40),
+                                            SvgPicture.asset(Assets.commentIcon,
+                                                color: Colors.white,
+                                                height: 40),
+                                            SvgPicture.asset(Assets.vectorIcon,
+                                                color: Colors.white,
+                                                height: 28),
+                                          ],
+                                        ),
+                                        SvgPicture.asset(Assets.saveIcon,
+                                            color: Colors.white, height: 30),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          postState.posts?[index].description ??
+                                              'No description',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                  ),
+                ],
               ),
               bottomNavigationBar: BottomNavigationBar(
                 items: <BottomNavigationBarItem>[

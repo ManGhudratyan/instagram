@@ -6,9 +6,9 @@ part 'post_model.g.dart';
 class PostModel extends PostEntity {
   PostModel({
     super.description,
-    required super.userId,
+    super.userId,
     super.photoUrl,
-    required super.postId,
+    super.postId,
   });
 
   factory PostModel.fromJson(Map<String, dynamic> json) =>

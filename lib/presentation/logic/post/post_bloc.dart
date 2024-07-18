@@ -51,7 +51,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
       await for (final snapshot in postRepository.getPostsFromCollection()) {
         final posts =
             snapshot.docs.map((doc) => PostModel.fromJson(doc.data())).toList();
-        // final posts = users.map((e) => PostEntity.fromModel(e),).toList();
+        print(posts);
         emit(GetPostFromCollectionLoaded(state, posts));
       }
     } catch (error) {

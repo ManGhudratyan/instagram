@@ -1,15 +1,18 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import '../../models/user/user_model.dart';
 import 'user_service.dart';
 
 class UserServiceImp extends UserService {
-  UserServiceImp(this.firebaseFirestore, this.firebaseStorage);
+  UserServiceImp(
+      this.firebaseFirestore, this.firebaseStorage, this.firebaseAuth);
 
   final FirebaseFirestore firebaseFirestore;
   final FirebaseStorage firebaseStorage;
+  final FirebaseAuth firebaseAuth;
 
   @override
   Future<void> saveUserToDB(UserModel userModel) async {
@@ -43,5 +46,15 @@ class UserServiceImp extends UserService {
   @override
   Stream<QuerySnapshot<Map<String, dynamic>>> getUsersFromCollection() {
     return FirebaseFirestore.instance.collection('users').snapshots();
+  }
+
+  @override
+  Future<String> getCurrentUser() async {
+    final user = firebaseAuth.currentUser;
+    if (user != null) {
+      return user.uid;
+    } else {
+      throw Exception('No user logged in');
+    }
   }
 }

@@ -6,7 +6,6 @@ sealed class PostEvent extends Equatable {
   final String? userId;
   final String? postId;
 
-
   @override
   List<Object?> get props => [userId, postEntity];
 }
@@ -16,9 +15,7 @@ final class SavePostToDbEvent extends PostEvent {
       : super(postEntity: postEntity);
 }
 
-final class GetPostsFromCollectionEvent extends PostEvent {
-  // const GetPostDataEvent(String postId) : super(postId: postId);
-}
+final class GetPostsFromCollectionEvent extends PostEvent {}
 
 final class DeletePostDataEvent extends PostEvent {
   const DeletePostDataEvent(String userId) : super(userId: userId);

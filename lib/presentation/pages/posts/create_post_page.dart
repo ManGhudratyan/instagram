@@ -59,7 +59,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
                               .read<PostBloc>()
                               .add(SavePostToDbEvent(postEntity));
                           context.read<PostBloc>().add(UploadPostEvent(
-                                postEntity.postId,
+                                postEntity.postId ?? '',
                                 mediaState.fileImage!.file,
                               ));
                           Navigator.pushNamed(context, '/home-page');

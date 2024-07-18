@@ -10,6 +10,7 @@ abstract class AppTheme {
   }
 
   Color get onPrimary;
+  Color get primaryColor;
   Color get secondary;
   Color get onSecondary;
   Color get error;

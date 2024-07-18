@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'app_theme.dart';
 
 class DarkThemeMode extends AppTheme {
+  @override
   Color get primaryColor => Color.fromARGB(255, 0, 0, 0);
 
   @override
