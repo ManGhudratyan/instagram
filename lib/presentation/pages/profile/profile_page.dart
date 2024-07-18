@@ -1,6 +1,10 @@
+// ignore_for_file: deprecated_member_use
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 
 import '../../../domain/entities/user_entity.dart';
 import '../../constants/assets.dart';
@@ -52,15 +56,13 @@ class _ProfilePageState extends State<ProfilePage> {
               title: Text(userState.userEntity?.username ?? 'No username'),
               actions: [
                 IconButton(
-                  icon: const Icon(
-                    Icons.control_point_duplicate_sharp,
-                    color: Colors.white,
-                  ),
+                  icon: SvgPicture.asset(Assets.plusIcon,
+                      height: 24, width: 24, color: Colors.white),
                   onPressed: () {},
                 ),
                 IconButton(
                   icon: const Icon(
-                    Icons.more_horiz_outlined,
+                    Icons.menu,
                     color: Colors.white,
                   ),
                   onPressed: () {},
@@ -90,7 +92,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           children: [
                             CircleAvatar(
                                 radius: 50,
-                                backgroundImage: NetworkImage(
+                                backgroundImage: CachedNetworkImageProvider(
                                     userState.userEntity?.profileImage ?? '')),
                             const IntOnString(count: '0', text: 'Posts'),
                             const IntOnString(count: '0', text: 'Followers'),
@@ -108,13 +110,22 @@ class _ProfilePageState extends State<ProfilePage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.white),
-                              child: const Text(
-                                'Edit profile',
-                                style: TextStyle(color: Colors.black),
+                            TextButton(
+                              style: ButtonStyle(
+                                shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                ),
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Colors.white),
+                                foregroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Colors.black),
                               ),
+                              child: Text('    Edit profile    '),
                               onPressed: () {
                                 showModalBottomSheet<void>(
                                   context: context,
@@ -213,10 +224,11 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                       .userEntity
                                                                       ?.profileImage !=
                                                                   null
-                                                              ? NetworkImage(userState
-                                                                      .userEntity
-                                                                      ?.profileImage ??
-                                                                  '')
+                                                              ? CachedNetworkImageProvider(
+                                                                  userState
+                                                                          .userEntity
+                                                                          ?.profileImage ??
+                                                                      '')
                                                               : AssetImage(Assets
                                                                   .profileImage),
                                                           child:
@@ -374,23 +386,34 @@ class _ProfilePageState extends State<ProfilePage> {
                                 );
                               },
                             ),
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.white,
+                            TextButton(
+                              style: ButtonStyle(
+                                shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                ),
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Colors.white),
+                                foregroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Colors.black),
                               ),
+                              child: Text('    Share profile    '),
                               onPressed: () {},
-                              child: const Text('Share profile'),
                             ),
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.white,
+                            TextButton(
+                              style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.all<Color>(
+                                          Colors.white)),
+                              child: Icon(
+                                Icons.keyboard_arrow_down_outlined,
+                                color: Colors.black,
                               ),
                               onPressed: () {},
-                              child: IconButton(
-                                onPressed: () {},
-                                icon: const Icon(
-                                    Icons.keyboard_arrow_down_outlined),
-                              ),
                             )
                           ],
                         ),
@@ -398,8 +421,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         const Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            Icon(Icons.grid_on_outlined, size: 40),
-                            Icon(Icons.person_pin_rounded, size: 40)
+                            Icon(Icons.grid_on_outlined, size: 30),
+                            Icon(Icons.person_pin_rounded, size: 30)
                           ],
                         ),
                         Expanded(
@@ -414,18 +437,18 @@ class _ProfilePageState extends State<ProfilePage> {
                               : GridView.builder(
                                   gridDelegate:
                                       SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2,
-                                    mainAxisSpacing: 8.0,
-                                    crossAxisSpacing: 8.0,
+                                    crossAxisCount: 3,
+                                    mainAxisSpacing: 8,
+                                    crossAxisSpacing: 8,
                                   ),
                                   itemCount: postState.posts!.length,
                                   itemBuilder: (context, index) {
                                     return SizedBox(
-                                      height: 100,
                                       child: postState.posts![index].photoUrl !=
                                               null
-                                          ? Image.network(
-                                              postState.posts![index].photoUrl!,
+                                          ? CachedNetworkImage(
+                                              imageUrl: postState
+                                                  .posts![index].photoUrl!,
                                               fit: BoxFit.cover,
                                             )
                                           : Container(),

@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -156,7 +157,7 @@ class _HomePageState extends State<HomePage> {
                               CircleAvatar(
                                 backgroundImage:
                                     userState.users?[index].profileImage != null
-                                        ? NetworkImage(userState
+                                        ? CachedNetworkImageProvider(userState
                                                 .users?[index].profileImage! ??
                                             '')
                                         : null,
@@ -217,8 +218,9 @@ class _HomePageState extends State<HomePage> {
                                       height: 400,
                                       child: postState.posts?[index].photoUrl !=
                                               null
-                                          ? Image.network(
-                                              postState.posts![index].photoUrl!)
+                                          ? CachedNetworkImage(
+                                              imageUrl: postState
+                                                  .posts![index].photoUrl!)
                                           : null,
                                     ),
                                     Row(
