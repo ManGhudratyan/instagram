@@ -6,7 +6,7 @@ class IntOnString extends StatelessWidget {
     required this.count,
     required this.text,
   });
-  final String count;
+  final int count;
   final String text;
 
   @override
@@ -14,7 +14,7 @@ class IntOnString extends StatelessWidget {
     return Column(
       children: [
         Text(
-          count,
+          count.toString(),
           style: TextStyle(color: Colors.white),
         ),
         Text(

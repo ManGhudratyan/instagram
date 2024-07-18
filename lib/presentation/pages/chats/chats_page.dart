@@ -84,25 +84,36 @@ class _ChatsPageState extends State<ChatsPage> {
                               title: Text(usersList?[index].name ?? ''),
                               subtitle: Text('Sent just now'),
                               trailing: Icon(Icons.camera_alt),
-                              leading: CircleAvatar(
-                                backgroundImage:
-                                    usersList?[index].profileImage != null
-                                        ? CachedNetworkImageProvider(
-                                            usersList?[index].profileImage ??
-                                                '',
-                                          )
-                                        : null,
-                                radius: 40,
-                                child: usersList?[index].profileImage == null
-                                    ? Text(
-                                        usersList?[index]
-                                                .username
-                                                ?.substring(0, 1)
-                                                .toUpperCase() ??
-                                            '',
-                                        style: const TextStyle(fontSize: 40),
-                                      )
-                                    : null,
+                              leading: Container(
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                                child: CircleAvatar(
+                                  backgroundColor:
+                                      Theme.of(context).colorScheme.primary,
+                                  backgroundImage:
+                                      userState.users?[index].profileImage !=
+                                              null
+                                          ? CachedNetworkImageProvider(userState
+                                                  .users?[index].profileImage ??
+                                              '')
+                                          : null,
+                                  radius: 40,
+                                  child: userState.users?[index].profileImage ==
+                                          null
+                                      ? Text(
+                                          userState.users?[index].username
+                                                  ?.substring(0, 1)
+                                                  .toUpperCase() ??
+                                              '',
+                                          style: TextStyle(
+                                              fontSize: 40, color: Colors.grey),
+                                        )
+                                      : null,
+                                ),
                               ),
                             ),
                           );

@@ -28,6 +28,7 @@ class _GoogleLoginState extends State<GoogleLogin> {
           appBar: AppBar(
             title: Text('Instagram'),
             centerTitle: true,
+            backgroundColor: Theme.of(context).colorScheme.primary,
           ),
           body: Center(
             child: ElevatedButton(

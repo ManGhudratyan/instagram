@@ -1,9 +1,12 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../constants/assets.dart';
+import '../logic/auth/auth_bloc.dart';
 import '../logic/post/post_bloc.dart';
 import '../logic/user/user_bloc.dart';
 import '../widgets/media_bottom_sheet_widget.dart';
@@ -36,195 +39,287 @@ class _HomePageState extends State<HomePage> {
         }
       },
       builder: (context, userState) {
+        // final usersList = userState.users
+        //     ?.where(
+        //       (element) => element.userId != userState.userEntity?.userId,
+        //     )
+        //     .toList();
+
         if (userState is GetUsersFromCollectionLoading) {
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(),
           );
         }
-        return BlocConsumer<PostBloc, PostState>(
-          listener: (context, postState) {
-            if (postState is PostFailed) {
+        return BlocConsumer<AuthBloc, AuthState>(
+          listener: (context, authState) {
+            if (authState is PostFailed) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text(postState.error ?? ''),
+                  content: Text(authState.error ?? ''),
                 ),
               );
             }
           },
-          builder: (context, postState) {
-            return Scaffold(
-              appBar: AppBar(
-                automaticallyImplyLeading: false,
-                title: const Text(
-                  'Instagram',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                actions: [
-                  MediaBottomSheetWidget(),
-                  IconButton(
-                    icon: SvgPicture.asset(
-                      Assets.messengerIcon,
-                      height: 24,
-                      width: 24,
-                      color: Colors.white,
+          builder: (context, authState) {
+            return BlocConsumer<PostBloc, PostState>(
+              listener: (context, postState) {
+                if (postState is PostFailed) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(postState.error ?? ''),
                     ),
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/chat-page');
-                    },
-                  ),
-                ],
-              ),
-              body: Column(
-                children: [
-                  SizedBox(
-                    height: 120,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: userState.users?.length ?? 0,
-                      itemBuilder: (context, index) {
-                        if (index >= (userState.users?.length ?? 0)) {
-                          return Container(); // return an empty container if index is out of bounds
-                        }
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            children: [
-                              CircleAvatar(
-                                backgroundImage: userState.users?[index].profileImage != null
-                                    ? CachedNetworkImageProvider(userState.users?[index].profileImage ?? '')
-                                    : null,
-                                radius: 40,
-                                child: userState.users?[index].profileImage == null
-                                    ? Text(
-                                        userState.users?[index].username?.substring(0, 1).toUpperCase() ?? '',
-                                        style: TextStyle(fontSize: 40),
-                                      )
-                                    : null,
-                              ),
-                              Text(
-                                userState.users?[index].name ?? 'No name',
-                                style: const TextStyle(color: Colors.white),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                  const Divider(),
-                  Expanded(
-                    child: postState.posts == null || postState.posts!.isEmpty
-                        ? Center(
-                            child: Text(
-                              'There are no posts',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          )
-                        : ListView.builder(
-                            itemCount: postState.posts?.length ?? 0,
-                            itemBuilder: (context, index) {
-                              if (index >= (postState.posts?.length ?? 0)) {
-                                return Container(); // return an empty container if index is out of bounds
-                              }
-                              final user = userState.users?.firstWhere(
-                                (user) => user.userId == postState.posts?[index].userId,
-                              );
-                              return Column(
-                                children: [
-                                  Card(
-                                    child: ListTile(
-                                      leading: CircleAvatar(
-                                        backgroundImage: user?.profileImage != null
-                                            ? CachedNetworkImageProvider(user?.profileImage ?? '')
-                                            : null,
-                                        radius: 40,
-                                        child: user?.profileImage == null
-                                            ? Text(
-                                                user?.username?.substring(0, 1).toUpperCase() ?? '',
-                                                style: TextStyle(fontSize: 40),
-                                              )
-                                            : null,
-                                      ),
-                                      title: Text(user?.name ?? 'No username'),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 400,
-                                    child: postState.posts?[index].photoUrl != null
-                                        ? CachedNetworkImage(imageUrl: postState.posts![index].photoUrl!)
-                                        : null,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          SvgPicture.asset(Assets.heartIcon, color: Colors.white, height: 40),
-                                          SvgPicture.asset(Assets.commentIcon, color: Colors.white, height: 40),
-                                          SvgPicture.asset(Assets.vectorIcon, color: Colors.white, height: 28),
-                                        ],
-                                      ),
-                                      SvgPicture.asset(Assets.saveIcon, color: Colors.white, height: 30),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        postState.posts?[index].description ?? 'No description',
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              );
-                            },
-                          ),
-                  ),
-                ],
-              ),
-              bottomNavigationBar: BottomNavigationBar(
-                items: <BottomNavigationBarItem>[
-                  BottomNavigationBarItem(
-                    backgroundColor: Colors.black,
-                    icon: SvgPicture.asset(
-                      Assets.homeIcon,
-                      color: Colors.white,
-                      height: 24,
-                      width: 24,
-                    ),
-                    label: '',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: SvgPicture.asset(Assets.groupIcon, color: Colors.white, height: 24, width: 24),
-                    label: '',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: SvgPicture.asset(Assets.movieIcon, color: Colors.white, height: 24, width: 24),
-                    label: '',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: SvgPicture.asset(Assets.heartIcon, color: Colors.white, height: 24, width: 24),
-                    label: '',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: IconButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/profile-page');
-                      },
-                      icon: SvgPicture.asset(
-                        Assets.elipseIcon,
-                        color: Colors.white,
-                        height: 24,
-                        width: 24,
+                  );
+                }
+              },
+              builder: (context, postState) {
+                if (postState is PostLoading) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                return Scaffold(
+                  appBar: AppBar(
+                    automaticallyImplyLeading: false,
+                    title: const Text(
+                      'Instagram',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                    label: '',
+                    actions: [
+                      const MediaBottomSheetWidget(),
+                      IconButton(
+                        icon: SvgPicture.asset(
+                          Assets.messengerIcon,
+                          height: 24,
+                          width: 24,
+                          color: Colors.white,
+                        ),
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/chat-page');
+                        },
+                      ),
+                    ],
                   ),
-                ],
-                selectedItemColor: Colors.amber[800],
-              ),
+                  body: Column(
+                    children: [
+                      SizedBox(
+                        height: 120,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: userState.users?.length ?? 0,
+                          itemBuilder: (context, index) {
+                            if (index >= (userState.users?.length ?? 0)) {
+                              return Container();
+                            }
+                            return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      border: Border.all(
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                    child: CircleAvatar(
+                                      backgroundColor:
+                                          Theme.of(context).colorScheme.primary,
+                                      backgroundImage: userState
+                                                  .users?[index].profileImage !=
+                                              null
+                                          ? CachedNetworkImageProvider(userState
+                                                  .users?[index].profileImage ??
+                                              '')
+                                          : null,
+                                      radius: 40,
+                                      child: userState
+                                                  .users?[index].profileImage ==
+                                              null
+                                          ? Text(
+                                              userState.users?[index].username
+                                                      ?.substring(0, 1)
+                                                      .toUpperCase() ??
+                                                  '',
+                                              style: const TextStyle(
+                                                  fontSize: 40,
+                                                  color: Colors.grey),
+                                            )
+                                          : null,
+                                    ),
+                                  ),
+                                  Text(
+                                    userState.users?[index].name ??
+                                        authState.userCredential?.user
+                                            ?.displayName ??
+                                        '',
+                                    style: const TextStyle(color: Colors.white),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      const Divider(),
+                      Expanded(
+                        child: postState.posts == null ||
+                                postState.posts!.isEmpty
+                            ? const Center(
+                                child: Text(
+                                  'No posts yet',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              )
+                            : ListView.builder(
+                                itemCount: postState.posts?.length ?? 0,
+                                itemBuilder: (context, index) {
+                                  if (index >= (postState.posts?.length ?? 0)) {
+                                    return Container();
+                                  }
+                                  final user = userState.users?.firstWhere(
+                                    (user) =>
+                                        user.userId ==
+                                        postState.posts?[index].userId,
+                                  );
+                                  return Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Card(
+                                        child: ListTile(
+                                          leading: CircleAvatar(
+                                            backgroundImage: user
+                                                        ?.profileImage !=
+                                                    null
+                                                ? CachedNetworkImageProvider(
+                                                    user?.profileImage ?? '')
+                                                : null,
+                                            radius: 40,
+                                            child: user?.profileImage == null
+                                                ? Text(
+                                                    user?.username
+                                                            ?.substring(0, 1)
+                                                            .toUpperCase() ??
+                                                        '',
+                                                    style: const TextStyle(
+                                                        fontSize: 40),
+                                                  )
+                                                : null,
+                                          ),
+                                          title:
+                                              Text(user?.name ?? 'No username'),
+                                        ),
+                                      ),
+                                      Center(
+                                        child: SizedBox(
+                                          height: 400,
+                                          child: postState
+                                                      .posts?[index].photoUrl !=
+                                                  null
+                                              ? CachedNetworkImage(
+                                                  imageUrl: postState
+                                                      .posts![index].photoUrl!)
+                                              : null,
+                                        ),
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              SvgPicture.asset(Assets.heartIcon,
+                                                  color: Colors.white,
+                                                  height: 40),
+                                              SvgPicture.asset(
+                                                  Assets.commentIcon,
+                                                  color: Colors.white,
+                                                  height: 40),
+                                              SvgPicture.asset(
+                                                  Assets.vectorIcon,
+                                                  color: Colors.white,
+                                                  height: 28),
+                                            ],
+                                          ),
+                                          SvgPicture.asset(Assets.saveIcon,
+                                              color: Colors.white, height: 30),
+                                        ],
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 8.0, bottom: 10.0),
+                                        child: Row(
+                                          children: [
+                                            const Text(
+                                              'Description ',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Text(
+                                              postState.posts?[index]
+                                                      .description ??
+                                                  'No description',
+                                              style: const TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              ),
+                      ),
+                    ],
+                  ),
+                  bottomNavigationBar: BottomNavigationBar(
+                    items: <BottomNavigationBarItem>[
+                      BottomNavigationBarItem(
+                        backgroundColor: Colors.black,
+                        icon: SvgPicture.asset(
+                          Assets.homeIcon,
+                          color: Colors.white,
+                          height: 24,
+                          width: 24,
+                        ),
+                        label: '',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: SvgPicture.asset(Assets.groupIcon,
+                            color: Colors.white, height: 24, width: 24),
+                        label: '',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: SvgPicture.asset(Assets.movieIcon,
+                            color: Colors.white, height: 24, width: 24),
+                        label: '',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: SvgPicture.asset(Assets.heartIcon,
+                            color: Colors.white, height: 24, width: 24),
+                        label: '',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: IconButton(
+                          onPressed: () {
+                            Navigator.pushNamed(context, '/profile-page');
+                          },
+                          icon: SvgPicture.asset(
+                            Assets.elipseIcon,
+                            color: Colors.white,
+                            height: 24,
+                            width: 24,
+                          ),
+                        ),
+                        label: '',
+                      ),
+                    ],
+                    selectedItemColor: Colors.amber[800],
+                  ),
+                );
+              },
             );
           },
         );
