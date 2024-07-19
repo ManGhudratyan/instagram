@@ -7,4 +7,6 @@ abstract class UserRepository {
   Future<void> uploadProfilePicture(String userId, File file);
   Future<UserEntity> getUserFromDb(String userId);
   Stream<QuerySnapshot<Map<String, dynamic>>> getUsersFromCollection();
+  Future<void> addFollowersList(String userId, List<String> newFollowers);
+  Future<void> removeFollower(String userId, String followerId);
 }

@@ -16,6 +16,8 @@ import 'data/services/auth/auth_service.dart';
 import 'data/services/auth/auth_service_imp.dart';
 import 'data/services/media/media_service.dart';
 import 'data/services/media/media_service_imp.dart';
+import 'data/services/message/message_service.dart';
+import 'data/services/message/message_service_imp.dart';
 import 'data/services/post/post_service.dart';
 import 'data/services/post/post_service_imp.dart';
 import 'data/services/user/user_service.dart';
@@ -34,12 +36,13 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: FirebaseOptions(
-      apiKey: 'AIzaSyBuAs7ySEpbAmuvNf1t5bOAPtpLpeO3qUc',
-      appId: '1:769958999795:android:3e8f61d31ae93e3ba4e986',
-      messagingSenderId: '',
-      projectId: 'instagram-flutter-fecce',
-      storageBucket: 'gs://instagram-flutter-fecce.appspot.com',
-    ),
+        apiKey: 'AIzaSyBuAs7ySEpbAmuvNf1t5bOAPtpLpeO3qUc',
+        appId: '1:769958999795:android:3e8f61d31ae93e3ba4e986',
+        messagingSenderId: '',
+        projectId: 'instagram-flutter-fecce',
+        storageBucket: 'gs://instagram-flutter-fecce.appspot.com',
+        databaseURL:
+            'https://instagram-flutter-fecce-default-rtdb.firebaseio.com/'),
   );
   runApp(
     MultiRepositoryProvider(
@@ -57,6 +60,12 @@ void main() async {
         ),
         RepositoryProvider<MediaService>(
           create: (context) => MediaServiceImp(),
+        ),
+        RepositoryProvider<MessageService>(
+          create: (context) => MessageServiceImp(
+            FirebaseDatabase.instance,
+            FirebaseStorage.instance,
+          ),
         ),
         RepositoryProvider<PostService>(
           create: (context) => PostServiceImp(

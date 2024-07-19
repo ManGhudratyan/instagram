@@ -56,5 +56,5 @@ class UserEntity {
   @JsonKey(includeIfNull: false)
   final String? bio;
 
-  where(bool Function(dynamic user) param0) {}
+  // where(bool Function(dynamic user) param0) {}
 }

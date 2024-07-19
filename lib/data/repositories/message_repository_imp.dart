@@ -10,4 +10,9 @@ class MessageRepositoryImp implements MessageRepository {
   Future<void> sendMessage(MessageModel messageModel) {
     return messageServiceImp.sendMessage(messageModel);
   }
+
+  @override
+  Future<List<MessageModel>> getMessages() {
+    return messageServiceImp.getMessages();
+  }
 }

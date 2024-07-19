@@ -9,4 +9,6 @@ abstract class UserService {
   Future<void> uploadProfilePicture(String userId, File file);
   Stream<QuerySnapshot<Map<String, dynamic>>> getUsersFromCollection();
   Future<String> getCurrentUser();
+  Future<void> addFollowersList(String userId, List<String> newFollowers);
+  Future<void> removeFollower(String userId, String followerId);
 }

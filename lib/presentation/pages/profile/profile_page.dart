@@ -154,6 +154,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(
                                             SnackBar(
+                                              backgroundColor: Colors.green,
                                               content: Text(
                                                   'Media updated successfully'),
                                             ),

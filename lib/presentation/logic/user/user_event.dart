@@ -1,12 +1,13 @@
 part of 'user_bloc.dart';
 
 sealed class UserEvent extends Equatable {
-  const UserEvent({this.userEntity, this.userId});
+  const UserEvent({this.userEntity, this.userId, this.newFollowers});
   final UserEntity? userEntity;
+  final List<String>? newFollowers;
   final String? userId;
 
   @override
-  List<Object?> get props => [userEntity];
+  List<Object?> get props => [userEntity, newFollowers, userId];
 }
 
 final class UpdateUserDataEvent extends UserEvent {
@@ -30,3 +31,18 @@ class UploadProfilePhotoEvent extends UserEvent {
 }
 
 class GetUsersCollectionEvent extends UserEvent {}
+
+class AddFollowersToDbEvent extends UserEvent {
+  const AddFollowersToDbEvent(String userId, List<String> newFollowers)
+      : super(userId: userId, newFollowers: newFollowers);
+}
+
+class RemoveFollowerFromDbEvent extends UserEvent {
+  final String userId;
+  final String followerId;
+
+  const RemoveFollowerFromDbEvent(this.userId, this.followerId);
+
+  @override
+  List<Object> get props => [userId, followerId];
+}

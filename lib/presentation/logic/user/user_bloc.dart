@@ -15,9 +15,28 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     on<GetUserDataEvent>(_mapGetUserDataEventToState);
     on<UploadProfilePhotoEvent>(_mapUploadProfilePhotoEventToState);
     on<GetUsersCollectionEvent>(_mapGetUsersCollectionEventToState);
+    on<AddFollowersToDbEvent>(_mapAddFollowersToDbEventToState);
+    on<RemoveFollowerFromDbEvent>(_mapRemoveFollowerFromDbEventToState);
   }
 
   final UserRepository userRepository;
+
+//chisht
+  // FutureOr<void> _mapUpdateUserDataEventToState(
+  //     UpdateUserDataEvent event, Emitter<UserState> emit) async {
+  //   try {
+  //     emit(UserDataDbUpdating(state));
+  //     final userModel = event.userEntity.toModel();
+  //     await userRepository.saveUserToDB(userModel);
+  //     if (event.file != null) {
+  //       await userRepository.uploadProfilePicture(
+  //           event.userEntity.userId ?? '', event.file!);
+  //     }
+  //     emit(UserDataDbUpdated(state));
+  //   } catch (error) {
+  //     emit(UserDataDbFailed(state.error ?? '', state));
+  //   }
+  // }
 
   FutureOr<void> _mapUpdateUserDataEventToState(
       UpdateUserDataEvent event, Emitter<UserState> emit) async {
@@ -29,11 +48,23 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         await userRepository.uploadProfilePicture(
             event.userEntity.userId ?? '', event.file!);
       }
-      emit(UserDataDbUpdated(userModel, state));
+      emit(UserDataDbUpdated(state));
     } catch (error) {
-      emit(UserDataDbFailed(state.error ?? '', state));
+      emit(UserDataDbFailed(error.toString(), state));
     }
   }
+
+  // FutureOr<void> _mapRemoveFollowerFromDbEventToState(
+  //     RemoveFollowerFromDbEvent event, Emitter<UserState> emit) async {
+  //   try {
+  //     emit(RemoveFollowerFromDbLoading());
+  //     await userRepository.removeFollower(event.userId, event.followerId);
+  //     final updatedUser = await userRepository.getUserFromDb(event.userId);
+  //     emit(RemoveFollowerFromDbLoaded(updatedUser.toModel(), state));
+  //   } catch (error) {
+  //     emit(RemoveFollowerFromDbFailed(error.toString()));
+  //   }
+  // }
 
   // FutureOr<void> _mapGetUserDataEventToState(
   //     GetUserDataEvent event, Emitter<UserState> emit) async {
@@ -46,17 +77,18 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   //     emit(GetUserDataFailed(error.toString(), state));
   //   }
   // }
-  FutureOr<void> _mapGetUserDataEventToState(
-    GetUserDataEvent event, Emitter<UserState> emit) async {
-  try {
-    emit(GetUserDataLoading(state));
-    final users = await userRepository.getUserFromDb(event.userId ?? '');
-    emit(GetUserDataLoaded(users.toModel(), state));
-  } catch (error) {
-    emit(GetUserDataFailed(error.toString(), state));
-  }
-}
 
+  //chisht
+  // FutureOr<void> _mapGetUserDataEventToState(
+  //     GetUserDataEvent event, Emitter<UserState> emit) async {
+  //   try {
+  //     emit(GetUserDataLoading(state));
+  //     final users = await userRepository.getUserFromDb(event.userId ?? '');
+  //     emit(GetUserDataLoaded(users.toModel(), state));
+  //   } catch (error) {
+  //     emit(GetUserDataFailed(error.toString(), state));
+  //   }
+  // }
 
   FutureOr<void> _mapUploadProfilePhotoEventToState(
       UploadProfilePhotoEvent event, Emitter<UserState> emit) async {
@@ -80,6 +112,56 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       }
     } catch (error) {
       emit(GetUsersFromCollectionFailed(error.toString(), state));
-    } 
+    }
+  }
+
+  // FutureOr<void> _mapAddFollowersToDbEventToState(
+  //     AddFollowersToDbEvent event, Emitter<UserState> emit) async {
+  //   try {
+  //     emit(AddFollowersToDbLoading());
+  //     await userRepository.addFollowersList(
+  //         event.userId ?? '', event.newFollowers ?? []);
+  //     emit(AddFollowersToDbLoaded(event.newFollowers ?? []));
+  //   } catch (error) {
+  //     emit(AddFollowersToDbFailed(error.toString()));
+  //   }
+  // }
+
+  FutureOr<void> _mapRemoveFollowerFromDbEventToState(
+      RemoveFollowerFromDbEvent event, Emitter<UserState> emit) async {
+    try {
+      emit(RemoveFollowerFromDbLoading());
+      await userRepository.removeFollower(event.userId, event.followerId);
+      final updatedUser = await userRepository.getUserFromDb(event.userId);
+      emit(RemoveFollowerFromDbLoaded(updatedUser.toModel(), state));
+    } catch (error) {
+      emit(RemoveFollowerFromDbFailed(error.toString()));
+    }
+  }
+
+  FutureOr<void> _mapAddFollowersToDbEventToState(
+      AddFollowersToDbEvent event, Emitter<UserState> emit) async {
+    try {
+      emit(AddFollowersToDbLoading());
+      await userRepository.addFollowersList(
+          event.userId ?? '', event.newFollowers ?? []);
+
+      final updatedUser =
+          await userRepository.getUserFromDb(event.userId ?? '');
+      emit(AddFollowersToDbLoaded(updatedUser.followers ?? []));
+    } catch (error) {
+      emit(AddFollowersToDbFailed(error.toString()));
+    }
+  }
+
+  FutureOr<void> _mapGetUserDataEventToState(
+      GetUserDataEvent event, Emitter<UserState> emit) async {
+    try {
+      emit(GetUserDataLoading(state));
+      final user = await userRepository.getUserFromDb(event.userId ?? '');
+      emit(GetUserDataLoaded(user.toModel(), state));
+    } catch (error) {
+      emit(GetUserDataFailed(error.toString(), state));
+    }
   }
 }

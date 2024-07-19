@@ -35,6 +35,33 @@ class UserServiceImp extends UserService {
     );
   }
 
+  // @override
+  // Future<void> addFollowersList(String userId, List<String> followers) async {
+  //   await firebaseFirestore.collection('users').doc(userId).update(
+  //     {
+  //       'followers': followers,
+  //     },
+  //   );
+  // }
+
+  @override
+  Future<void> addFollowersList(
+      String userId, List<String> newFollowers) async {
+    final userDocRef = firebaseFirestore.collection('users').doc(userId);
+
+    await userDocRef.update({
+      'followers': FieldValue.arrayUnion(newFollowers),
+    });
+  }
+
+  @override
+  Future<void> removeFollower(String userId, String followerId) async {
+    final userDocRef = firebaseFirestore.collection('users').doc(userId);
+    await userDocRef.update({
+      'followers': FieldValue.arrayRemove([followerId]),
+    });
+  }
+
   @override
   Future<UserModel> getUserFromDb(String userId) async {
     final snapshot =

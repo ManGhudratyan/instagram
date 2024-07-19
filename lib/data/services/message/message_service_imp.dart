@@ -10,7 +10,12 @@ class MessageServiceImp with MessageMixin implements MessageService {
   final FirebaseStorage firebaseStorage;
   @override
   final FirebaseDatabase firebaseDatabase;
-  
+
+  @override
+  Future<void> sendMessage(MessageModel messageModel) async {
+    await messageDatabaseReference.push().set(messageModel.toJson());
+  }
+
   @override
   Future<List<MessageModel>> getMessages() async {
     final event = await messageDatabaseReference.once();
@@ -21,10 +26,4 @@ class MessageServiceImp with MessageMixin implements MessageService {
               ..addAll({'messageId': e.key})))
         .toList();
   }
-
-  @override
-  Future<void> sendMessage(MessageModel messageModel) async {
-    await messageDatabaseReference.push().set(messageModel.toJson());
-  }
-  
 }

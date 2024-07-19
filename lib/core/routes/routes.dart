@@ -16,7 +16,7 @@ class Routes {
     '/': (context) => const GoogleLogin(),
     '/home-page': (context) => const HomePage(),
     '/profile-page': (context) => ProfilePage(
-          userEntity: ModalRoute.of(context)!.settings.arguments as UserEntity,
+          userEntity: ModalRoute.of(context)?.settings.arguments as UserEntity,
         ),
     '/user-page': (context) => UserPage(
           userEntity: ModalRoute.of(context)!.settings.arguments as UserEntity,

@@ -1,7 +1,5 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import '../../domain/entities/user_entity.dart';
 import '../../domain/repositories/user_repository.dart';
 import '../services/user/user_service.dart';
@@ -28,5 +26,15 @@ class UserRepositoryImp implements UserRepository {
   @override
   Stream<QuerySnapshot<Map<String, dynamic>>> getUsersFromCollection() {
     return userService.getUsersFromCollection();
+  }
+
+  @override
+  Future<void> addFollowersList(String userId, List<String> newFollowers) {
+    return userService.addFollowersList(userId, newFollowers);
+  }
+
+  @override
+  Future<void> removeFollower(String userId, String followerId) {
+    return userService.removeFollower(userId, followerId);
   }
 }

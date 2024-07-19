@@ -7,7 +7,7 @@ sealed class PostEvent extends Equatable {
   final String? postId;
 
   @override
-  List<Object?> get props => [userId, postEntity];
+  List<Object?> get props => [userId, postEntity, postId];
 }
 
 final class SavePostToDbEvent extends PostEvent {
