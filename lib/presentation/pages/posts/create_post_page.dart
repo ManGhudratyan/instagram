@@ -83,14 +83,15 @@ class _CreatePostPageState extends State<CreatePostPage> {
                               .read<MediaBloc>()
                               .add(UploadPictureFromGalleryEvent());
                         },
-                        child: SizedBox(
-                          height: 550,
-                          child: mediaState is MediaLoaded &&
-                                  mediaState.fileImage != null
-                              ? Image.file(mediaState.fileImage!.file)
-                              : Image.network(
-                                  'https://www.paperplace.com.au/cdn/shop/products/via-felt-white.jpg?v=1458264914',
-                                ),
+                        child: Center(
+                          child: SizedBox(
+                            height: 550,
+                            child: mediaState.fileImage != null
+                                ? Image.file(mediaState.fileImage!.file)
+                                : Image.network(
+                                    'https://www.paperplace.com.au/cdn/shop/products/via-felt-white.jpg?v=1458264914',
+                                  ),
+                          ),
                         ),
                       ),
                       SizedBox(height: Gaps.largest),

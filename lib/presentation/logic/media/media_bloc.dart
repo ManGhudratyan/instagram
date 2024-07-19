@@ -20,7 +20,7 @@ class MediaBloc extends Bloc<MediaEvent, MediaState> {
     try {
       emit(MediaLoading());
       final fileImage = await mediaRepository.uploadFromGallery();
-      emit(MediaLoaded(fileImage));
+      emit(MediaLoaded(fileImage, state));
     } catch (error) {
       emit(MediaFailed(error.toString()));
     }
@@ -32,7 +32,7 @@ class MediaBloc extends Bloc<MediaEvent, MediaState> {
       emit(MediaLoading());
       final fileImage = await mediaRepository.uploadFromCamera();
       if (fileImage != null) {
-        emit(MediaLoaded(fileImage));
+        emit(MediaLoaded(fileImage, state));
       }
     } catch (error) {
       emit(MediaFailed(error.toString()));

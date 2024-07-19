@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import '../../domain/entities/user_entity.dart';
 import '../constants/assets.dart';
 import '../logic/auth/auth_bloc.dart';
 import '../logic/post/post_bloc.dart';
@@ -39,12 +40,6 @@ class _HomePageState extends State<HomePage> {
         }
       },
       builder: (context, userState) {
-        // final usersList = userState.users
-        //     ?.where(
-        //       (element) => element.userId != userState.userEntity?.userId,
-        //     )
-        //     .toList();
-
         if (userState is GetUsersFromCollectionLoading) {
           return const Center(
             child: CircularProgressIndicator(),
@@ -61,6 +56,13 @@ class _HomePageState extends State<HomePage> {
             }
           },
           builder: (context, authState) {
+            final currentUserId = authState.userCredential?.user?.uid;
+
+            final filteredUsers = userState.users
+                    ?.where((user) => user.userId != currentUserId)
+                    .map((user) => user.toModel())
+                    .toList() ??
+                [];
             return BlocConsumer<PostBloc, PostState>(
               listener: (context, postState) {
                 if (postState is PostFailed) {
@@ -107,9 +109,9 @@ class _HomePageState extends State<HomePage> {
                         height: 120,
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
-                          itemCount: userState.users?.length ?? 0,
+                          itemCount: filteredUsers.length,
                           itemBuilder: (context, index) {
-                            if (index >= (userState.users?.length ?? 0)) {
+                            if (index >= (filteredUsers.length)) {
                               return Container();
                             }
                             return Padding(
@@ -125,7 +127,7 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                     child: GestureDetector(
                                       onTap: () {
-                                        final user = userState.users?[index];
+                                        final user = filteredUsers[index];
                                         if (user != null) {
                                           Navigator.push(
                                             context,
@@ -141,20 +143,20 @@ class _HomePageState extends State<HomePage> {
                                         backgroundColor: Theme.of(context)
                                             .colorScheme
                                             .primary,
-                                        backgroundImage: userState.users?[index]
+                                        backgroundImage: filteredUsers[index]
                                                     .profileImage !=
                                                 null
                                             ? CachedNetworkImageProvider(
-                                                userState.users?[index]
+                                                filteredUsers[index]
                                                         .profileImage ??
                                                     '')
                                             : null,
                                         radius: 40,
-                                        child: userState.users?[index]
+                                        child: filteredUsers[index]
                                                     .profileImage ==
                                                 null
                                             ? Text(
-                                                userState.users?[index].username
+                                                filteredUsers[index].username
                                                         ?.substring(0, 1)
                                                         .toUpperCase() ??
                                                     '',
@@ -167,7 +169,7 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                   ),
                                   Text(
-                                    userState.users?[index].name ??
+                                    filteredUsers[index].name ??
                                         authState.userCredential?.user
                                             ?.displayName ??
                                         '',
@@ -331,12 +333,8 @@ class _HomePageState extends State<HomePage> {
                               context
                                   .read<UserBloc>()
                                   .add(GetUserDataEvent(userId));
-                              Navigator.pushNamed(
-                                context,
-                                '/profile-page',
-                                arguments:
-                                    context.read<UserBloc>().state.userEntity,
-                              );
+                              Navigator.pushNamed(context, '/profile-page',
+                                  arguments: UserEntity());
                             }
                           },
                           icon: SvgPicture.asset(

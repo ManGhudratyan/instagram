@@ -386,7 +386,7 @@ class _UserPageState extends State<UserPage> {
                                 WidgetStateProperty.all<Color>(Colors.white),
                           ),
                           onPressed: _toggleFollow,
-                          child: Text(isFollowing ? 'Following' : 'Follow'),
+                          child: Text(isFollowing ? '        Following        ' : '        Follow        '),
                         ),
                         TextButton(
                           style: ButtonStyle(
@@ -401,7 +401,7 @@ class _UserPageState extends State<UserPage> {
                             foregroundColor:
                                 WidgetStateProperty.all<Color>(Colors.white),
                           ),
-                          child: const Text('Message'),
+                          child: const Text('        Message        '),
                           onPressed: () {},
                         ),
                         TextButton(
