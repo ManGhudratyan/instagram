@@ -1,16 +1,32 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class SettingBottomSheetWidget extends StatelessWidget {
+import '../logic/cubit/theme_cubit.dart';
+
+class SettingBottomSheetWidget extends StatefulWidget {
   const SettingBottomSheetWidget({super.key});
+
+  @override
+  State<SettingBottomSheetWidget> createState() =>
+      _SettingBottomSheetWidgetState();
+}
+
+class _SettingBottomSheetWidgetState extends State<SettingBottomSheetWidget> {
+  bool isTurnSwitch = false;
+  @override
+  void initState() {
+    super.initState();
+    isTurnSwitch = ThemeMode.dark == context.read<ThemeCubit>().state.themeMode;
+  }
 
   @override
   Widget build(BuildContext context) {
     return IconButton(
       icon: Icon(
         Icons.menu,
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.onSurface,
       ),
       onPressed: () {
         showModalBottomSheet(
@@ -46,8 +62,23 @@ class SettingBottomSheetWidget extends StatelessWidget {
                         ];
                         return Card(
                           child: ListTile(
-                            leading: Icon(icons[index]),
-                            title: Text(titles[index]),
+                            leading: Icon(icons[index], color: Theme.of(context).colorScheme.onPrimary,),
+                            title: Text(titles[index], ),
+                            trailing: index == 0
+                                ? Switch(
+                                    value: isTurnSwitch,
+                                    onChanged: (val) {
+                                      context.read<ThemeCubit>().updateTheme(
+                                            val
+                                                ? ThemeMode.dark
+                                                : ThemeMode.light,
+                                          );
+                                      setState(() {
+                                        isTurnSwitch = val;
+                                      });
+                                    },
+                                  )
+                                : null,
                           ),
                         );
                       },

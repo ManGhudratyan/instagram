@@ -45,7 +45,7 @@ class DarkThemeMode extends AppTheme {
 
 class LightThemeMode extends AppTheme {
   @override
-  Color get primaryColor => Color.fromARGB(255, 0, 0, 0);
+  Color get primaryColor => Colors.white;
 
   @override
   Color get error => Colors.redAccent;
@@ -54,13 +54,13 @@ class LightThemeMode extends AppTheme {
   Color get onError => Colors.white70;
 
   @override
-  Color get onPrimary => const Color.fromARGB(255, 255, 255, 255);
+  Color get onPrimary => Colors.black;
 
   @override
   Color get onSecondary => Colors.white;
 
   @override
-  Color get onSurface => Colors.white;
+  Color get onSurface => Colors.black;
 
   @override
   Color get secondary => Color.fromARGB(255, 0, 0, 0);

@@ -60,6 +60,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ?.where((post) => post.userId == userState.userEntity?.userId)
                 .toList();
             return Scaffold(
+              backgroundColor: Theme.of(context).colorScheme.primary,
               appBar: AppBar(
                 automaticallyImplyLeading: false,
                 title: Text(userState.userEntity?.username ?? 'No username'),
@@ -429,7 +430,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                             TextButton(
                               style: ButtonStyle(
-                                  backgroundColor: MaterialStateProperty.all<
+                                  backgroundColor: WidgetStateProperty.all<
                                           Color>(
                                       const Color.fromRGBO(65, 62, 62, 0.612))),
                               child: const Icon(
@@ -444,11 +445,19 @@ class _ProfilePageState extends State<ProfilePage> {
                         const Divider(
                           color: Colors.grey,
                         ),
-                        const Row(
+                        Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            Icon(Icons.grid_on_outlined, size: 30),
-                            Icon(Icons.person_pin_rounded, size: 30)
+                            Icon(
+                              Icons.grid_on_outlined,
+                              size: 30,
+                              color: Theme.of(context).colorScheme.onSurface,
+                            ),
+                            Icon(
+                              Icons.person_pin_rounded,
+                              size: 30,
+                              color: Theme.of(context).colorScheme.onSurface,
+                            )
                           ],
                         ),
                         SizedBox(height: Gaps.large),

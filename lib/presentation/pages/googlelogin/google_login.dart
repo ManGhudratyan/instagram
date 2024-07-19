@@ -25,8 +25,13 @@ class _GoogleLoginState extends State<GoogleLogin> {
       },
       builder: (context, state) {
         return Scaffold(
+          backgroundColor: Theme.of(context).colorScheme.primary,
           appBar: AppBar(
-            title: Text('Instagram'),
+            title: Text('Instagram',
+                style: TextStyle(
+                  color: Color.fromRGBO(1, 149, 247, 1),
+                  fontWeight: FontWeight.bold,
+                )),
             centerTitle: true,
             backgroundColor: Theme.of(context).colorScheme.primary,
           ),

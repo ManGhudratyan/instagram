@@ -15,11 +15,11 @@ class IntOnString extends StatelessWidget {
       children: [
         Text(
           count.toString(),
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
         ),
         Text(
           text,
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
         ),
       ],
     );

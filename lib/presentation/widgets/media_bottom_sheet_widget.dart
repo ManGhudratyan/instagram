@@ -16,7 +16,7 @@ class MediaBottomSheetWidget extends StatelessWidget {
         Assets.plusIcon,
         height: 24,
         width: 24,
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.secondary,
       ),
       onPressed: () {
         showModalBottomSheet(
