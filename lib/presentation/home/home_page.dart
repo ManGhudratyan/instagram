@@ -8,7 +8,6 @@ import '../constants/assets.dart';
 import '../logic/auth/auth_bloc.dart';
 import '../logic/post/post_bloc.dart';
 import '../logic/user/user_bloc.dart';
-import '../pages/profile/profile_page.dart';
 import '../pages/user/user_page.dart';
 import '../widgets/media_bottom_sheet_widget.dart';
 
