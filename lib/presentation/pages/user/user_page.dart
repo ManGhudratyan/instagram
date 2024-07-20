@@ -225,10 +225,7 @@ class _UserPageState extends State<UserPage> {
                     Expanded(
                       child: postState.posts == null || postState.posts!.isEmpty
                           ? const Center(
-                              child: Text(
-                                'No posts yet',
-                                style: TextStyle(color: Colors.red),
-                              ),
+                              child: CircularProgressIndicator()
                             )
                           : GridView.builder(
                               gridDelegate:

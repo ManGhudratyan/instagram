@@ -45,7 +45,6 @@ class _CreatePostPageState extends State<CreatePostPage> {
                 actions: [
                   BlocConsumer<AuthBloc, AuthState>(
                     listener: (context, authState) {
-                      // TODO: implement listener
                     },
                     builder: (context, authState) {
                       return IconButton(

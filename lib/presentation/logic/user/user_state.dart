@@ -1,3 +1,5 @@
+// ignore_for_file: overridden_fields
+
 part of 'user_bloc.dart';
 
 sealed class UserState extends Equatable {
@@ -102,6 +104,7 @@ final class UserDataDbUpdated extends UserState {
 
 class UserDataDbFailed extends UserState {
   const UserDataDbFailed(this.error, this.initState);
+  @override
   final String error;
   final UserState initState;
 }

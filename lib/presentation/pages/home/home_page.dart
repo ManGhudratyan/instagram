@@ -196,15 +196,7 @@ class _HomePageState extends State<HomePage> {
                       Expanded(
                         child: postState.posts == null ||
                                 postState.posts!.isEmpty
-                            ? Center(
-                                child: Text(
-                                  'No posts yet',
-                                  style: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onPrimary),
-                                ),
-                              )
+                            ? Center(child: CircularProgressIndicator())
                             : ListView.builder(
                                 itemCount: postState.posts?.length ?? 0,
                                 itemBuilder: (context, index) {
@@ -225,36 +217,48 @@ class _HomePageState extends State<HomePage> {
                                             .colorScheme
                                             .surface,
                                         child: ListTile(
-                                          tileColor: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                          leading: CircleAvatar(
-                                            backgroundImage: user
-                                                        ?.profileImage !=
-                                                    null
-                                                ? CachedNetworkImageProvider(
-                                                    user?.profileImage ?? '')
-                                                : null,
-                                            radius: 30,
-                                            child: user?.profileImage == null
-                                                ? Text(
-                                                    user?.username
-                                                            ?.substring(0, 1)
-                                                            .toUpperCase() ??
-                                                        '',
-                                                    style: const TextStyle(
-                                                        fontSize: 40),
-                                                  )
-                                                : null,
-                                          ),
-                                          title: Text(
-                                            user?.name ?? 'No username',
-                                            style: TextStyle(
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .onSurface),
-                                          ),
-                                        ),
+                                            tileColor: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
+                                            leading: CircleAvatar(
+                                              backgroundImage: user
+                                                          ?.profileImage !=
+                                                      null
+                                                  ? CachedNetworkImageProvider(
+                                                      user?.profileImage ?? '')
+                                                  : null,
+                                              radius: 30,
+                                              child: user?.profileImage == null
+                                                  ? Text(
+                                                      user?.username
+                                                              ?.substring(0, 1)
+                                                              .toUpperCase() ??
+                                                          '',
+                                                      style: const TextStyle(
+                                                          fontSize: 40),
+                                                    )
+                                                  : null,
+                                            ),
+                                            title: Text(
+                                              user?.name ?? 'No username',
+                                              style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .onSurface),
+                                            ),
+                                            trailing: IconButton(
+                                              icon: Icon(Icons.delete_sharp),
+                                              onPressed: () {
+                                                final postId = postState
+                                                        .posts?[index].postId ??
+                                                    '';
+                                                if (postId.isNotEmpty) {
+                                                  context.read<PostBloc>().add(
+                                                      DeletePostDataEvent(
+                                                          postId));
+                                                }
+                                              },
+                                            )),
                                       ),
                                       Center(
                                         child: SizedBox(
@@ -342,7 +346,7 @@ class _HomePageState extends State<HomePage> {
                         backgroundColor: Theme.of(context).colorScheme.primary,
                         icon: SvgPicture.asset(
                           Assets.homeIcon,
-                          color: Theme.of(context).colorScheme.secondary,
+                          color: Color.fromARGB(255, 69, 74, 86),
                           height: 24,
                           width: 24,
                         ),
@@ -350,21 +354,21 @@ class _HomePageState extends State<HomePage> {
                       ),
                       BottomNavigationBarItem(
                         icon: SvgPicture.asset(Assets.groupIcon,
-                            color: Theme.of(context).colorScheme.secondary,
+                            color: Color.fromARGB(255, 69, 74, 86),
                             height: 24,
                             width: 24),
                         label: '',
                       ),
                       BottomNavigationBarItem(
                         icon: SvgPicture.asset(Assets.movieIcon,
-                            color: Theme.of(context).colorScheme.secondary,
+                            color: Color.fromARGB(255, 69, 74, 86),
                             height: 24,
                             width: 24),
                         label: '',
                       ),
                       BottomNavigationBarItem(
                         icon: SvgPicture.asset(Assets.heartIcon,
-                            color: Theme.of(context).colorScheme.secondary,
+                            color: Color.fromARGB(255, 69, 74, 86),
                             height: 24,
                             width: 24),
                         label: '',
@@ -388,7 +392,7 @@ class _HomePageState extends State<HomePage> {
                           },
                           icon: SvgPicture.asset(
                             Assets.elipseIcon,
-                            color: Theme.of(context).colorScheme.secondary,
+                            color: Color.fromARGB(255, 69, 74, 86),
                             height: 24,
                             width: 24,
                           ),

@@ -21,9 +21,7 @@ class _ChatsPageState extends State<ChatsPage> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AuthBloc, AuthState>(
-      listener: (context, authState) {
-        // TODO: implement listener
-      },
+      listener: (context, authState) {},
       builder: (context, authState) {
         return BlocConsumer<UserBloc, UserState>(
           listener: (context, userState) {

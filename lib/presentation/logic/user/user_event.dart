@@ -1,3 +1,5 @@
+// ignore_for_file: overridden_fields
+
 part of 'user_bloc.dart';
 
 sealed class UserEvent extends Equatable {
@@ -15,6 +17,7 @@ sealed class UserEvent extends Equatable {
 final class UpdateUserDataEvent extends UserEvent {
   const UpdateUserDataEvent(this.userEntity, {this.file});
   final File? file;
+  @override
   final UserEntity userEntity;
 }
 
@@ -28,6 +31,7 @@ final class GetUserByIdEvent extends UserEvent {
 
 class UploadProfilePhotoEvent extends UserEvent {
   const UploadProfilePhotoEvent(this.userId, this.file);
+  @override
   final String userId;
   final File file;
 }
@@ -41,6 +45,7 @@ class AddFollowersToDbEvent extends UserEvent {
 
 class RemoveFollowerFromDbEvent extends UserEvent {
   const RemoveFollowerFromDbEvent(this.userId, this.followerId);
+  @override
   final String userId;
   final String followerId;
 
@@ -55,6 +60,7 @@ class AddFollowingsToDbEvent extends UserEvent {
 
 class RemoveFollowingsFromDbEvent extends UserEvent {
   const RemoveFollowingsFromDbEvent(this.userId, this.followingId);
+  @override
   final String userId;
   final String followingId;
 
@@ -63,13 +69,15 @@ class RemoveFollowingsFromDbEvent extends UserEvent {
 }
 
 class GetFollowingListEvent extends UserEvent {
-  GetFollowingListEvent(this.userId);
+  const GetFollowingListEvent(this.userId);
 
+  @override
   final String userId;
 }
 
 class FetchUserEvent extends UserEvent {
   const FetchUserEvent({required this.userId});
+  @override
   final String userId;
 }
 

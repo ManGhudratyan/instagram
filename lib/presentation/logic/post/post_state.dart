@@ -102,7 +102,6 @@
 //         );
 // }
 
-
 part of 'post_bloc.dart';
 
 sealed class PostState extends Equatable {
@@ -157,7 +156,13 @@ final class GetPostDataFailed extends PostState {
             posts: initState.posts);
 }
 
-final class DeletePostDataSuccessed extends PostState {}
+final class DeletePostDataSuccessed extends PostState {
+  DeletePostDataSuccessed(PostState initState)
+      : super(
+          postEntity: initState.postEntity,
+          posts: initState.posts,
+        );
+}
 
 final class DeletePostDataLoading extends PostState {}
 

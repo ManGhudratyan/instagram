@@ -54,11 +54,22 @@ class _ProfilePageState extends State<ProfilePage> {
         final bioController =
             TextEditingController(text: userState.userEntity?.bio);
         return BlocConsumer<PostBloc, PostState>(
-          listener: (context, postState) {},
+          listener: (context, postState) {
+            if (postState is GetPostDataFailed) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Posts failed to load')),
+              );
+            }
+          },
           builder: (context, postState) {
             final postsList = postState.posts
                 ?.where((post) => post.userId == userState.userEntity?.userId)
                 .toList();
+            if (postState is GetPostFromCollectionLoading) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
             return Scaffold(
               backgroundColor: Theme.of(context).colorScheme.primary,
               appBar: AppBar(
@@ -233,7 +244,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                           userEntity,
                                                                           file: mediaState
                                                                               .fileImage
-                                                                              ?.  file),
+                                                                              ?.file),
                                                                     );
                                                                 Navigator.pushNamed(
                                                                     context,
@@ -467,7 +478,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               ? const Center(
                                   child: Text(
                                     'No posts yet',
-                                    style: TextStyle(color: Colors.red),
+                                    style: TextStyle(color: Colors.white),
                                   ),
                                 )
                               : GridView.builder(

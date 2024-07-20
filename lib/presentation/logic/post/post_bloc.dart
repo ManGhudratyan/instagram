@@ -15,7 +15,6 @@ part 'post_state.dart';
 class PostBloc extends Bloc<PostEvent, PostState> {
   PostBloc(this.postRepository) : super(PostInitial()) {
     on<SavePostToDbEvent>(_mapSavePostToDbEventToState);
-    // on<GetPostDataEvent>(_mapGetPostDataEventToState);
     on<DeletePostDataEvent>(_mapDeletePostDataEventToState);
     on<UploadPostEvent>(_mapUploadPostEventToState);
     on<GetPostsFromCollectionEvent>(_mapGetPostsFromCollectionEventToState);
@@ -33,32 +32,6 @@ class PostBloc extends Bloc<PostEvent, PostState> {
       emit(SavePostToDbFailed(error.toString(), state));
     }
   }
-
-  // FutureOr<void> _mapGetPostDataEventToState(
-  //     GetPostDataEvent event, Emitter<PostState> emit) async {
-  //   try {
-  //     emit(GetPostDataLoading(state));
-  //     final posts =
-  //         await postRepository.getPostFromDB(event.postEntity?.postId ?? '');
-  //     emit(GetPostDataLoaded(posts.toModel(), state));
-  //   } catch (error) {
-  //     emit(GetPostDataFailed(error.toString(), state));
-  //   }
-  // }
-
-  // FutureOr<void> _mapGetPostsFromCollectionEventToState(
-  //     GetPostsFromCollectionEvent event, Emitter<PostState> emit) async {
-  //   try {
-  //     emit(GetPostDataLoading(state));
-  //     await for (final snapshot in postRepository.getPostsFromCollection()) {
-  //       final posts =
-  //           snapshot.docs.map((doc) => PostModel.fromJson(doc.data())).toList();
-  //       emit(GetPostFromCollectionLoaded(state, posts, ));
-  //     }
-  //   } catch (error) {
-  //     emit(GetPostDataFailed(error.toString(), state));
-  //   }
-  // }
 
   FutureOr<void> _mapGetPostsFromCollectionEventToState(
       GetPostsFromCollectionEvent event, Emitter<PostState> emit) async {
@@ -107,8 +80,12 @@ class PostBloc extends Bloc<PostEvent, PostState> {
       DeletePostDataEvent event, Emitter<PostState> emit) async {
     try {
       emit(DeletePostDataLoading());
-      await postRepository.deletePostFromDB(event.userId ?? '');
-      emit(DeletePostDataSuccessed());
+      final postId = event.postId;
+      if (postId.isEmpty) {
+        throw Exception('Post ID is empty');
+      }
+      await postRepository.deletePostFromDB(postId);
+      emit(DeletePostDataSuccessed(state));
     } catch (error) {
       emit(DeletePostDataFailed(error.toString()));
     }

@@ -1,3 +1,5 @@
+// ignore_for_file: overridden_fields
+
 part of 'post_bloc.dart';
 
 sealed class PostEvent extends Equatable {
@@ -18,18 +20,25 @@ final class SavePostToDbEvent extends PostEvent {
 final class GetPostsFromCollectionEvent extends PostEvent {}
 
 final class DeletePostDataEvent extends PostEvent {
-  const DeletePostDataEvent(String userId) : super(userId: userId);
+  final String postId;
+
+  const DeletePostDataEvent(this.postId) : super();
+
+  @override
+  List<Object> get props => [postId];
 }
+
 
 class UploadPostEvent extends PostEvent {
   const UploadPostEvent(this.postId, this.file);
+  @override
   final String postId;
   final File file;
 }
 
 class GetCommentsForPostEvent extends PostEvent {
-
   const GetCommentsForPostEvent(this.postId);
+  @override
   final String postId;
 
   @override

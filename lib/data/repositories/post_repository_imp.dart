@@ -18,8 +18,8 @@ class PostRepositoryImp extends PostRepository {
   }
 
   @override
-  Future<void> deletePostFromDB(String userId) async {
-    await postService.deletePostFromDB(userId);
+  Future<void> deletePostFromDB(String postId) async {
+    await postService.deletePostFromDB(postId);
   }
 
   @override

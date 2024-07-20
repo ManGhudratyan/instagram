@@ -98,10 +98,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       final user = await userRepository.getUserFromDb(event.userId ?? '');
       emit(UserLoaded(user.toModel(), state));
     } catch (error) {
-      emit(UserFailed(
-        state,
-        error.toString(),
-      ));
+      emit(UserFailed(state, error.toString()));
     }
   }
 

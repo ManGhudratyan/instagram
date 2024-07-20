@@ -7,7 +7,7 @@ import '../entities/post_entity.dart';
 
 abstract class PostRepository {
   Future<void> savePostsToDB(PostEntity postEntity);
-  Future<void> deletePostFromDB(String userId);
+  Future<void> deletePostFromDB(String postId);
   Future<PostModel> getPostFromDB(String postId);
   Future<void> updatePostFromDB(PostModel postModel);
   Future<void> uploadPictureToDB(String postId, File file);
