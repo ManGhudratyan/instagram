@@ -1,17 +1,17 @@
 import '../../data/models/comment/comment_model.dart';
 
 class CommentEntity {
-  CommentEntity({this.userId, this.message, this.messageId});
+  CommentEntity({this.userId, this.comment, this.commentId});
 
   factory CommentEntity.fromModel(CommentModel model) => CommentEntity(
         userId: model.userId,
-        message: model.message,
-        messageId: model.messageId,
+        comment: model.comment,
+        commentId: model.commentId,
       );
   final String? userId;
-  final String? message;
-  final String? messageId;
+  final String? comment;
+  final String? commentId;
 
 
-  CommentModel toModel() => CommentModel(userId: userId, message: message);
+  CommentModel toModel() => CommentModel(userId: userId, comment: comment);
 }

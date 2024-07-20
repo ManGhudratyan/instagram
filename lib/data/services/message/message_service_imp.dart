@@ -1,7 +1,7 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
-import '../../../core/mixins/chat_mixin.dart';
+import '../../../core/mixins/message_mixin.dart';
 import '../../models/message/message_model.dart';
 import 'message_service.dart';
 

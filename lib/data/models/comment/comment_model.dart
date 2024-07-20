@@ -7,8 +7,8 @@ part 'comment_model.g.dart';
 class CommentModel extends CommentEntity {
   CommentModel({
     super.userId,
-    super.message,
-    super.messageId,
+    super.comment,
+    super.commentId,
   });
 
   factory CommentModel.fromJson(Map<String, dynamic> json) =>

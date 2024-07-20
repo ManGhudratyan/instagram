@@ -91,30 +91,17 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     }
   }
 
-  // FutureOr<void> _mapGetUserDataEventToState(
-  //     GetUserDataEvent event, Emitter<UserState> emit) async {
-  //   try {
-  //     emit(GetUserDataLoading(state));
-  //     final user = await userRepository.getUserFromDb(event.userId ?? '');
-  //     emit(GetUserDataLoaded(user.toModel(), state));
-  //   } catch (error) {
-  //     emit(GetUserDataFailed(error.toString(), state));
-  //   }
-  // }
-
-// In UserBloc
   FutureOr<void> _mapGetUserDataEventToState(
       GetUserDataEvent event, Emitter<UserState> emit) async {
     try {
-      emit(UserLoading(state)); // Indicate that loading is in progress
-      final user = await userRepository
-          .getUserFromDb(event.userId ?? ''); // Fetch user data
-      emit(UserLoaded(user.toModel(), state)); // Emit user data on success
+      emit(UserLoading(state));
+      final user = await userRepository.getUserFromDb(event.userId ?? '');
+      emit(UserLoaded(user.toModel(), state));
     } catch (error) {
       emit(UserFailed(
         state,
         error.toString(),
-      )); // Emit error state if fetching fails
+      ));
     }
   }
 

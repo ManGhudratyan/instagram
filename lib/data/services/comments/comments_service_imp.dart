@@ -23,7 +23,7 @@ class CommentsServiceImp with CommentMixin implements CommentsService {
             (Map<String, dynamic>.from(
               e.value as Map<dynamic, dynamic>? ?? <String, dynamic>{},
             ))
-              ..addAll({'messageId': e.key}),
+              ..addAll({'commentId': e.key}),
           ),
         )
         .toList();

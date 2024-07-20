@@ -4,13 +4,14 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../../domain/entities/user_entity.dart';
-import '../constants/assets.dart';
-import '../logic/auth/auth_bloc.dart';
-import '../logic/post/post_bloc.dart';
-import '../logic/user/user_bloc.dart';
-import '../pages/user/user_page.dart';
-import '../widgets/media_bottom_sheet_widget.dart';
+
+import '../../../domain/entities/user_entity.dart';
+import '../../constants/assets.dart';
+import '../../logic/auth/auth_bloc.dart';
+import '../../logic/post/post_bloc.dart';
+import '../../logic/user/user_bloc.dart';
+import '../../widgets/media_bottom_sheet_widget.dart';
+import '../user/user_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -56,6 +57,11 @@ class _HomePageState extends State<HomePage> {
             }
           },
           builder: (context, authState) {
+            if (authState is LoginGoogleLoading) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
             final currentUserId = authState.userCredential?.user?.uid;
 
             final filteredUsers = userState.users

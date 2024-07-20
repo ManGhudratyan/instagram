@@ -8,13 +8,13 @@ part of 'comment_model.dart';
 
 CommentModel _$CommentModelFromJson(Map<String, dynamic> json) => CommentModel(
       userId: json['userId'] as String?,
-      message: json['message'] as String?,
-      messageId: json['messageId'] as String?,
+      comment: json['comment'] as String?,
+      commentId: json['commentId'] as String?,
     );
 
 Map<String, dynamic> _$CommentModelToJson(CommentModel instance) =>
     <String, dynamic>{
       'userId': instance.userId,
-      'message': instance.message,
-      'messageId': instance.messageId,
+      'comment': instance.comment,
+      'commentId': instance.commentId,
     };

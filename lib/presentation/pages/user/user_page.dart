@@ -99,10 +99,22 @@ class _UserPageState extends State<UserPage> {
       },
       builder: (context, userState) {
         final userEntity = userState.userEntity ?? widget.userEntity;
-
         return BlocConsumer<PostBloc, PostState>(
-          listener: (context, postState) {},
+          listener: (context, postState) {
+            if (postState is GetPostFromCollectionFailed) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(postState.error ?? ''),
+                ),
+              );
+            }
+          },
           builder: (context, postState) {
+            if (postState is GetPostFromCollectionLoading) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
             final postsList = postState.posts
                 ?.where((post) => post.userId == userEntity.userId)
                 .toList();

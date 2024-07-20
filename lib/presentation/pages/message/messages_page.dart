@@ -40,75 +40,77 @@ class _MessagesPageState extends State<MessagesPage> {
               title: const Text('Messages'),
             ),
             body: BlocConsumer<MessageBloc, MessageState>(
-              listener: (context, messageState) {
-                // TODO: implement listener
-              },
+              listener: (context, messageState) {},
               builder: (context, messageState) {
-               return Stack(
-              children: [
-                Positioned.fill(
-                  bottom: 100,
-                  child: ListView.builder(
-                    reverse: true,
-                    itemCount: messageState.messages.length,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: ColoredBox(
-                          color: messageState.messages[index].userId ==
-                                  context
-                                      .read<UserBloc>()
-                                      .state
-                                      .userEntity
-                                      ?.userId
-                              ? Colors.green
-                              : Colors.grey,
-                          child: Column(
-                            children: [
-                              Text(messageState.messages[index].message ?? ''),
-                              Text(messageState.messages[index].userId ?? ''),
-                              Text(messageState.messages[index].dateTime.toString())
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: ColoredBox(
-                      color: Colors.yellowAccent.withOpacity(0.5),
-                      child: TextField(
-                        controller: _messageController,
-                        decoration: InputDecoration(
-                            hintText: 'Send',
-                            suffixIcon: IconButton(
-                                onPressed: () {
-                                  context.read<MessageBloc>().add(
-                                        SendMessageEvent(
-                                          messageEntity: MessageEntity(
-                                              userId: context
-                                                      .read<UserBloc>()
-                                                      .state
-                                                      .userEntity
-                                                      ?.userId ??
-                                                  '',
-                                              message: _messageController.text,
-                                              dateTime:
-                                                  Timestamp.now().toDate()),
-                                        ),
-                                      );
-                                },
-                                icon: const Icon(Icons.send))),
+                return Stack(
+                  children: [
+                    Positioned.fill(
+                      bottom: 100,
+                      child: ListView.builder(
+                        reverse: true,
+                        itemCount: messageState.messages.length,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ColoredBox(
+                              color: messageState.messages[index].userId ==
+                                      context
+                                          .read<UserBloc>()
+                                          .state
+                                          .userEntity
+                                          ?.userId
+                                  ? Colors.green
+                                  : Colors.grey,
+                              child: Column(
+                                children: [
+                                  Text(messageState.messages[index].message ??
+                                      ''),
+                                  Text(messageState.messages[index].userId ??
+                                      ''),
+                                  Text(messageState.messages[index].dateTime
+                                      .toString())
+                                ],
+                              ),
+                            ),
+                          );
+                        },
                       ),
                     ),
-                  ),
-                ),
-              ],
-            );
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: ColoredBox(
+                          color: Colors.yellowAccent.withOpacity(0.5),
+                          child: TextField(
+                            controller: _messageController,
+                            decoration: InputDecoration(
+                                hintText: 'Send',
+                                suffixIcon: IconButton(
+                                    onPressed: () {
+                                      context.read<MessageBloc>().add(
+                                            SendMessageEvent(
+                                              messageEntity: MessageEntity(
+                                                  userId: context
+                                                          .read<UserBloc>()
+                                                          .state
+                                                          .userEntity
+                                                          ?.userId ??
+                                                      '',
+                                                  message:
+                                                      _messageController.text,
+                                                  dateTime:
+                                                      Timestamp.now().toDate()),
+                                            ),
+                                          );
+                                    },
+                                    icon: const Icon(Icons.send))),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                );
               },
             ),
           ),
@@ -117,23 +119,3 @@ class _MessagesPageState extends State<MessagesPage> {
     );
   }
 }
-
-
-  // return Align(
-  //                 alignment: Alignment.bottomCenter,
-  //                 child: Padding(
-  //                   padding: const EdgeInsets.symmetric(vertical: 8.0),
-  //                   child: ColoredBox(
-  //                     color: const Color.fromARGB(255, 115, 115, 112)
-  //                         .withOpacity(0.5),
-  //                     child: TextField(
-  //                       controller: _messageController,
-  //                       decoration: InputDecoration(
-  //                           hintText: 'Send',
-  //                           suffixIcon: IconButton(
-  //                               onPressed: () {},
-  //                               icon: const Icon(Icons.send))),
-  //                     ),
-  //                   ),
-  //                 ),
-  //               );

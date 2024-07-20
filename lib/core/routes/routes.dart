@@ -1,9 +1,8 @@
 // ignore_for_file: avoid_classes_with_only_static_members, cast_nullable_to_non_nullable
 
 import 'package:flutter/widgets.dart';
-
 import '../../domain/entities/user_entity.dart';
-import '../../presentation/home/home_page.dart';
+import '../../presentation/pages/home/home_page.dart';
 import '../../presentation/pages/chats/chats_page.dart';
 import '../../presentation/pages/comment/comment_page.dart';
 import '../../presentation/pages/googlelogin/google_login.dart';

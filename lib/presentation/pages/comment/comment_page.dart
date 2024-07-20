@@ -37,7 +37,8 @@ class _CommentPageState extends State<CommentPage> {
           ],
         ),
         body: BlocConsumer<AuthBloc, AuthState>(
-          listener: (context, authState) {},
+          listener: (context, authState) {
+          },
           builder: (context, authState) {
             return BlocConsumer<CommentBloc, CommentState>(
               listener: (context, state) {
@@ -83,7 +84,7 @@ class _CommentPageState extends State<CommentPage> {
                                         ),
                                         trailing: Icon(Icons.favorite_border),
                                         subtitle: Text(
-                                            state.comments[index].message ??
+                                            state.comments[index].comment ??
                                                 ''),
                                       ),
                                       // Text(state.comments[index].userId ?? ''),
@@ -119,7 +120,7 @@ class _CommentPageState extends State<CommentPage> {
                                                     .userEntity
                                                     ?.userId ??
                                                 '',
-                                            message: _messageController.text,
+                                            comment: _messageController.text,
                                           ),
                                         ),
                                       );
