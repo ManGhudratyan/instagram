@@ -216,12 +216,12 @@ class _HomePageState extends State<HomePage> {
                                     children: [
                                       Card(
                                         color: Theme.of(context)
-                                                      .colorScheme
-                                                      .surface,
+                                            .colorScheme
+                                            .surface,
                                         child: ListTile(
                                           tileColor: Theme.of(context)
-                                                      .colorScheme
-                                                      .primary,
+                                              .colorScheme
+                                              .primary,
                                           leading: CircleAvatar(
                                             backgroundImage: user
                                                         ?.profileImage !=
@@ -244,12 +244,10 @@ class _HomePageState extends State<HomePage> {
                                           title: Text(
                                             user?.name ?? 'No username',
                                             style: TextStyle(
-                                              color:Theme.of(context)
-                                                      .colorScheme
-                                                      .onSurface
-                                            ),
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onSurface),
                                           ),
-                                         
                                         ),
                                       ),
                                       Center(
@@ -276,15 +274,17 @@ class _HomePageState extends State<HomePage> {
                                                       .onPrimary,
                                                   height: 40),
                                               GestureDetector(
-                                                onTap: (){
-                                                  Navigator.pushNamed(context, '/comments-page');
+                                                onTap: () {
+                                                  Navigator.pushNamed(context,
+                                                      '/comments-page');
                                                 },
                                                 child: SvgPicture.asset(
-                                                    Assets.commentIcon,
-                                                    color: Theme.of(context)
-                                                        .colorScheme
-                                                        .onPrimary,
-                                                    height: 40,),
+                                                  Assets.commentIcon,
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .onPrimary,
+                                                  height: 40,
+                                                ),
                                               ),
                                               SvgPicture.asset(
                                                   Assets.vectorIcon,
@@ -315,7 +315,7 @@ class _HomePageState extends State<HomePage> {
                                               postState.posts?[index]
                                                       .description ??
                                                   'No description',
-                                              style:  TextStyle(
+                                              style: TextStyle(
                                                   color: Theme.of(context)
                                                       .colorScheme
                                                       .onSurface),

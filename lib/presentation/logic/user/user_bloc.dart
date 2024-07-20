@@ -10,106 +10,134 @@ part 'user_event.dart';
 part 'user_state.dart';
 
 class UserBloc extends Bloc<UserEvent, UserState> {
-UserBloc(this.userRepository) : super(UserInitial()) {
-  on<UpdateUserDataEvent>(_mapUpdateUserDataEventToState);
-  on<GetUserDataEvent>(_mapGetUserDataEventToState);
-  on<UploadProfilePhotoEvent>(_mapUploadProfilePhotoEventToState);
-  on<GetUsersCollectionEvent>(_mapGetUsersCollectionEventToState);
-  on<AddFollowersToDbEvent>(_mapAddFollowersToDbEventToState);
-  on<RemoveFollowerFromDbEvent>(_mapRemoveFollowerFromDbEventToState);
-  on<AddFollowingsToDbEvent>(_mapAddFollowingsToDbEventToState);
-}
+  UserBloc(this.userRepository) : super(UserInitial()) {
+    on<UpdateUserDataEvent>(_mapUpdateUserDataEventToState);
+    on<GetUserDataEvent>(_mapGetUserDataEventToState);
+    on<UploadProfilePhotoEvent>(_mapUploadProfilePhotoEventToState);
+    on<GetUsersCollectionEvent>(_mapGetUsersCollectionEventToState);
+    on<AddFollowersToDbEvent>(_mapAddFollowersToDbEventToState);
+    on<RemoveFollowerFromDbEvent>(_mapRemoveFollowerFromDbEventToState);
+    on<AddFollowingsToDbEvent>(_mapAddFollowingsToDbEventToState);
+    on<LoadUserDataEvent>(_mapLoadUserDataEventToState);
+  }
 
-final UserRepository userRepository;
+  final UserRepository userRepository;
 
-FutureOr<void> _mapUpdateUserDataEventToState(
-    UpdateUserDataEvent event, Emitter<UserState> emit) async {
-  try {
-    emit(UserDataDbUpdating(state));
-    final userModel = event.userEntity.toModel();
-    await userRepository.saveUserToDB(userModel);
-    if (event.file != null) {
-      await userRepository.uploadProfilePicture(
-          event.userEntity.userId ?? '', event.file!);
+  FutureOr<void> _mapUpdateUserDataEventToState(
+      UpdateUserDataEvent event, Emitter<UserState> emit) async {
+    try {
+      emit(UserDataDbUpdating(state));
+      final userModel = event.userEntity.toModel();
+      await userRepository.saveUserToDB(userModel);
+      if (event.file != null) {
+        await userRepository.uploadProfilePicture(
+            event.userEntity.userId ?? '', event.file!);
+      }
+      emit(UserDataDbUpdated(state));
+    } catch (error) {
+      emit(UserDataDbFailed(error.toString(), state));
     }
-    emit(UserDataDbUpdated(state));
-  } catch (error) {
-    emit(UserDataDbFailed(error.toString(), state));
   }
-}
 
-FutureOr<void> _mapUploadProfilePhotoEventToState(
-    UploadProfilePhotoEvent event, Emitter<UserState> emit) async {
-  try {
-    emit(UserLoading(state));
-    await userRepository.uploadProfilePicture(event.userId, event.file);
-    emit(UserLoaded(state.userEntity, state));
-  } catch (e) {
-    emit(UserFailed(state, e.toString()));
-  }
-}
-
-FutureOr<void> _mapGetUsersCollectionEventToState(
-    GetUsersCollectionEvent event, Emitter<UserState> emit) async {
-  try {
-    emit(GetUsersFromCollectionLoading(state));
-    await for (final snapshot in userRepository.getUsersFromCollection()) {
-      final users =
-          snapshot.docs.map((doc) => UserModel.fromJson(doc.data())).toList();
-      emit(GetUsersFromCollectionLoaded(state, users));
+  FutureOr<void> _mapUploadProfilePhotoEventToState(
+      UploadProfilePhotoEvent event, Emitter<UserState> emit) async {
+    try {
+      emit(UserLoading(state));
+      await userRepository.uploadProfilePicture(event.userId, event.file);
+      emit(UserLoaded(state.userEntity, state));
+    } catch (e) {
+      emit(UserFailed(state, e.toString()));
     }
-  } catch (error) {
-    emit(GetUsersFromCollectionFailed(error.toString(), state));
   }
-}
 
-FutureOr<void> _mapRemoveFollowerFromDbEventToState(
-    RemoveFollowerFromDbEvent event, Emitter<UserState> emit) async {
-  try {
-    emit(RemoveFollowerFromDbLoading());
-    await userRepository.removeFollower(event.userId, event.followerId);
-    final updatedUser = await userRepository.getUserFromDb(event.userId);
-    emit(RemoveFollowerFromDbLoaded(updatedUser.toModel(), state));
-  } catch (error) {
-    emit(RemoveFollowerFromDbFailed(error.toString()));
+  FutureOr<void> _mapGetUsersCollectionEventToState(
+      GetUsersCollectionEvent event, Emitter<UserState> emit) async {
+    try {
+      emit(GetUsersFromCollectionLoading(state));
+      await for (final snapshot in userRepository.getUsersFromCollection()) {
+        final users =
+            snapshot.docs.map((doc) => UserModel.fromJson(doc.data())).toList();
+        emit(GetUsersFromCollectionLoaded(state, users));
+      }
+    } catch (error) {
+      emit(GetUsersFromCollectionFailed(error.toString(), state));
+    }
   }
-}
 
-FutureOr<void> _mapAddFollowersToDbEventToState(
-    AddFollowersToDbEvent event, Emitter<UserState> emit) async {
-  try {
+  FutureOr<void> _mapRemoveFollowerFromDbEventToState(
+      RemoveFollowerFromDbEvent event, Emitter<UserState> emit) async {
+    try {
+      emit(RemoveFollowerFromDbLoading());
+      await userRepository.removeFollower(event.userId, event.followerId);
+      final updatedUser = await userRepository.getUserFromDb(event.userId);
+      emit(RemoveFollowerFromDbLoaded(updatedUser.toModel(), state));
+    } catch (error) {
+      emit(RemoveFollowerFromDbFailed(error.toString()));
+    }
+  }
+
+  FutureOr<void> _mapAddFollowersToDbEventToState(
+      AddFollowersToDbEvent event, Emitter<UserState> emit) async {
+    try {
+      emit(AddFollowersToDbLoading());
+      await userRepository.addFollowersList(
+          event.userId ?? '', event.newFollowers ?? []);
+
+      final updatedUser =
+          await userRepository.getUserFromDb(event.userId ?? '');
+      emit(AddFollowersToDbLoaded(updatedUser.followers ?? []));
+    } catch (error) {
+      emit(AddFollowersToDbFailed(error.toString()));
+    }
+  }
+
+  // FutureOr<void> _mapGetUserDataEventToState(
+  //     GetUserDataEvent event, Emitter<UserState> emit) async {
+  //   try {
+  //     emit(GetUserDataLoading(state));
+  //     final user = await userRepository.getUserFromDb(event.userId ?? '');
+  //     emit(GetUserDataLoaded(user.toModel(), state));
+  //   } catch (error) {
+  //     emit(GetUserDataFailed(error.toString(), state));
+  //   }
+  // }
+
+// In UserBloc
+  FutureOr<void> _mapGetUserDataEventToState(
+      GetUserDataEvent event, Emitter<UserState> emit) async {
+    try {
+      emit(UserLoading(state)); // Indicate that loading is in progress
+      final user = await userRepository
+          .getUserFromDb(event.userId ?? ''); // Fetch user data
+      emit(UserLoaded(user.toModel(), state)); // Emit user data on success
+    } catch (error) {
+      emit(UserFailed(
+        state,
+        error.toString(),
+      )); // Emit error state if fetching fails
+    }
+  }
+
+  FutureOr<void> _mapAddFollowingsToDbEventToState(
+      AddFollowingsToDbEvent event, Emitter<UserState> emit) async {
     emit(AddFollowersToDbLoading());
-    await userRepository.addFollowersList(
-        event.userId ?? '', event.newFollowers ?? []);
-
-    final updatedUser =
-        await userRepository.getUserFromDb(event.userId ?? '');
-    emit(AddFollowersToDbLoaded(updatedUser.followers ?? []));
-  } catch (error) {
-    emit(AddFollowersToDbFailed(error.toString()));
+    try {
+      final followingList =
+          await userRepository.getFollowingsList(event.userId ?? '');
+      emit(UserFollowingListLoaded(followingList));
+    } catch (e) {
+      emit(AddFollowersToDbFailed(e.toString()));
+    }
   }
-}
 
-FutureOr<void> _mapGetUserDataEventToState(
-    GetUserDataEvent event, Emitter<UserState> emit) async {
-  try {
-    emit(GetUserDataLoading(state));
-    final user = await userRepository.getUserFromDb(event.userId ?? '');
-    emit(GetUserDataLoaded(user.toModel(), state));
-  } catch (error) {
-    emit(GetUserDataFailed(error.toString(), state));
+  FutureOr<void> _mapLoadUserDataEventToState(
+      LoadUserDataEvent event, Emitter<UserState> emit) async {
+    try {
+      emit(UserLoading(state));
+      final user = await userRepository.getUserFromDb(event.userId ?? '');
+      emit(UserLoaded(user.toModel(), state));
+    } catch (error) {
+      emit(UserFailed(state, error.toString()));
+    }
   }
-}
-
-FutureOr<void> _mapAddFollowingsToDbEventToState(
-    AddFollowingsToDbEvent event, Emitter<UserState> emit) async {
-  emit(AddFollowersToDbLoading());
-  try {
-    final followingList =
-        await userRepository.getFollowingsList(event.userId ?? '');
-    emit(UserFollowingListLoaded(followingList));
-  } catch (e) {
-    emit(AddFollowersToDbFailed(e.toString()));
-  }
-}
 }

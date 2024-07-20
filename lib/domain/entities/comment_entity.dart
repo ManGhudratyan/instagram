@@ -12,5 +12,6 @@ class CommentEntity {
   final String? message;
   final String? messageId;
 
+
   CommentModel toModel() => CommentModel(userId: userId, message: message);
 }

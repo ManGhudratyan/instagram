@@ -63,6 +63,14 @@ class RemoveFollowingsFromDbEvent extends UserEvent {
 }
 
 class GetFollowingListEvent extends UserEvent {
-  final String userId;
   GetFollowingListEvent(this.userId);
+
+  final String userId;
 }
+
+class FetchUserEvent extends UserEvent {
+  const FetchUserEvent({required this.userId});
+  final String userId;
+}
+
+class LoadUserDataEvent extends UserEvent {}
