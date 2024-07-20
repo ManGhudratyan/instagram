@@ -9,11 +9,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'core/app_themes/app_theme.dart';
 import 'core/routes/routes.dart';
 import 'data/repositories/auth_repository_imp.dart';
+import 'data/repositories/comment_repository_imp.dart';
 import 'data/repositories/media_repository_imp.dart';
 import 'data/repositories/post_repository_imp.dart';
 import 'data/repositories/user_repository_imp.dart';
 import 'data/services/auth/auth_service.dart';
 import 'data/services/auth/auth_service_imp.dart';
+import 'data/services/comments/comments_service.dart';
+import 'data/services/comments/comments_service_imp.dart';
 import 'data/services/media/media_service.dart';
 import 'data/services/media/media_service_imp.dart';
 import 'data/services/message/message_service.dart';
@@ -23,6 +26,7 @@ import 'data/services/post/post_service_imp.dart';
 import 'data/services/user/user_service.dart';
 import 'data/services/user/user_service_imp.dart';
 import 'domain/repositories/auth_repository.dart';
+import 'domain/repositories/comment_repository.dart';
 import 'domain/repositories/media_repository.dart';
 import 'domain/repositories/post_repository.dart';
 import 'domain/repositories/user_repository.dart';
@@ -61,6 +65,12 @@ void main() async {
         RepositoryProvider<MediaService>(
           create: (context) => MediaServiceImp(),
         ),
+        RepositoryProvider<CommentsService>(
+          create: (context) => CommentsServiceImp(
+            firebaseDatabase: FirebaseDatabase.instance,
+            firebaseStorage: FirebaseStorage.instance,
+          ),
+        ),
         RepositoryProvider<MessageService>(
           create: (context) => MessageServiceImp(
             FirebaseDatabase.instance,
@@ -89,6 +99,10 @@ void main() async {
         RepositoryProvider<PostRepository>(
           create: (context) => PostRepositoryImp(
               postService: RepositoryProvider.of<PostService>(context)),
+        ),
+        RepositoryProvider<CommentRepository>(
+          create: (context) => CommentRepositoryImp(
+               RepositoryProvider.of<CommentsService>(context)),
         ),
       ],
       child: MultiBlocProvider(

@@ -233,7 +233,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                           userEntity,
                                                                           file: mediaState
                                                                               .fileImage
-                                                                              ?.file),
+                                                                              ?.  file),
                                                                     );
                                                                 Navigator.pushNamed(
                                                                     context,

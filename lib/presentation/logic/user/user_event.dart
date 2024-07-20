@@ -1,13 +1,15 @@
 part of 'user_bloc.dart';
 
 sealed class UserEvent extends Equatable {
-  const UserEvent({this.userEntity, this.userId, this.newFollowers});
+  const UserEvent(
+      {this.userEntity, this.userId, this.newFollowers, this.newFollowings});
   final UserEntity? userEntity;
   final List<String>? newFollowers;
+  final List<String>? newFollowings;
   final String? userId;
 
   @override
-  List<Object?> get props => [userEntity, newFollowers, userId];
+  List<Object?> get props => [userEntity, newFollowers, userId, newFollowings];
 }
 
 final class UpdateUserDataEvent extends UserEvent {
@@ -38,11 +40,29 @@ class AddFollowersToDbEvent extends UserEvent {
 }
 
 class RemoveFollowerFromDbEvent extends UserEvent {
+  const RemoveFollowerFromDbEvent(this.userId, this.followerId);
   final String userId;
   final String followerId;
 
-  const RemoveFollowerFromDbEvent(this.userId, this.followerId);
-
   @override
   List<Object> get props => [userId, followerId];
+}
+
+class AddFollowingsToDbEvent extends UserEvent {
+  const AddFollowingsToDbEvent(String userId, List<String> newFollowings)
+      : super(userId: userId, newFollowings: newFollowings);
+}
+
+class RemoveFollowingsFromDbEvent extends UserEvent {
+  const RemoveFollowingsFromDbEvent(this.userId, this.followingId);
+  final String userId;
+  final String followingId;
+
+  @override
+  List<Object> get props => [userId, followingId];
+}
+
+class GetFollowingListEvent extends UserEvent {
+  final String userId;
+  GetFollowingListEvent(this.userId);
 }

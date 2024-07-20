@@ -13,8 +13,7 @@ final class MediaInitial extends MediaState {}
 final class MediaLoading extends MediaState {}
 
 final class MediaLoaded extends MediaState {
-  MediaLoaded(FileImage? fileImage, MediaState initState)
-      : super(fileImage: initState.fileImage);
+const   MediaLoaded(FileImage? fileImage) : super(fileImage: fileImage);
 }
 
 final class MediaFailed extends MediaState {
