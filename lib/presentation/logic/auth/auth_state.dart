@@ -23,6 +23,11 @@ final class LoginGoogleFailed extends AuthState {
   const LoginGoogleFailed(String error) : super(error: error);
 }
 
+final class LoginGoogleSuccess extends AuthState {
+  const LoginGoogleSuccess(this.user);
+  final User user;
+}
+
 final class SaveUserToDbLoading extends AuthState {}
 
 final class SaveUserToDbLoaded extends AuthState {

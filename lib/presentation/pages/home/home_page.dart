@@ -98,10 +98,12 @@ class _HomePageState extends State<HomePage> {
                     actions: [
                       const MediaBottomSheetWidget(),
                       IconButton(
-                        icon: SvgPicture.asset(Assets.messengerIcon,
-                            height: 24,
-                            width: 24,
-                            color: Theme.of(context).colorScheme.secondary),
+                        icon: SvgPicture.asset(
+                          Assets.messengerIcon,
+                          height: 24,
+                          width: 24,
+                          color: const Color.fromARGB(255, 113, 113, 113),
+                        ),
                         onPressed: () {
                           Navigator.pushNamed(context, '/chat-page');
                         },

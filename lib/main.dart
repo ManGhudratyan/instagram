@@ -48,6 +48,8 @@ void main() async {
         databaseURL:
             'https://instagram-flutter-fecce-default-rtdb.firebaseio.com/'),
   );
+
+
   runApp(
     MultiRepositoryProvider(
       providers: [
@@ -102,7 +104,7 @@ void main() async {
         ),
         RepositoryProvider<CommentRepository>(
           create: (context) => CommentRepositoryImp(
-               RepositoryProvider.of<CommentsService>(context)),
+              RepositoryProvider.of<CommentsService>(context)),
         ),
       ],
       child: MultiBlocProvider(
