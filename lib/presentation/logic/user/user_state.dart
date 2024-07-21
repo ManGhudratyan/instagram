@@ -66,20 +66,6 @@ final class GetUsersFromCollectionFailed extends UserState {
         );
 }
 
-final class AddFollowersToDbLoading extends UserState {}
-
-class AddFollowersToDbLoaded extends UserState {
-  const AddFollowersToDbLoaded(this.updatedFollowers);
-  final List<String> updatedFollowers;
-
-  @override
-  List<Object?> get props => [updatedFollowers];
-}
-
-final class AddFollowersToDbFailed extends UserState {
-  const AddFollowersToDbFailed(String error) : super(error: error);
-}
-
 class RemoveFollowerFromDbLoading extends UserState {}
 
 class RemoveFollowerFromDbLoaded extends UserState {
@@ -111,7 +97,48 @@ class UserDataDbFailed extends UserState {
 
 final class AddFollowingsToDbLoading extends UserState {}
 
+class AddFollowersToDbLoaded extends UserState {
+  const AddFollowersToDbLoaded(this.updatedFollowers);
+  final List<String> updatedFollowers;
+
+  @override
+  List<Object?> get props => [updatedFollowers];
+}
+
 class UserFollowingListLoaded extends UserState {
   const UserFollowingListLoaded(this.followingList);
   final List<UserEntity> followingList;
+}
+
+final class AddFollowersToDbLoading extends UserState {}
+
+final class AddFollowersToDbFailed extends UserState {
+  const AddFollowersToDbFailed(String error) : super(error: error);
+}
+
+
+class AddFollowingsToDbLoaded extends UserState {
+  final UserModel userModel;
+
+  AddFollowingsToDbLoaded(this.userModel);
+}
+
+class AddFollowingToDbFailed extends UserState {
+  final String error;
+
+  AddFollowingToDbFailed(this.error);
+}
+
+class RemoveFollowingFromDbLoading extends UserState {}
+
+class RemoveFollowingFromDbLoaded extends UserState {
+  final UserModel userModel;
+
+  RemoveFollowingFromDbLoaded(this.userModel);
+}
+
+class RemoveFollowingFromDbFailed extends UserState {
+  final String error;
+
+  RemoveFollowingFromDbFailed(this.error);
 }

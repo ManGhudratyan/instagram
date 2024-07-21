@@ -17,8 +17,10 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     on<GetUsersCollectionEvent>(_mapGetUsersCollectionEventToState);
     on<AddFollowersToDbEvent>(_mapAddFollowersToDbEventToState);
     on<RemoveFollowerFromDbEvent>(_mapRemoveFollowerFromDbEventToState);
-    on<AddFollowingsToDbEvent>(_mapAddFollowingsToDbEventToState);
     on<LoadUserDataEvent>(_mapLoadUserDataEventToState);
+    // on<AddFollowingsToDbEvent>(_mapAddFollowingsToDbEventToState);
+    on<AddFollowingsToDbEvent>(_mapAddFollowingsToDbEventToState);
+    on<RemoveFollowingFromDbEvent>(_mapRemoveFollowingFromDbEventToState);
   }
 
   final UserRepository userRepository;
@@ -102,17 +104,17 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     }
   }
 
-  FutureOr<void> _mapAddFollowingsToDbEventToState(
-      AddFollowingsToDbEvent event, Emitter<UserState> emit) async {
-    emit(AddFollowersToDbLoading());
-    try {
-      final followingList =
-          await userRepository.getFollowingsList(event.userId ?? '');
-      emit(UserFollowingListLoaded(followingList));
-    } catch (e) {
-      emit(AddFollowersToDbFailed(e.toString()));
-    }
-  }
+  // FutureOr<void> _mapAddFollowingsToDbEventToState(
+  //     AddFollowingsToDbEvent event, Emitter<UserState> emit) async {
+  //   emit(AddFollowersToDbLoading());
+  //   try {
+  //     final followingList =
+  //         await userRepository.getFollowingsList(event.userId ?? '');
+  //     emit(UserFollowingListLoaded(followingList));
+  //   } catch (e) {
+  //     emit(AddFollowersToDbFailed(e.toString()));
+  //   }
+  // }
 
   FutureOr<void> _mapLoadUserDataEventToState(
       LoadUserDataEvent event, Emitter<UserState> emit) async {
@@ -122,6 +124,47 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       emit(UserLoaded(user.toModel(), state));
     } catch (error) {
       emit(UserFailed(state, error.toString()));
+    }
+  }
+
+  FutureOr<void> _mapAddFollowingsToDbEventToState(
+      AddFollowingsToDbEvent event, Emitter<UserState> emit) async {
+    try {
+      emit(AddFollowingsToDbLoading());
+
+      // Add the following
+      await userRepository.addFollowingList(event.userId, event.newFollowings);
+      final updatedUser = await userRepository.getUserFromDb(event.userId);
+
+      // Check if the follower's userId is equal to the following's userId
+      if (event.userId == event.newFollowings.first) {
+        await userRepository.addFollowersList(
+            event.userId, event.newFollowings);
+      }
+
+      emit(AddFollowingsToDbLoaded(updatedUser.toModel()));
+    } catch (error) {
+      emit(AddFollowingToDbFailed(error.toString()));
+    }
+  }
+
+  FutureOr<void> _mapRemoveFollowingFromDbEventToState(
+      RemoveFollowingFromDbEvent event, Emitter<UserState> emit) async {
+    try {
+      emit(RemoveFollowingFromDbLoading());
+
+      // Remove the following
+      await userRepository.removeFollowing(event.userId, event.followingId);
+      final updatedUser = await userRepository.getUserFromDb(event.userId);
+
+      // Check if the follower's userId is equal to the following's userId
+      if (event.userId == event.followingId) {
+        await userRepository.removeFollower(event.userId, event.followingId);
+      }
+
+      emit(RemoveFollowingFromDbLoaded(updatedUser.toModel()));
+    } catch (error) {
+      emit(RemoveFollowingFromDbFailed(error.toString()));
     }
   }
 }

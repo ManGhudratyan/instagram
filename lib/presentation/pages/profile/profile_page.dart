@@ -115,8 +115,12 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                             IntOnString(
                                 count: postsList?.length ?? 0, text: 'Posts'),
-                            IntOnString(count: 0, text: 'Followers'),
-                            IntOnString(count: 0, text: 'Following')
+                            IntOnString(
+                                count: userState.userEntity?.followers?.length ?? 0,
+                                text: 'Followers'),
+                            IntOnString(
+                                count: userState.userEntity?.followings?.length ?? 0,
+                                text: 'Following')
                           ],
                         ),
                         Column(

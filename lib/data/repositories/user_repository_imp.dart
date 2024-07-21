@@ -37,19 +37,29 @@ class UserRepositoryImp implements UserRepository {
   Future<void> removeFollower(String userId, String followerId) {
     return userService.removeFollower(userId, followerId);
   }
-
+  
   @override
-  Future<void> addFollowingsList(String userId, List<String> newFollowings) {
-    return userService.addFollowingsList(userId, newFollowings);
+  Future<void> addFollowingList(String userId, List<String> newFollowings) {
+    return userService.addFollowingList(userId, newFollowings);
   }
-
+  
   @override
   Future<void> removeFollowing(String userId, String followingId) {
     return userService.removeFollowing(userId, followingId);
   }
+
+  // @override
+  // Future<void> addFollowingsList(String userId, List<String> newFollowings) {
+  //   return userService.addFollowingsList(userId, newFollowings);
+  // }
+
+  // @override
+  // Future<void> removeFollowing(String userId, String followingId) {
+  //   return userService.removeFollowing(userId, followingId);
+  // }
   
-  @override
-  Future<List<UserEntity>> getFollowingsList(String userId) {
-  return userService.getFollowingsList(userId);
-  }
+  // @override
+  // Future<List<UserEntity>> getFollowingsList(String userId) {
+  // return userService.getFollowingsList(userId);
+  // }
 }
