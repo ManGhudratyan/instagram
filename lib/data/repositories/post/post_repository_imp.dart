@@ -41,9 +41,5 @@ class PostRepositoryImp extends PostRepository {
   Stream<QuerySnapshot<Map<String, dynamic>>> getPostsFromCollection() {
     return postService.getPostsFromCollection();
   }
-  
-  @override
-  Future<List<DocumentSnapshot<Object?>>> getCommentsForPost(String postId) {
-   return postService.getCommentsForPost(postId);
-  }
+
 }

@@ -86,7 +86,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
       final updatedUser =
           await userRepository.getUserFromDb(event.userId ?? '');
-      emit(AddFollowersToDbLoaded(updatedUser.followers ?? []));
+      emit(AddFollowersToDbLoaded(state,updatedUser.followers ?? []));
     } catch (error) {
       emit(AddFollowersToDbFailed(error.toString()));
     }

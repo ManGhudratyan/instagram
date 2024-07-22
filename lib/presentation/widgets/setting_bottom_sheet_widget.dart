@@ -68,6 +68,7 @@ class _SettingBottomSheetWidgetState extends State<SettingBottomSheetWidget> {
                               Icons.favorite_border,
                             ];
                             return Card(
+                                elevation: 0,
                               child: ListTile(
                                 leading: Icon(
                                   icons[index],

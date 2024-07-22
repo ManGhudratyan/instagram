@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../domain/entities/user_entity.dart';
@@ -116,10 +117,14 @@ class _ProfilePageState extends State<ProfilePage> {
                             IntOnString(
                                 count: postsList?.length ?? 0, text: 'Posts'),
                             IntOnString(
-                                count: userState.userEntity?.followers?.length ?? 0,
+                                count:
+                                    userState.userEntity?.followers?.length ??
+                                        0,
                                 text: 'Followers'),
                             IntOnString(
-                                count: userState.userEntity?.followings?.length ?? 0,
+                                count:
+                                    userState.userEntity?.followings?.length ??
+                                        0,
                                 text: 'Following')
                           ],
                         ),

@@ -64,20 +64,5 @@ class PostServiceImp implements PostService {
     return FirebaseFirestore.instance.collection('posts').snapshots();
   }
 
-  @override
-  Future<List<DocumentSnapshot>> getCommentsForPost(String postId) async {
-    try {
-      final commentsCollection = firebaseFirestore
-          .collection('posts')
-          .doc(postId)
-          .collection('comments')
-          .orderBy('timestamp', descending: true);
-
-      final querySnapshot = await commentsCollection.get();
-
-      return querySnapshot.docs;
-    } catch (e) {
-      throw Exception('Failed to fetch comments: $e');
-    }
-  }
+ 
 }

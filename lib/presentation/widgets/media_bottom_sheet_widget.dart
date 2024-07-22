@@ -16,7 +16,7 @@ class MediaBottomSheetWidget extends StatelessWidget {
         Assets.plusIcon,
         height: 24,
         width: 24,
-        color: const Color.fromARGB(255, 113, 113, 113),
+        color: Color.fromARGB(255, 159, 156, 156),
       ),
       onPressed: () {
         showModalBottomSheet(
@@ -49,6 +49,7 @@ class MediaBottomSheetWidget extends StatelessWidget {
                           Icons.menu_book,
                         ];
                         return Card(
+                          elevation: 0,
                           child: InkWell(
                             onTap: () {
                               if (index == 1) {

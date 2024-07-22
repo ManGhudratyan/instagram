@@ -37,11 +37,3 @@ class UploadPostEvent extends PostEvent {
   final File file;
 }
 
-class GetCommentsForPostEvent extends PostEvent {
-  const GetCommentsForPostEvent(this.postId);
-  @override
-  final String postId;
-
-  @override
-  List<Object?> get props => [postId];
-}

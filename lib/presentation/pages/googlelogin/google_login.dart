@@ -14,16 +14,16 @@ class _GoogleLoginState extends State<GoogleLogin> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AuthBloc, AuthState>(
-      listener: (context, state) {
-        if (state is LoginGoogleFailed) {
+      listener: (context, userState) {
+        if (userState is LoginGoogleFailed) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(state.error ?? ''),
+              content: Text(userState.error ?? ''),
             ),
           );
         }
       },
-      builder: (context, state) {
+      builder: (context, userState) {
         return Scaffold(
           backgroundColor: Theme.of(context).colorScheme.primary,
           appBar: AppBar(

@@ -5,12 +5,12 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'core/app_themes/app_theme.dart';
 import 'core/routes/routes.dart';
 import 'data/repositories/auth/auth_repository_imp.dart';
 import 'data/repositories/chat/chat_repository_imp.dart';
-import 'data/repositories/comment/comment_repository_imp.dart';
 import 'data/repositories/media/media_repository_imp.dart';
 import 'data/repositories/post/post_repository_imp.dart';
 import 'data/repositories/user/user_repository_imp.dart';
@@ -18,8 +18,6 @@ import 'data/services/auth/auth_service.dart';
 import 'data/services/auth/auth_service_imp.dart';
 import 'data/services/chat/chat_service.dart';
 import 'data/services/chat/chat_service_imp.dart';
-import 'data/services/comments/comments_service.dart';
-import 'data/services/comments/comments_service_imp.dart';
 import 'data/services/media/media_service.dart';
 import 'data/services/media/media_service_imp.dart';
 import 'data/services/post/post_service.dart';
@@ -28,7 +26,6 @@ import 'data/services/user/user_service.dart';
 import 'data/services/user/user_service_imp.dart';
 import 'domain/repositories/auth/auth_repository.dart';
 import 'domain/repositories/chat/chat_repository.dart';
-import 'domain/repositories/comment/comment_repository.dart';
 import 'domain/repositories/media/media_repository.dart';
 import 'domain/repositories/post/post_repository.dart';
 import 'domain/repositories/user/user_repository.dart';
@@ -52,6 +49,9 @@ void main() async {
             'https://instagram-flutter-fecce-default-rtdb.firebaseio.com/'),
   );
 
+  final prefs = await SharedPreferences.getInstance();
+  final isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+
   runApp(
     MultiRepositoryProvider(
       providers: [
@@ -72,12 +72,7 @@ void main() async {
         RepositoryProvider<ChatService>(
           create: (context) => ChatServiceImp(),
         ),
-        RepositoryProvider<CommentsService>(
-          create: (context) => CommentsServiceImp(
-            firebaseDatabase: FirebaseDatabase.instance,
-            firebaseStorage: FirebaseStorage.instance,
-          ),
-        ),
+       
         RepositoryProvider<PostService>(
           create: (context) => PostServiceImp(
             firebaseDatabase: FirebaseDatabase.instance,
@@ -103,12 +98,10 @@ void main() async {
         ),
         RepositoryProvider<PostRepository>(
           create: (context) => PostRepositoryImp(
-              postService: RepositoryProvider.of<PostService>(context),),
+            postService: RepositoryProvider.of<PostService>(context),
+          ),
         ),
-        RepositoryProvider<CommentRepository>(
-          create: (context) => CommentRepositoryImp(
-              RepositoryProvider.of<CommentsService>(context)),
-        ),
+        
       ],
       child: MultiBlocProvider(
         providers: [
@@ -135,14 +128,14 @@ void main() async {
             create: (context) =>
                 ChatBloc(RepositoryProvider.of<ChatRepository>(context)),
           ),
+         
         ],
         child: BlocBuilder<ThemeCubit, ThemeState>(
           builder: (context, state) {
             return MaterialApp(
               debugShowCheckedModeBanner: false,
-              // routes: Routes.routes,
               onGenerateRoute: Routes.generateRoute,
-              initialRoute: '/',
+              initialRoute: isLoggedIn ? '/home-page' : '/',
               themeMode: state.themeMode,
               theme: AppThemeData(context: context).lighTheme,
               darkTheme: AppThemeData(context: context).darkTheme,

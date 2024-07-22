@@ -5,16 +5,14 @@ sealed class PostState extends Equatable {
     this.error,
     this.postEntity,
     this.posts,
-    this.postComments,
   });
 
   final String? error;
   final PostEntity? postEntity;
   final List<PostEntity>? posts;
-  final Map<String, List<CommentModel>>? postComments;
 
   @override
-  List<Object?> get props => [error, postEntity, posts, postComments];
+  List<Object?> get props => [error, postEntity, posts];
 }
 
 final class PostInitial extends PostState {}
@@ -82,22 +80,15 @@ final class PostLoaded extends PostState {
 }
 
 final class GetPostFromCollectionLoaded extends PostState {
-  GetPostFromCollectionLoaded(PostState initState, List<PostEntity> posts,
-      Map<String, List<CommentModel>> postComments)
-      : super(
-            posts: posts,
-            postEntity: initState.postEntity,
-            postComments: postComments);
+  GetPostFromCollectionLoaded(
+    PostState initState,
+    List<PostEntity> posts,
+  ) : super(
+          posts: posts,
+          postEntity: initState.postEntity,
+        );
 }
 
-class GetCommentsForPostLoaded extends PostState {
-  const GetCommentsForPostLoaded(this.postId, this.comments);
-  final String postId;
-  final List<CommentModel> comments;
-
-  @override
-  List<Object?> get props => [postId, comments];
-}
 
 final class GetPostFromCollectionLoading extends PostState {
   GetPostFromCollectionLoading(PostState initialState)

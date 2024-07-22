@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../../data/models/comment/comment_model.dart';
 import '../../../data/models/post/post_model.dart';
 import '../../../domain/entities/post_entity.dart';
 import '../../../domain/repositories/post/post_repository.dart';
@@ -18,10 +17,10 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     on<DeletePostDataEvent>(_mapDeletePostDataEventToState);
     on<UploadPostEvent>(_mapUploadPostEventToState);
     on<GetPostsFromCollectionEvent>(_mapGetPostsFromCollectionEventToState);
-    on<GetCommentsForPostEvent>(_mapGetCommentsForPostEventToState);
   }
 
   final PostRepository postRepository;
+
   FutureOr<void> _mapSavePostToDbEventToState(
       SavePostToDbEvent event, Emitter<PostState> emit) async {
     try {
@@ -38,41 +37,14 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     try {
       emit(GetPostFromCollectionLoading(state));
       final postSnapshot = postRepository.getPostsFromCollection();
-      final postComments = <String, List<CommentModel>>{};
+      var posts = <PostModel>[];
 
       await for (final snapshot in postSnapshot) {
-        final posts =
-            snapshot.docs.map((doc) => PostModel.fromJson(doc.data())).toList();
-
-        for (final post in posts) {
-          final comments =
-              await postRepository.getCommentsForPost(post.postId ?? '');
-          postComments[post.postId ?? ''] = comments
-              .map((doc) =>
-                  CommentModel.fromJson(doc.data()! as Map<String, dynamic>))
-              .toList();
-        }
-
-        emit(GetPostFromCollectionLoaded(state, posts, postComments));
+        posts = snapshot.docs.map((doc) => PostModel.fromJson(doc.data())).toList();
+        emit(GetPostFromCollectionLoaded(state, posts));
       }
     } catch (error) {
       emit(GetPostFromCollectionFailed(error.toString(), state));
-    }
-  }
-
-  FutureOr<void> _mapGetCommentsForPostEventToState(
-      GetCommentsForPostEvent event, Emitter<PostState> emit) async {
-    try {
-      final comments = await postRepository.getCommentsForPost(event.postId);
-      emit(GetCommentsForPostLoaded(
-        event.postId,
-        comments
-            .map((doc) =>
-                CommentModel.fromJson(doc.data()! as Map<String, dynamic>))
-            .toList(),
-      ));
-    } catch (error) {
-      emit(GetPostDataFailed(error.toString(), state));
     }
   }
 

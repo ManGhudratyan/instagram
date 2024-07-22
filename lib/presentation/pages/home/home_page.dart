@@ -92,8 +92,9 @@ class _HomePageState extends State<HomePage> {
                     title: Text(
                       'Instagram',
                       style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).colorScheme.onPrimary),
+                        fontWeight: FontWeight.bold,
+                        color: Color.fromARGB(255, 159, 156, 156),
+                      ),
                     ),
                     actions: [
                       const MediaBottomSheetWidget(),
@@ -102,7 +103,7 @@ class _HomePageState extends State<HomePage> {
                           Assets.messengerIcon,
                           height: 24,
                           width: 24,
-                          color: const Color.fromARGB(255, 113, 113, 113),
+                          color: Color.fromARGB(255, 159, 156, 156),
                         ),
                         onPressed: () {
                           Navigator.pushNamed(context, '/chat-page');
@@ -215,6 +216,7 @@ class _HomePageState extends State<HomePage> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Card(
+                                       elevation: 0,
                                         color: Theme.of(context)
                                             .colorScheme
                                             .surface,
@@ -229,7 +231,7 @@ class _HomePageState extends State<HomePage> {
                                                 ? CachedNetworkImageProvider(
                                                     user?.profileImage ?? '')
                                                 : null,
-                                            radius: 30,
+                                            radius: 25,
                                             child: user?.profileImage == null
                                                 ? Text(
                                                     user?.username
@@ -294,18 +296,12 @@ class _HomePageState extends State<HomePage> {
                                                       .colorScheme
                                                       .onPrimary,
                                                   height: 40),
-                                              GestureDetector(
-                                                onTap: () {
-                                                  Navigator.pushNamed(context,
-                                                      '/comments-page');
-                                                },
-                                                child: SvgPicture.asset(
-                                                  Assets.commentIcon,
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .onPrimary,
-                                                  height: 40,
-                                                ),
+                                              SvgPicture.asset(
+                                                Assets.commentIcon,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onPrimary,
+                                                height: 40,
                                               ),
                                               SvgPicture.asset(
                                                   Assets.vectorIcon,

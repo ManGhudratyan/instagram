@@ -1,14 +1,17 @@
-// ignore_for_file: overridden_fields
+// ignore_for_file: overridden_fields, avoid_unused_constructor_parameters
 
 part of 'user_bloc.dart';
 
 sealed class UserState extends Equatable {
-  const UserState({this.error, this.userEntity, this.users});
+  const UserState(
+      {this.error, this.userEntity, this.users, this.updatedFollowers});
   final String? error;
   final UserEntity? userEntity;
   final List<UserEntity>? users;
+  final List<String>? updatedFollowers;
+
   @override
-  List<Object?> get props => [error, userEntity, users];
+  List<Object?> get props => [error, userEntity, users, updatedFollowers];
 }
 
 final class UserInitial extends UserState {}
@@ -66,18 +69,6 @@ final class GetUsersFromCollectionFailed extends UserState {
         );
 }
 
-class RemoveFollowerFromDbLoading extends UserState {}
-
-class RemoveFollowerFromDbLoaded extends UserState {
-  const RemoveFollowerFromDbLoaded(this.userModel, this.initState);
-  final UserModel userModel;
-  final UserState initState;
-}
-
-class RemoveFollowerFromDbFailed extends UserState {
-  const RemoveFollowerFromDbFailed(String error) : super(error: error);
-}
-
 final class UserDataDbUpdating extends UserState {
   UserDataDbUpdating(UserState initialState)
       : super(userEntity: initialState.userEntity, users: initialState.users);
@@ -98,11 +89,23 @@ class UserDataDbFailed extends UserState {
 final class AddFollowingsToDbLoading extends UserState {}
 
 class AddFollowersToDbLoaded extends UserState {
-  const AddFollowersToDbLoaded(this.updatedFollowers);
-  final List<String> updatedFollowers;
+  AddFollowersToDbLoaded(UserState initState, List<String> updatedFollowers)
+      : super(
+          updatedFollowers: initState.updatedFollowers,
+        );
+}
 
-  @override
-  List<Object?> get props => [updatedFollowers];
+class RemoveFollowerFromDbLoading extends UserState {}
+
+class RemoveFollowerFromDbLoaded extends UserState {
+  RemoveFollowerFromDbLoaded(UserModel userModel, UserState initState)
+      : super(userEntity: initState.userEntity);
+  // final UserModel userModel;
+  // final UserState initState;
+}
+
+class RemoveFollowerFromDbFailed extends UserState {
+  const RemoveFollowerFromDbFailed(String error) : super(error: error);
 }
 
 class UserFollowingListLoaded extends UserState {

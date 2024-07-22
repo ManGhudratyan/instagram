@@ -1,4 +1,3 @@
-
 import 'package:firebase_database/firebase_database.dart';
 
 import 'chat_service.dart';
@@ -32,17 +31,21 @@ class ChatServiceImp implements ChatService {
         .child('users/$senderId/chats/$receiverId/messages')
         .orderByChild('timeSend')
         .onValue
-        .map((event) {
-      final snapshot = event.snapshot;
-      if (snapshot.value == null) {
-        return [];
-      }
+        .map(
+      (event) {
+        final snapshot = event.snapshot;
+        if (snapshot.value == null) {
+          return [];
+        }
 
-      final messagesMap = snapshot.value! as Map<Object?, Object?>;
-      return messagesMap.entries.map((entry) {
-        final value = entry.value! as Map<Object?, Object?>;
-        return value.map((key, value) => MapEntry(key.toString(), value));
-      }).toList();
-    });
+        final messagesMap = snapshot.value! as Map<Object?, Object?>;
+        return messagesMap.entries.map(
+          (entry) {
+            final value = entry.value! as Map<Object?, Object?>;
+            return value.map((key, value) => MapEntry(key.toString(), value));
+          },
+        ).toList();
+      },
+    );
   }
 }
