@@ -86,7 +86,7 @@ class ChatServiceImp implements ChatService {
 
       final messagesMap = snapshot.value! as Map<Object?, Object?>;
       return messagesMap.entries.map((entry) {
-        final value = entry.value as Map<Object?, Object?>;
+        final value = entry.value! as Map<Object?, Object?>;
         return value.map((key, value) => MapEntry(key.toString(), value));
       }).toList();
     });
