@@ -7,7 +7,7 @@ import 'package:equatable/equatable.dart';
 import '../../../data/models/comment/comment_model.dart';
 import '../../../data/models/post/post_model.dart';
 import '../../../domain/entities/post_entity.dart';
-import '../../../domain/repositories/post_repository.dart';
+import '../../../domain/repositories/post/post_repository.dart';
 
 part 'post_event.dart';
 part 'post_state.dart';

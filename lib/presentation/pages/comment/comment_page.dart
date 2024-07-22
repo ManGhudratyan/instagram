@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../domain/entities/comment_entity.dart';
-import '../../../domain/repositories/comment_repository.dart';
+import '../../../domain/repositories/comment/comment_repository.dart';
 import '../../logic/auth/auth_bloc.dart';
 import '../../logic/comment/comment_bloc.dart';
 import '../../logic/user/user_bloc.dart';

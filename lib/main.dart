@@ -8,12 +8,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'core/app_themes/app_theme.dart';
 import 'core/routes/routes.dart';
-import 'data/repositories/auth_repository_imp.dart';
-import 'data/repositories/chat_repository_imp.dart';
-import 'data/repositories/comment_repository_imp.dart';
-import 'data/repositories/media_repository_imp.dart';
-import 'data/repositories/post_repository_imp.dart';
-import 'data/repositories/user_repository_imp.dart';
+import 'data/repositories/auth/auth_repository_imp.dart';
+import 'data/repositories/chat/chat_repository_imp.dart';
+import 'data/repositories/comment/comment_repository_imp.dart';
+import 'data/repositories/media/media_repository_imp.dart';
+import 'data/repositories/post/post_repository_imp.dart';
+import 'data/repositories/user/user_repository_imp.dart';
 import 'data/services/auth/auth_service.dart';
 import 'data/services/auth/auth_service_imp.dart';
 import 'data/services/chat/chat_service.dart';
@@ -22,18 +22,16 @@ import 'data/services/comments/comments_service.dart';
 import 'data/services/comments/comments_service_imp.dart';
 import 'data/services/media/media_service.dart';
 import 'data/services/media/media_service_imp.dart';
-import 'data/services/message/message_service.dart';
-import 'data/services/message/message_service_imp.dart';
 import 'data/services/post/post_service.dart';
 import 'data/services/post/post_service_imp.dart';
 import 'data/services/user/user_service.dart';
 import 'data/services/user/user_service_imp.dart';
-import 'domain/repositories/auth_repository.dart';
-import 'domain/repositories/chat_repository.dart';
-import 'domain/repositories/comment_repository.dart';
-import 'domain/repositories/media_repository.dart';
-import 'domain/repositories/post_repository.dart';
-import 'domain/repositories/user_repository.dart';
+import 'domain/repositories/auth/auth_repository.dart';
+import 'domain/repositories/chat/chat_repository.dart';
+import 'domain/repositories/comment/comment_repository.dart';
+import 'domain/repositories/media/media_repository.dart';
+import 'domain/repositories/post/post_repository.dart';
+import 'domain/repositories/user/user_repository.dart';
 import 'presentation/logic/auth/auth_bloc.dart';
 import 'presentation/logic/chat/chat_bloc.dart';
 import 'presentation/logic/cubit/theme_cubit.dart';
@@ -78,12 +76,6 @@ void main() async {
           create: (context) => CommentsServiceImp(
             firebaseDatabase: FirebaseDatabase.instance,
             firebaseStorage: FirebaseStorage.instance,
-          ),
-        ),
-        RepositoryProvider<MessageService>(
-          create: (context) => MessageServiceImp(
-            FirebaseDatabase.instance,
-            FirebaseStorage.instance,
           ),
         ),
         RepositoryProvider<PostService>(
@@ -141,7 +133,7 @@ void main() async {
           ),
           BlocProvider(
             create: (context) =>
-              ChatBloc(RepositoryProvider.of<ChatRepository>(context)),
+                ChatBloc(RepositoryProvider.of<ChatRepository>(context)),
           ),
         ],
         child: BlocBuilder<ThemeCubit, ThemeState>(

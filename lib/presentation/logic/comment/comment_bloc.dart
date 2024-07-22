@@ -6,7 +6,7 @@ import 'package:firebase_database/firebase_database.dart';
 
 import '../../../data/models/comment/comment_model.dart';
 import '../../../domain/entities/comment_entity.dart';
-import '../../../domain/repositories/comment_repository.dart';
+import '../../../domain/repositories/comment/comment_repository.dart';
 
 part 'comment_event.dart';
 part 'comment_state.dart';

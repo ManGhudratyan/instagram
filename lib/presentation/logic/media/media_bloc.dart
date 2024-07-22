@@ -3,7 +3,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
-import '../../../domain/repositories/media_repository.dart';
+import '../../../domain/repositories/media/media_repository.dart';
 
 part 'media_event.dart';
 part 'media_state.dart';

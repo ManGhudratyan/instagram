@@ -1,5 +1,5 @@
-import '../../domain/repositories/chat_repository.dart';
-import '../services/chat/chat_service.dart';
+import '../../../domain/repositories/chat/chat_repository.dart';
+import '../../services/chat/chat_service.dart';
 
 class ChatRepositoryImp implements ChatRepository {
   ChatRepositoryImp(this.chatService);

@@ -1,8 +1,8 @@
 import 'package:firebase_database/firebase_database.dart';
 
-import '../../domain/repositories/comment_repository.dart';
-import '../models/comment/comment_model.dart';
-import '../services/comments/comments_service.dart';
+import '../../../domain/repositories/comment/comment_repository.dart';
+import '../../models/comment/comment_model.dart';
+import '../../services/comments/comments_service.dart';
 
 class CommentRepositoryImp implements CommentRepository {
   CommentRepositoryImp(this.commentsService);

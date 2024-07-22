@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../../domain/repositories/chat_repository.dart';
+import '../../../domain/repositories/chat/chat_repository.dart';
 
 part 'chat_event.dart';
 part 'chat_state.dart';

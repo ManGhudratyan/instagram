@@ -2,10 +2,10 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../../domain/entities/post_entity.dart';
-import '../../domain/repositories/post_repository.dart';
-import '../models/post/post_model.dart';
-import '../services/post/post_service.dart';
+import '../../../domain/entities/post_entity.dart';
+import '../../../domain/repositories/post/post_repository.dart';
+import '../../models/post/post_model.dart';
+import '../../services/post/post_service.dart';
 
 class PostRepositoryImp extends PostRepository {
   PostRepositoryImp({required this.postService});

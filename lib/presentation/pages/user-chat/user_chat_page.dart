@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../logic/chat/chat_bloc.dart';
 
-class ChatPagee extends StatefulWidget {
-  const ChatPagee({super.key, required this.uid});
+class UserChatPage extends StatefulWidget {
+  const UserChatPage({super.key, required this.uid});
   final String uid;
 
   @override
-  State<ChatPagee> createState() => _ChatPageeState();
+  State<UserChatPage> createState() => _UserChatPageState();
 }
 
-class _ChatPageeState extends State<ChatPagee> {
+class _UserChatPageState extends State<UserChatPage> {
   final TextEditingController messageController = TextEditingController();
   final ScrollController scrollController = ScrollController();
 

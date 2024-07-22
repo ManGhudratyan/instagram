@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../entities/user_entity.dart';
+import '../../entities/user_entity.dart';
 
 abstract class UserRepository {
   Future<void> saveUserToDB(UserEntity userEntity);

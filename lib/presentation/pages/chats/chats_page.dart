@@ -79,7 +79,7 @@ class _ChatsPageState extends State<ChatsPage> {
                             onTap: () {
                               Navigator.pushNamed(
                                 context,
-                                '/chat-pagee',
+                                '/user-chat-page',
                                 arguments: {
                                   'uid': user?.userId ?? ''
                                 },
