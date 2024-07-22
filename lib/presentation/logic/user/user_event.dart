@@ -54,17 +54,18 @@ class RemoveFollowerFromDbEvent extends UserEvent {
 }
 
 class AddFollowingsToDbEvent extends UserEvent {
+  const AddFollowingsToDbEvent(this.userId, this.newFollowings);
+  @override
   final String userId;
+  @override
   final List<String> newFollowings;
-
-  AddFollowingsToDbEvent(this.userId, this.newFollowings);
 }
 
 class RemoveFollowingFromDbEvent extends UserEvent {
+  const RemoveFollowingFromDbEvent(this.userId, this.followingId);
+  @override
   final String userId;
   final String followingId;
-
-  RemoveFollowingFromDbEvent(this.userId, this.followingId);
 }
 
 class GetFollowingListEvent extends UserEvent {

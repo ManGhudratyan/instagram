@@ -20,9 +20,10 @@ final class SavePostToDbEvent extends PostEvent {
 final class GetPostsFromCollectionEvent extends PostEvent {}
 
 final class DeletePostDataEvent extends PostEvent {
-  final String postId;
 
   const DeletePostDataEvent(this.postId) : super();
+  @override
+  final String postId;
 
   @override
   List<Object> get props => [postId];

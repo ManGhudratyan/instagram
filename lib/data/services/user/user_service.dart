@@ -10,9 +10,6 @@ abstract class UserService {
   Future<String> getCurrentUser();
   Future<void> addFollowersList(String userId, List<String> newFollowers);
   Future<void> removeFollower(String userId, String followerId);
-  // Future<void> addFollowingsList(String userId, List<String> newFollowings);
-  // Future<void> removeFollowing(String userId, String followingId);
-  // Future<List<UserEntity>> getFollowingsList(String userId);
   Future<void> addFollowingList(String userId, List<String> newFollowings);
   Future<void> removeFollowing(String userId, String followingId);
 }

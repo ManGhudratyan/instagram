@@ -8,7 +8,7 @@ sealed class MessageState extends Equatable {
   final List<MessageEntity> messages;
   final bool initialDataLoaded;
   @override
-  List<Object> get props => [messages, initialDataLoaded];
+  List<Object?> get props => [messages, initialDataLoaded, error];
 }
 
 final class MessageInitial extends MessageState {}

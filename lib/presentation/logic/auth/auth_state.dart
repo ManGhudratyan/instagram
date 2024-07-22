@@ -7,7 +7,7 @@ sealed class AuthState extends Equatable {
   final UserEntity? userEntity;
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [userCredential, error, userEntity];
 }
 
 final class AuthInitial extends AuthState {}

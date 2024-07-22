@@ -74,12 +74,19 @@ class _ChatsPageState extends State<ChatsPage> {
                       child: ListView.builder(
                         itemCount: usersList?.length ?? 0,
                         itemBuilder: (context, index) {
+                          final user = usersList?[index];
                           return GestureDetector(
                             onTap: () {
-                              Navigator.pushNamed(context, '/messages-page');
+                              Navigator.pushNamed(
+                                context,
+                                '/chat-pagee',
+                                arguments: {
+                                  'uid': user?.userId ?? ''
+                                },
+                              );
                             },
                             child: ListTile(
-                              title: Text(usersList?[index].name ?? ''),
+                              title: Text(user?.name ?? ''),
                               subtitle: Text('Sent just now'),
                               trailing: Icon(Icons.camera_alt),
                               leading: Container(
@@ -93,20 +100,13 @@ class _ChatsPageState extends State<ChatsPage> {
                                   backgroundColor:
                                       Theme.of(context).colorScheme.primary,
                                   backgroundImage:
-                                      userState.users?[index].profileImage !=
-                                              null
-                                          ? CachedNetworkImageProvider(userState
-                                                  .users?[index].profileImage ??
-                                              '')
+                                      user?.profileImage != null
+                                          ? CachedNetworkImageProvider(user?.profileImage ?? '')
                                           : null,
                                   radius: 40,
-                                  child: userState.users?[index].profileImage ==
-                                          null
+                                  child: user?.profileImage == null
                                       ? Text(
-                                          userState.users?[index].username
-                                                  ?.substring(0, 1)
-                                                  .toUpperCase() ??
-                                              '',
+                                          user?.username?.substring(0, 1).toUpperCase() ?? '',
                                           style: TextStyle(
                                               fontSize: 40, color: Colors.grey),
                                         )

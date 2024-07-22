@@ -116,29 +116,26 @@ final class AddFollowersToDbFailed extends UserState {
   const AddFollowersToDbFailed(String error) : super(error: error);
 }
 
-
 class AddFollowingsToDbLoaded extends UserState {
+  const AddFollowingsToDbLoaded(this.userModel);
   final UserModel userModel;
-
-  AddFollowingsToDbLoaded(this.userModel);
 }
 
 class AddFollowingToDbFailed extends UserState {
+  const AddFollowingToDbFailed(this.error);
+  @override
   final String error;
-
-  AddFollowingToDbFailed(this.error);
 }
 
 class RemoveFollowingFromDbLoading extends UserState {}
 
 class RemoveFollowingFromDbLoaded extends UserState {
+  const RemoveFollowingFromDbLoaded(this.userModel);
   final UserModel userModel;
-
-  RemoveFollowingFromDbLoaded(this.userModel);
 }
 
 class RemoveFollowingFromDbFailed extends UserState {
+  const RemoveFollowingFromDbFailed(this.error);
+  @override
   final String error;
-
-  RemoveFollowingFromDbFailed(this.error);
 }

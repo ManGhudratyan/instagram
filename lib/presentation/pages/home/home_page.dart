@@ -106,6 +106,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                         onPressed: () {
                           Navigator.pushNamed(context, '/chat-page');
+                         
                         },
                       ),
                     ],
