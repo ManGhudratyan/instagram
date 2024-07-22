@@ -34,11 +34,13 @@ class _ChatsPageState extends State<ChatsPage> {
             }
           },
           builder: (context, userState) {
-            final usersList = userState.users
-                ?.where(
-                  (element) => element.userId != userState.userEntity?.userId,
-                )
-                .toList();
+            final currentUserId = authState.userCredential?.user?.uid;
+
+            final filteredUsers = userState.users
+                    ?.where((user) => user.userId != currentUserId)
+                    .map((user) => user.toModel())
+                    .toList() ??
+                [];
 
             return Scaffold(
               appBar: AppBar(
@@ -72,21 +74,19 @@ class _ChatsPageState extends State<ChatsPage> {
                     SizedBox(height: 20),
                     Expanded(
                       child: ListView.builder(
-                        itemCount: usersList?.length ?? 0,
+                        itemCount: filteredUsers.length,
                         itemBuilder: (context, index) {
-                          final user = usersList?[index];
+                          final user = filteredUsers[index];
                           return GestureDetector(
                             onTap: () {
                               Navigator.pushNamed(
                                 context,
                                 '/user-chat-page',
-                                arguments: {
-                                  'uid': user?.userId ?? ''
-                                },
+                                arguments: {'uid': user.userId ?? ''},
                               );
                             },
                             child: ListTile(
-                              title: Text(user?.name ?? ''),
+                              title: Text(user.name ?? ''),
                               subtitle: Text('Sent just now'),
                               trailing: Icon(Icons.camera_alt),
                               leading: Container(
@@ -99,14 +99,17 @@ class _ChatsPageState extends State<ChatsPage> {
                                 child: CircleAvatar(
                                   backgroundColor:
                                       Theme.of(context).colorScheme.primary,
-                                  backgroundImage:
-                                      user?.profileImage != null
-                                          ? CachedNetworkImageProvider(user?.profileImage ?? '')
-                                          : null,
+                                  backgroundImage: user.profileImage != null
+                                      ? CachedNetworkImageProvider(
+                                          user.profileImage ?? '')
+                                      : null,
                                   radius: 40,
-                                  child: user?.profileImage == null
+                                  child: user.profileImage == null
                                       ? Text(
-                                          user?.username?.substring(0, 1).toUpperCase() ?? '',
+                                          user.username
+                                                  ?.substring(0, 1)
+                                                  .toUpperCase() ??
+                                              '',
                                           style: TextStyle(
                                               fontSize: 40, color: Colors.grey),
                                         )

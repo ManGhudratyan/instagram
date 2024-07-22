@@ -1,14 +1,15 @@
 // ignore_for_file: avoid_classes_with_only_static_members
 
 import 'package:flutter/material.dart';
+
 import '../../domain/entities/user_entity.dart';
-import '../../presentation/pages/user-chat/user_chat_page.dart';
 import '../../presentation/pages/chats/chats_page.dart';
 import '../../presentation/pages/comment/comment_page.dart';
 import '../../presentation/pages/googlelogin/google_login.dart';
 import '../../presentation/pages/home/home_page.dart';
 import '../../presentation/pages/posts/create_post_page.dart';
 import '../../presentation/pages/profile/profile_page.dart';
+import '../../presentation/pages/user-chat/user_chat_page.dart';
 import '../../presentation/pages/user/user_page.dart';
 
 class Routes {

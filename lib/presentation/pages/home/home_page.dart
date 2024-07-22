@@ -106,7 +106,6 @@ class _HomePageState extends State<HomePage> {
                         ),
                         onPressed: () {
                           Navigator.pushNamed(context, '/chat-page');
-                         
                         },
                       ),
                     ],
@@ -220,48 +219,57 @@ class _HomePageState extends State<HomePage> {
                                             .colorScheme
                                             .surface,
                                         child: ListTile(
-                                            tileColor: Theme.of(context)
-                                                .colorScheme
-                                                .primary,
-                                            leading: CircleAvatar(
-                                              backgroundImage: user
-                                                          ?.profileImage !=
-                                                      null
-                                                  ? CachedNetworkImageProvider(
-                                                      user?.profileImage ?? '')
-                                                  : null,
-                                              radius: 30,
-                                              child: user?.profileImage == null
-                                                  ? Text(
-                                                      user?.username
-                                                              ?.substring(0, 1)
-                                                              .toUpperCase() ??
-                                                          '',
-                                                      style: const TextStyle(
-                                                          fontSize: 40),
-                                                    )
-                                                  : null,
-                                            ),
-                                            title: Text(
-                                              user?.name ?? 'No username',
-                                              style: TextStyle(
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .onSurface),
-                                            ),
-                                            trailing: IconButton(
-                                              icon: Icon(Icons.delete_sharp),
-                                              onPressed: () {
-                                                final postId = postState
-                                                        .posts?[index].postId ??
-                                                    '';
-                                                if (postId.isNotEmpty) {
-                                                  context.read<PostBloc>().add(
-                                                      DeletePostDataEvent(
-                                                          postId));
-                                                }
-                                              },
-                                            )),
+                                          tileColor: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                          leading: CircleAvatar(
+                                            backgroundImage: user
+                                                        ?.profileImage !=
+                                                    null
+                                                ? CachedNetworkImageProvider(
+                                                    user?.profileImage ?? '')
+                                                : null,
+                                            radius: 30,
+                                            child: user?.profileImage == null
+                                                ? Text(
+                                                    user?.username
+                                                            ?.substring(0, 1)
+                                                            .toUpperCase() ??
+                                                        '',
+                                                    style: const TextStyle(
+                                                        fontSize: 40),
+                                                  )
+                                                : null,
+                                          ),
+                                          title: Text(
+                                            user?.name ?? 'No username',
+                                            style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onSurface),
+                                          ),
+                                          trailing: user?.userId ==
+                                                  currentUserId
+                                              ? IconButton(
+                                                  icon:
+                                                      Icon(Icons.delete_sharp),
+                                                  onPressed: () {
+                                                    final postId = postState
+                                                            .posts?[index]
+                                                            .postId ??
+                                                        '';
+                                                    if (postId.isNotEmpty) {
+                                                      context
+                                                          .read<PostBloc>()
+                                                          .add(
+                                                            DeletePostDataEvent(
+                                                                postId),
+                                                          );
+                                                    }
+                                                  },
+                                                )
+                                              : null,
+                                        ),
                                       ),
                                       Center(
                                         child: SizedBox(

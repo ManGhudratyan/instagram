@@ -1,13 +1,15 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../domain/entities/user_entity.dart';
 import '../../constants/assets.dart';
 import '../../constants/gaps.dart';
 import '../../logic/post/post_bloc.dart';
 import '../../logic/user/user_bloc.dart';
-import '../../widgets/setting_bottom_sheet_widget.dart';
 import '../profile/widgets/int_on_string.dart';
 
 class UserPage extends StatefulWidget {
@@ -71,18 +73,36 @@ class _UserPageState extends State<UserPage> {
             .read<UserBloc>()
             .add(RemoveFollowingFromDbEvent(currentUserId, profileUserId));
       } else if (!isFollowing && !isAlreadyFollowing) {
-        context
-            .read<UserBloc>()
-            .add(AddFollowersToDbEvent(profileUserId, [currentUserId]));
-        context
-            .read<UserBloc>()
-            .add(AddFollowingsToDbEvent(currentUserId, [profileUserId]));
+        context.read<UserBloc>().add(
+              AddFollowersToDbEvent(
+                profileUserId,
+                [currentUserId],
+              ),
+            );
+        context.read<UserBloc>().add(
+              AddFollowingsToDbEvent(
+                currentUserId,
+                [profileUserId],
+              ),
+            );
       }
 
       setState(() {
         isFollowing = !isFollowing;
         hasClickedFollow = true;
       });
+    }
+  }
+
+  Future<void> _copyProfileUrl() async {
+    if (widget.userEntity.userId != null) {
+      final profileUrl = widget.userEntity.userId;
+      await Clipboard.setData(ClipboardData(text: profileUrl ?? ''));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Profile URL copied to clipboard'),
+        ),
+      );
     }
   }
 
@@ -93,11 +113,13 @@ class _UserPageState extends State<UserPage> {
         if (userState is UserDataDbUpdated ||
             userState is AddFollowingsToDbLoaded ||
             userState is RemoveFollowingFromDbLoaded) {
-          setState(() {
-            isFollowing =
-                userState.userEntity?.followers?.contains(currentUserId) ??
-                    false;
-          });
+          setState(
+            () {
+              isFollowing =
+                  userState.userEntity?.followers?.contains(currentUserId) ??
+                      false;
+            },
+          );
         }
       },
       builder: (context, userState) {
@@ -126,8 +148,55 @@ class _UserPageState extends State<UserPage> {
               appBar: AppBar(
                 automaticallyImplyLeading: false,
                 title: Text(userEntity.username ?? 'No username'),
-                actions: const [
-                  SettingBottomSheetWidget(),
+                actions: [
+                  IconButton(
+                    icon: Icon(Icons.horizontal_split_rounded),
+                    onPressed: () {
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (context) {
+                          return SizedBox(
+                            height: 350,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                Expanded(
+                                  child: ListView.builder(
+                                    itemCount: 6,
+                                    itemBuilder: (context, index) {
+                                      final titles = [
+                                        'Report...',
+                                        'Block',
+                                        'About this account',
+                                        'Restrict',
+                                        'Hide your story',
+                                        'Copy profile URL',
+                                      ];
+
+                                      return Column(
+                                        children: [
+                                          ListTile(
+                                            title: Text(titles[index]),
+                                            onTap: () {
+                                              if (titles[index] ==
+                                                  'Copy profile URL') {
+                                                _copyProfileUrl();
+                                              }
+                                            },
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  )
                 ],
               ),
               body: Padding(
@@ -185,7 +254,7 @@ class _UserPageState extends State<UserPage> {
                           onPressed: hasClickedFollow ? null : _toggleFollow,
                           child: Text(isFollowing
                               ? '        Following        '
-                              : '        Follow      '),
+                              : '       Follow      '),
                         ),
                         TextButton(
                           style: ButtonStyle(

@@ -32,7 +32,7 @@ class _UserChatPageState extends State<UserChatPage> {
           message: message));
       messageController.clear();
       Future.delayed(
-        Duration(milliseconds: 300),
+        const Duration(milliseconds: 300),
         () {
           scrollController.animateTo(
             scrollController.position.maxScrollExtent,
@@ -49,6 +49,9 @@ class _UserChatPageState extends State<UserChatPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Chat'),
+        actions: const [
+          Icon(Icons.videocam),
+        ],
       ),
       body: Column(
         children: [
@@ -111,6 +114,8 @@ class _UserChatPageState extends State<UserChatPage> {
                     controller: messageController,
                     decoration: InputDecoration(
                       hintText: 'Type a message',
+                      hintStyle: const TextStyle(
+                          color: Color.fromARGB(255, 125, 124, 124)),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15.0),
                       ),

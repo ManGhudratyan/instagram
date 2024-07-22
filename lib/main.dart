@@ -103,7 +103,7 @@ void main() async {
         ),
         RepositoryProvider<PostRepository>(
           create: (context) => PostRepositoryImp(
-              postService: RepositoryProvider.of<PostService>(context)),
+              postService: RepositoryProvider.of<PostService>(context),),
         ),
         RepositoryProvider<CommentRepository>(
           create: (context) => CommentRepositoryImp(
