@@ -93,7 +93,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         content: Text('Information has updated successfully'),
                       ),
                     );
-                    Navigator.pushNamed(context, '/home-page');
+                    Navigator.pop(context);
                   }
                 },
                 builder: (context, authState) {

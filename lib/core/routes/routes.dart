@@ -18,10 +18,12 @@ class Routes {
         return MaterialPageRoute(builder: (_) => const GoogleLogin());
       case '/home-page':
         return MaterialPageRoute(builder: (_) => const HomePage());
-      case '/profile-page':
-        final userEntity = settings.arguments! as UserEntity;
+     case '/profile-page':
+        // ignore: cast_nullable_to_non_nullable
+        final userEntity = settings.arguments as UserEntity;
         return MaterialPageRoute(
-            builder: (_) => ProfilePage(userEntity: userEntity));
+          builder: (_) => ProfilePage(userEntity: userEntity),
+        );
       case '/user-page':
         final userEntity = settings.arguments! as UserEntity;
         return MaterialPageRoute(

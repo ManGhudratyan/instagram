@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../../domain/entities/user_entity.dart';
 import '../../constants/assets.dart';
 import '../../logic/auth/auth_bloc.dart';
 import '../../logic/post/post_bloc.dart';
@@ -393,8 +392,8 @@ class _HomePageState extends State<HomePage> {
                               context
                                   .read<UserBloc>()
                                   .add(GetUserDataEvent(userId));
-                              Navigator.pushNamed(context, '/profile-page',
-                                  arguments: UserEntity());
+                               Navigator.pushNamed(context, '/profile-page', arguments: userState.userEntity);
+
                             }
                           },
                           icon: SvgPicture.asset(
