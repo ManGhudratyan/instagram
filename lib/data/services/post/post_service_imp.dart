@@ -8,10 +8,11 @@ import '../../models/post/post_model.dart';
 import 'post_service.dart';
 
 class PostServiceImp implements PostService {
-  PostServiceImp(
-      {required this.firebaseDatabase,
-      required this.firebaseFirestore,
-      required this.firebaseStorage});
+  PostServiceImp({
+    required this.firebaseDatabase,
+    required this.firebaseFirestore,
+    required this.firebaseStorage,
+  });
 
   final FirebaseDatabase firebaseDatabase;
   final FirebaseFirestore firebaseFirestore;
@@ -64,7 +65,7 @@ class PostServiceImp implements PostService {
     return FirebaseFirestore.instance.collection('posts').snapshots();
   }
 
-   @override
+  @override
   Future<List<DocumentSnapshot>> getCommentsForPost(String postId) async {
     try {
       final commentsCollection = firebaseFirestore

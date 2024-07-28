@@ -20,7 +20,15 @@ class _CreatePostPageState extends State<CreatePostPage> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<PostBloc, PostState>(
-      listener: (context, postState) {},
+      listener: (context, postState) {
+        if (postState is GetPostFromCollectionFailed) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Failed to get posts'),
+            ),
+          );
+        }
+      },
       builder: (context, postState) {
         return BlocConsumer<MediaBloc, MediaState>(
           listener: (context, mediaState) {
@@ -44,8 +52,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
                 ),
                 actions: [
                   BlocConsumer<AuthBloc, AuthState>(
-                    listener: (context, authState) {
-                    },
+                    listener: (context, authState) {},
                     builder: (context, authState) {
                       return IconButton(
                         onPressed: () {

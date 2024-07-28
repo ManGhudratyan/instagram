@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:firebase_database/firebase_database.dart';
 
-import '../../../domain/comment/comment_entity.dart';
+import '../../../domain/entities/comment_entity.dart';
 import '../../../domain/repositories/comment/comment_repository.dart';
 import '../../models/message/comment_model.dart';
 import '../../services/comment/comment_service.dart';

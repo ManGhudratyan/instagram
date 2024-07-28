@@ -36,13 +36,13 @@ final class GetUserDataFailed extends UserState {
 }
 
 final class UserFailed extends UserState {
-  UserFailed(UserState initialState, String error)
-      : super(userEntity: initialState.userEntity, error: error);
+  UserFailed(UserState initState, String error)
+      : super(userEntity: initState.userEntity, error: error);
 }
 
 final class UserLoading extends UserState {
-  UserLoading(UserState initialState)
-      : super(userEntity: initialState.userEntity, users: initialState.users);
+  UserLoading(UserState initState)
+      : super(userEntity: initState.userEntity, users: initState.users);
 }
 
 final class UserLoaded extends UserState {
@@ -56,8 +56,8 @@ final class GetUsersFromCollectionLoaded extends UserState {
 }
 
 final class GetUsersFromCollectionLoading extends UserState {
-  GetUsersFromCollectionLoading(UserState initialState)
-      : super(userEntity: initialState.userEntity, users: initialState.users);
+  GetUsersFromCollectionLoading(UserState initState)
+      : super(userEntity: initState.userEntity, users: initState.users);
 }
 
 final class GetUsersFromCollectionFailed extends UserState {
@@ -70,20 +70,23 @@ final class GetUsersFromCollectionFailed extends UserState {
 }
 
 final class UserDataDbUpdating extends UserState {
-  UserDataDbUpdating(UserState initialState)
-      : super(userEntity: initialState.userEntity, users: initialState.users);
+  UserDataDbUpdating(UserState initState)
+      : super(userEntity: initState.userEntity, users: initState.users);
 }
 
 final class UserDataDbUpdated extends UserState {
-  UserDataDbUpdated(UserState initialState)
-      : super(userEntity: initialState.userEntity, users: initialState.users);
+  UserDataDbUpdated(UserState initState)
+      : super(userEntity: initState.userEntity, users: initState.users);
 }
 
 class UserDataDbFailed extends UserState {
-   UserDataDbFailed(this.error,  UserState initState): super(error: error, users: initState.users,userEntity: initState.userEntity  );
+  UserDataDbFailed(this.error, UserState initState)
+      : super(
+            error: error,
+            users: initState.users,
+            userEntity: initState.userEntity);
   @override
   final String error;
-  
 }
 
 final class AddFollowingsToDbLoading extends UserState {}
@@ -91,10 +94,9 @@ final class AddFollowingsToDbLoading extends UserState {}
 class AddFollowersToDbLoaded extends UserState {
   AddFollowersToDbLoaded(UserState initState, List<String> updatedFollowers)
       : super(
-          updatedFollowers: updatedFollowers,
-          users: initState.users,
-          userEntity: initState.userEntity
-        );
+            updatedFollowers: updatedFollowers,
+            users: initState.users,
+            userEntity: initState.userEntity);
 }
 
 class RemoveFollowerFromDbLoading extends UserState {}
@@ -102,8 +104,6 @@ class RemoveFollowerFromDbLoading extends UserState {}
 class RemoveFollowerFromDbLoaded extends UserState {
   RemoveFollowerFromDbLoaded(UserModel userModel, UserState initState)
       : super(userEntity: initState.userEntity);
-  // final UserModel userModel;
-  // final UserState initState;
 }
 
 class RemoveFollowerFromDbFailed extends UserState {

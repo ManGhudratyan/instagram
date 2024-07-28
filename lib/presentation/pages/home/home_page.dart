@@ -115,6 +115,7 @@ class _HomePageState extends State<HomePage> {
                       SizedBox(
                         height: 120,
                         child: ListView.builder(
+                          reverse: true,
                           scrollDirection: Axis.horizontal,
                           itemCount: filteredUsers.length,
                           itemBuilder: (context, index) {
@@ -200,6 +201,7 @@ class _HomePageState extends State<HomePage> {
                                 postState.posts!.isEmpty
                             ? Center(child: CircularProgressIndicator())
                             : ListView.builder(
+                                reverse: true,
                                 itemCount: postState.posts?.length ?? 0,
                                 itemBuilder: (context, index) {
                                   if (index >= (postState.posts?.length ?? 0)) {

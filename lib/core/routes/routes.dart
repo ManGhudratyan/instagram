@@ -20,7 +20,8 @@ class Routes {
       case '/home-page':
         return MaterialPageRoute(builder: (_) => const HomePage());
       case '/profile-page':
-        final userEntity = settings.arguments! as UserEntity;
+        // ignore: cast_nullable_to_non_nullable
+        final userEntity = settings.arguments as UserEntity;
         return MaterialPageRoute(
           builder: (_) => ProfilePage(userEntity: userEntity),
         );
@@ -32,8 +33,7 @@ class Routes {
         return MaterialPageRoute(builder: (_) => const CreatePostPage());
       case '/chat-page':
         return MaterialPageRoute(builder: (_) => const ChatsPage());
-      // case '/comment-page':
-      //   return MaterialPageRoute(builder: (_) => const CommentsPage());
+
       case '/comments-page':
         final args = settings.arguments! as Map<String, dynamic>;
         final String postId = args['postId'];

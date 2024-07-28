@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../logic/cubit/theme_cubit.dart';
+import '../logic/theme/theme_cubit.dart';
 
 class SettingBottomSheetWidget extends StatefulWidget {
   const SettingBottomSheetWidget({super.key});

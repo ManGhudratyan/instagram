@@ -62,35 +62,41 @@ class UserServiceImp extends UserService {
   Future<void> addFollowersList(
       String userId, List<String> newFollowers) async {
     final userDocRef = firebaseFirestore.collection('users').doc(userId);
-    await userDocRef.update({
-      'followers': FieldValue.arrayUnion(newFollowers),
-    });
+    await userDocRef.update(
+      {
+        'followers': FieldValue.arrayUnion(newFollowers),
+      },
+    );
   }
 
   @override
   Future<void> removeFollower(String userId, String followerId) async {
     final userDocRef = firebaseFirestore.collection('users').doc(userId);
-    await userDocRef.update({
-      'followers': FieldValue.arrayRemove([followerId]),
-    });
+    await userDocRef.update(
+      {
+        'followers': FieldValue.arrayRemove([followerId]),
+      },
+    );
   }
 
   @override
   Future<void> addFollowingList(
       String userId, List<String> newFollowings) async {
     final userDocRef = firebaseFirestore.collection('users').doc(userId);
-    await userDocRef.update({
-      'followings': FieldValue.arrayUnion(newFollowings),
-    });
+    await userDocRef.update(
+      {
+        'followings': FieldValue.arrayUnion(newFollowings),
+      },
+    );
   }
 
   @override
   Future<void> removeFollowing(String userId, String followingId) async {
     final userDocRef = firebaseFirestore.collection('users').doc(userId);
-    await userDocRef.update({
-      'followings': FieldValue.arrayRemove([followingId]),
-    });
+    await userDocRef.update(
+      {
+        'followings': FieldValue.arrayRemove([followingId]),
+      },
+    );
   }
-
-
 }

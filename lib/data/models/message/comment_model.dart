@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import '../../../domain/comment/comment_entity.dart';
+import '../../../domain/entities/comment_entity.dart';
 
 part 'comment_model.g.dart';
 

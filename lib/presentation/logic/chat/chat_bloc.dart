@@ -45,7 +45,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
   FutureOr<void> _mapMessagesUpdatedEventToState(
       MessagesUpdatedEvent event, Emitter<ChatState> emit) {
-    emit(ChatLoaded(messages : event.messages));
+    emit(ChatLoaded(messages: event.messages));
   }
 
   @override

@@ -21,7 +21,15 @@ class _ChatsPageState extends State<ChatsPage> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AuthBloc, AuthState>(
-      listener: (context, authState) {},
+      listener: (context, authState) {
+        if (authState is LoginGoogleFailed) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Failed to login with Google account'),
+            ),
+          );
+        }
+      },
       builder: (context, authState) {
         return BlocConsumer<UserBloc, UserState>(
           listener: (context, userState) {
