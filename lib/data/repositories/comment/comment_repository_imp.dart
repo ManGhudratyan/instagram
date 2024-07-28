@@ -4,6 +4,7 @@ import 'package:firebase_database/firebase_database.dart';
 
 import '../../../domain/comment/comment_entity.dart';
 import '../../../domain/repositories/comment/comment_repository.dart';
+import '../../models/message/comment_model.dart';
 import '../../services/comment/comment_service.dart';
 
 class CommentRepositoryImp implements CommentRepository {
@@ -11,28 +12,22 @@ class CommentRepositoryImp implements CommentRepository {
   final CommentService commentService;
 
   @override
-  Future<List<CommentEntity>> getComments() async {
-    final comments = await commentService.getComments();
-    return comments.map(CommentEntity.fromModel).toList();
+  Future<List<CommentModel>> getComments(String postId) {
+    return commentService.getComments(postId);
   }
 
   @override
-  Future<void> sendComment(CommentEntity commentEntity) async {
-    await commentService.sendComment(commentEntity.toModel());
+  Stream<DatabaseEvent> onChildAdded(String postId) {
+    return commentService.onChildAdded(postId);
   }
 
   @override
-  Future<void> sendMedia(File file) async {
-    return commentService.sendMedia(file);
+  Future<void> sendComment(String postId, CommentEntity commentEntity) {
+    return commentService.sendComment(postId, commentEntity.toModel());
   }
 
   @override
-  Stream<DatabaseEvent> onChildAdded() {
-    return commentService.onChildAdded();
-  }
-
-  @override
-  Stream<DatabaseEvent> onChildChanged() {
-    return commentService.onChildChanged();
+  Future<void> sendMedia(String postId, File file) {
+    return commentService.sendMedia(postId, file);
   }
 }

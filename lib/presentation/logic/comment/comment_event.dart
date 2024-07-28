@@ -8,16 +8,34 @@ sealed class CommentEvent extends Equatable {
 }
 
 class SendCommentEvent extends CommentEvent {
-  const SendCommentEvent({required this.commentEntity});
+
+  const SendCommentEvent({required this.postId, required this.commentEntity});
+  final String postId;
   final CommentEntity commentEntity;
 }
 
-class GetCommentsEvent extends CommentEvent {}
 
-class ListenCommentsEvent extends CommentEvent {}
+class GetCommentsEvent extends CommentEvent {
+  const GetCommentsEvent({required this.postId});
+  final String postId;
+
+  @override
+  List<Object> get props => [postId];
+}
+
+class ListenCommentsEvent extends CommentEvent {
+  const ListenCommentsEvent({required this.postId});
+  final String postId;
+
+  @override
+  List<Object> get props => [postId];
+}
 
 class SendMediaEvent extends CommentEvent {
-  const SendMediaEvent({required this.file});
-
+  const SendMediaEvent({required this.postId, required this.file});
+  final String postId;
   final File file;
+
+  @override
+  List<Object> get props => [postId, file];
 }

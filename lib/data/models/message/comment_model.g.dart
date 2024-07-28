@@ -13,6 +13,8 @@ CommentModel _$CommentModelFromJson(Map<String, dynamic> json) => CommentModel(
           ? null
           : DateTime.parse(json['dateTime'] as String),
       commentId: json['commentId'] as String?,
+      postId: json['postId'] as String?,
+      username: json['username'] as String?,
     );
 
 Map<String, dynamic> _$CommentModelToJson(CommentModel instance) =>
@@ -21,4 +23,6 @@ Map<String, dynamic> _$CommentModelToJson(CommentModel instance) =>
       'comment': instance.comment,
       'dateTime': instance.dateTime?.toIso8601String(),
       'commentId': instance.commentId,
+      'postId': instance.postId,
+      'username': instance.username,
     };

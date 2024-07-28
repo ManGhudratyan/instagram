@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 
 import '../../domain/entities/user_entity.dart';
 import '../../presentation/pages/chats/chats_page.dart';
+import '../../presentation/pages/comments/comments_page.dart';
 import '../../presentation/pages/googlelogin/google_login.dart';
 import '../../presentation/pages/home/home_page.dart';
-import '../../presentation/pages/comments/comments_page.dart';
 import '../../presentation/pages/posts/create_post_page.dart';
 import '../../presentation/pages/profile/profile_page.dart';
 import '../../presentation/pages/user-chat/user_chat_page.dart';
@@ -32,8 +32,12 @@ class Routes {
         return MaterialPageRoute(builder: (_) => const CreatePostPage());
       case '/chat-page':
         return MaterialPageRoute(builder: (_) => const ChatsPage());
-      case '/comment-page':
-        return MaterialPageRoute(builder: (_) => const CommentsPage());
+      // case '/comment-page':
+      //   return MaterialPageRoute(builder: (_) => const CommentsPage());
+      case '/comments-page':
+        final args = settings.arguments! as Map<String, dynamic>;
+        final String postId = args['postId'];
+        return MaterialPageRoute(builder: (_) => CommentsPage(postId: postId));
       case '/user-chat-page':
         final args = settings.arguments! as Map<String, dynamic>;
         final String uid = args['uid'];

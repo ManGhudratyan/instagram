@@ -26,7 +26,8 @@ class CommentBloc extends Bloc<CommentEvent, CommentState> {
       GetCommentsEvent event, Emitter<CommentState> emit) async {
     try {
       emit(CommentsLoading(state));
-      final comments = await commentRepository.getComments();
+      final commentModels = await commentRepository.getComments(event.postId);
+      final comments = commentModels.map((model) => CommentEntity.fromModel(model)).toList();
       emit(CommentsLoaded(comments));
     } catch (e) {
       emit(CommentsFailed(state, e.toString()));
@@ -37,7 +38,7 @@ class CommentBloc extends Bloc<CommentEvent, CommentState> {
       SendCommentEvent event, Emitter<CommentState> emit) async {
     try {
       emit(CommentsLoading(state));
-      await commentRepository.sendComment(event.commentEntity);
+      await commentRepository.sendComment(event.postId, event.commentEntity);
     } catch (e) {
       emit(CommentsFailed(state, e.toString()));
     }
@@ -47,7 +48,7 @@ class CommentBloc extends Bloc<CommentEvent, CommentState> {
       SendMediaEvent event, Emitter<CommentState> emit) async {
     try {
       emit(CommentsLoading(state));
-      await commentRepository.sendMedia(event.file);
+      await commentRepository.sendMedia(event.postId, event.file);
       emit(CommentSent(state, List.from(state.comments)));
     } catch (e) {
       emit(CommentsFailed(state, e.toString()));
@@ -58,7 +59,7 @@ class CommentBloc extends Bloc<CommentEvent, CommentState> {
       ListenCommentsEvent event, Emitter<CommentState> emit) async {
     try {
       await for (final DatabaseEvent addedEvent
-          in commentRepository.onChildAdded()) {
+          in commentRepository.onChildAdded(event.postId)) {
         if (state.initialDataLoaded) {
           final json = Map<String, dynamic>.from(
             addedEvent.snapshot.value! as Map<dynamic, dynamic>,

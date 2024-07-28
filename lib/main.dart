@@ -34,15 +34,15 @@
 // import 'domain/repositories/post/post_repository.dart';
 // import 'domain/repositories/user/user_repository.dart';
 // import 'presentation/logic/auth/auth_bloc.dart';
-// import 'presentation/logic/bloc/comment_bloc.dart';
 // import 'presentation/logic/chat/chat_bloc.dart';
+// import 'presentation/logic/comment/comment_bloc.dart';
 // import 'presentation/logic/cubit/theme_cubit.dart';
 // import 'presentation/logic/media/media_bloc.dart';
 // import 'presentation/logic/post/post_bloc.dart';
 // import 'presentation/logic/user/user_bloc.dart';
 
 // void main() async {
-//   WidgetsFlutterBinding.ensureInitialized();c
+//   WidgetsFlutterBinding.ensureInitialized();
 //   await Firebase.initializeApp(
 //     options: FirebaseOptions(
 //         apiKey: 'AIzaSyBuAs7ySEpbAmuvNf1t5bOAPtpLpeO3qUc',
@@ -111,9 +111,10 @@
 //             postService: RepositoryProvider.of<PostService>(context),
 //           ),
 //         ),
-//         RepositoryProvider<CommentRepository>(
+
+//          RepositoryProvider<CommentRepository>(
 //           create: (context) => CommentRepositoryImp(
-//             RepositoryProvider.of<CommentService>(context),
+//             commentService: RepositoryProvider.of<CommentService>(context),
 //           ),
 //         ),
 //       ],
@@ -203,25 +204,23 @@ import 'domain/repositories/post/post_repository.dart';
 import 'domain/repositories/user/user_repository.dart';
 import 'presentation/logic/auth/auth_bloc.dart';
 import 'presentation/logic/chat/chat_bloc.dart';
-import 'presentation/logic/comment/comment_bloc.dart';
 import 'presentation/logic/cubit/theme_cubit.dart';
 import 'presentation/logic/media/media_bloc.dart';
 import 'presentation/logic/post/post_bloc.dart';
 import 'presentation/logic/user/user_bloc.dart';
 
-
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: FirebaseOptions(
-        apiKey: 'AIzaSyBuAs7ySEpbAmuvNf1t5bOAPtpLpeO3qUc',
-        appId: '1:769958999795:android:3e8f61d31ae93e3ba4e986',
-        messagingSenderId: '',
-        projectId: 'instagram-flutter-fecce',
-        storageBucket: 'gs://instagram-flutter-fecce.appspot.com',
-        databaseURL:
-            'https://instagram-flutter-fecce-default-rtdb.firebaseio.com/'),
+      apiKey: 'AIzaSyBuAs7ySEpbAmuvNf1t5bOAPtpLpeO3qUc',
+      appId: '1:769958999795:android:3e8f61d31ae93e3ba4e986',
+      messagingSenderId: '',
+      projectId: 'instagram-flutter-fecce',
+      storageBucket: 'gs://instagram-flutter-fecce.appspot.com',
+      databaseURL:
+          'https://instagram-flutter-fecce-default-rtdb.firebaseio.com/',
+    ),
   );
 
   final prefs = await SharedPreferences.getInstance();
@@ -281,17 +280,11 @@ void main() async {
             postService: RepositoryProvider.of<PostService>(context),
           ),
         ),
-
-         RepositoryProvider<CommentRepository>(
+        RepositoryProvider<CommentRepository>(
           create: (context) => CommentRepositoryImp(
             commentService: RepositoryProvider.of<CommentService>(context),
           ),
         ),
-        // RepositoryProvider<CommentRepository>(
-        //   create: (context) => CommentRepositoryImp(
-        //     RepositoryProvider.of<CommentService>(context),
-        //   ),
-        // ),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -317,12 +310,6 @@ void main() async {
           BlocProvider(
             create: (context) =>
                 ChatBloc(RepositoryProvider.of<ChatRepository>(context)),
-          ),
-          BlocProvider<CommentBloc>(
-            create: (context) =>
-                CommentBloc(RepositoryProvider.of<CommentRepository>(context))
-                  ..add(ListenCommentsEvent())
-                  ..add(GetCommentsEvent()),
           ),
         ],
         child: BlocBuilder<ThemeCubit, ThemeState>(

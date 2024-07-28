@@ -215,7 +215,7 @@ class _HomePageState extends State<HomePage> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Card(
-                                       elevation: 0,
+                                        elevation: 0,
                                         color: Theme.of(context)
                                             .colorScheme
                                             .surface,
@@ -296,8 +296,20 @@ class _HomePageState extends State<HomePage> {
                                                       .onPrimary,
                                                   height: 40),
                                               GestureDetector(
-                                                onTap: (){
-                                                  Navigator.pushNamed(context, '/comment-page');
+                                                onTap: () {
+                                                  final postId = postState
+                                                          .posts?[index]
+                                                          .postId ??
+                                                      '';
+                                                  if (postId.isNotEmpty) {
+                                                    Navigator.pushNamed(
+                                                      context,
+                                                      '/comments-page',
+                                                      arguments: {
+                                                        'postId': postId
+                                                      },
+                                                    );
+                                                  }
                                                 },
                                                 child: SvgPicture.asset(
                                                   Assets.commentIcon,
@@ -397,8 +409,8 @@ class _HomePageState extends State<HomePage> {
                               context
                                   .read<UserBloc>()
                                   .add(GetUserDataEvent(userId));
-                               Navigator.pushNamed(context, '/profile-page', arguments: userState.userEntity);
-
+                              Navigator.pushNamed(context, '/profile-page',
+                                  arguments: userState.userEntity);
                             }
                           },
                           icon: SvgPicture.asset(

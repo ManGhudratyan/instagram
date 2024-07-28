@@ -14,13 +14,18 @@ class CommentServiceImp with CommentMixin implements CommentService {
     required this.firebaseDatabase,
     required this.firebaseStorage,
   });
+  
   @override
   final FirebaseDatabase firebaseDatabase;
   final FirebaseStorage firebaseStorage;
 
+  DatabaseReference _getCommentReference(String postId) {
+    return firebaseDatabase.ref('posts/$postId/comments');
+  }
+
   @override
-  Future<List<CommentModel>> getComments() async {
-    final event = await commentDatabaseReference.once();
+  Future<List<CommentModel>> getComments(String postId) async {
+    final event = await _getCommentReference(postId).once();
     return event.snapshot.children
         .map(
           (e) => CommentModel.fromJson(
@@ -34,25 +39,24 @@ class CommentServiceImp with CommentMixin implements CommentService {
   }
 
   @override
-  Future<void> sendComment(CommentModel model) async {
-    await commentDatabaseReference.push().set(model.toJson());
+  Future<void> sendComment(String postId, CommentModel model) async {
+    await _getCommentReference(postId).push().set(model.toJson());
   }
 
   @override
-  Future<void> sendMedia(File file) async {
+  Future<void> sendMedia(String postId, File file) async {
     final ref = firebaseStorage.ref('sharedMedias/').child(
         '${Timestamp.now().millisecondsSinceEpoch}.${file.absolute.path.split('.').lastOrNull ?? 'mp4'}');
     await ref.putFile(file);
-    print(await ref.getDownloadURL()); // TBD
   }
 
   @override
-  Stream<DatabaseEvent> onChildAdded() {
-    return commentDatabaseReference.onChildAdded;
+  Stream<DatabaseEvent> onChildAdded(String postId) {
+    return _getCommentReference(postId).onChildAdded;
   }
 
   @override
-  Stream<DatabaseEvent> onChildChanged() {
-    return commentDatabaseReference.onChildChanged;
+  Stream<DatabaseEvent> onChildChanged(String postId) {
+    return _getCommentReference(postId).onChildChanged;
   }
 }
