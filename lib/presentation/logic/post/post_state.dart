@@ -5,11 +5,13 @@ sealed class PostState extends Equatable {
     this.error,
     this.postEntity,
     this.posts,
+    //  this.postComments,
   });
 
   final String? error;
   final PostEntity? postEntity;
   final List<PostEntity>? posts;
+  // final Map<String, List<CommentModel>>? postComments;
 
   @override
   List<Object?> get props => [error, postEntity, posts];
@@ -88,7 +90,6 @@ final class GetPostFromCollectionLoaded extends PostState {
           postEntity: initState.postEntity,
         );
 }
-
 
 final class GetPostFromCollectionLoading extends PostState {
   GetPostFromCollectionLoading(PostState initialState)

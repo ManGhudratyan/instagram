@@ -91,4 +91,6 @@ class UserServiceImp extends UserService {
       'followings': FieldValue.arrayRemove([followingId]),
     });
   }
+
+
 }

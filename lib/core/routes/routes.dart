@@ -6,6 +6,7 @@ import '../../domain/entities/user_entity.dart';
 import '../../presentation/pages/chats/chats_page.dart';
 import '../../presentation/pages/googlelogin/google_login.dart';
 import '../../presentation/pages/home/home_page.dart';
+import '../../presentation/pages/comments/comments_page.dart';
 import '../../presentation/pages/posts/create_post_page.dart';
 import '../../presentation/pages/profile/profile_page.dart';
 import '../../presentation/pages/user-chat/user_chat_page.dart';
@@ -18,9 +19,8 @@ class Routes {
         return MaterialPageRoute(builder: (_) => const GoogleLogin());
       case '/home-page':
         return MaterialPageRoute(builder: (_) => const HomePage());
-     case '/profile-page':
-        // ignore: cast_nullable_to_non_nullable
-        final userEntity = settings.arguments as UserEntity;
+      case '/profile-page':
+        final userEntity = settings.arguments! as UserEntity;
         return MaterialPageRoute(
           builder: (_) => ProfilePage(userEntity: userEntity),
         );
@@ -32,6 +32,8 @@ class Routes {
         return MaterialPageRoute(builder: (_) => const CreatePostPage());
       case '/chat-page':
         return MaterialPageRoute(builder: (_) => const ChatsPage());
+      case '/comment-page':
+        return MaterialPageRoute(builder: (_) => const CommentsPage());
       case '/user-chat-page':
         final args = settings.arguments! as Map<String, dynamic>;
         final String uid = args['uid'];

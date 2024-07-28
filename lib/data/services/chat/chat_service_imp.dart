@@ -3,14 +3,14 @@ import 'package:firebase_database/firebase_database.dart';
 import 'chat_service.dart';
 
 class ChatServiceImp implements ChatService {
-  final DatabaseReference _database = FirebaseDatabase.instance.ref();
+  final DatabaseReference database = FirebaseDatabase.instance.ref();
 
   @override
   Future<void> sendMessage(
       String senderId, String receiverId, String messageText) async {
     final timeSend = DateTime.now().toUtc().toIso8601String();
     final messageRef =
-        _database.child('users/$senderId/chats/$receiverId/messages').push();
+        database.child('users/$senderId/chats/$receiverId/messages').push();
     final message = {
       'text': messageText,
       'senderId': senderId,
@@ -18,7 +18,7 @@ class ChatServiceImp implements ChatService {
     };
     await messageRef.set(message);
 
-    _database
+    database
         .child('users/$receiverId/chats/$senderId/messages')
         .push()
         .set(message);
@@ -27,7 +27,7 @@ class ChatServiceImp implements ChatService {
   @override
   Stream<List<Map<String, dynamic>>> getMessages(
       String senderId, String receiverId) {
-    return _database
+    return database
         .child('users/$senderId/chats/$receiverId/messages')
         .orderByChild('timeSend')
         .onValue

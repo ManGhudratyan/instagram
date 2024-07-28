@@ -295,12 +295,17 @@ class _HomePageState extends State<HomePage> {
                                                       .colorScheme
                                                       .onPrimary,
                                                   height: 40),
-                                              SvgPicture.asset(
-                                                Assets.commentIcon,
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .onPrimary,
-                                                height: 40,
+                                              GestureDetector(
+                                                onTap: (){
+                                                  Navigator.pushNamed(context, '/comment-page');
+                                                },
+                                                child: SvgPicture.asset(
+                                                  Assets.commentIcon,
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .onPrimary,
+                                                  height: 40,
+                                                ),
                                               ),
                                               SvgPicture.asset(
                                                   Assets.vectorIcon,

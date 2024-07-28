@@ -11,4 +11,5 @@ abstract class PostService {
   Future<void> updatePostFromDB(PostModel postModel);
   Future<void> uploadPictureToDB(String postId, File file);
   Stream<QuerySnapshot<Map<String, dynamic>>> getPostsFromCollection();
+  Future<List<DocumentSnapshot>> getCommentsForPost(String postId);
 }
